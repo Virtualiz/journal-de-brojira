@@ -1,16 +1,7 @@
 ---
-import Social from "./Social.astro";
 ---
-<style>
-  footer {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-</style>
-
-<footer>
-  <Social platform="twitter" username="astrodotbuild" />
-  <Social platform="github" username="withastro" />
-  <Social platform="youtube" username="astrodotbuild" />
+<footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 sticky bottom-0">
+  <aside>
+    <p>Copyright © {new Date().getFullYear()} - Tous droits réservés par Moi</p>
+  </aside>
 </footer>
