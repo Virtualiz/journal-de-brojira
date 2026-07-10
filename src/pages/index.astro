@@ -1,33 +1,66 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import myBackground from "../assets/index/biblio_jeux.webp";
+import LandingHero from "../components/LandingHero.astro";
+import Card from "../components/Card.astro";
 
 const pageTitle = "Journal de Brojira";
-import { getImage } from "astro:assets";
-const optimizedBackground = await getImage({
-  src: myBackground,
-  format: "avif",
-});
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <LandingHero />
   <div
-    class="hero lg:min-h-96 min-h-fit"
-    style={`
-	background-image: url(${optimizedBackground.src});`
-	}
+    class="p-4
+  lg:px-8
+  grid
+  lg:grid-cols-4
+  md:grid-cols-2
+  grid-cols-1
+  gap-4
+  w-auto
+  justify-center"
   >
-    <div class="hero-overlay"></div>
-    <div class="hero-content text-center backdrop-brightness-50 lg:min-h-96 lg:w-3/4">
-      <div class="max-w-md">
-        <h1 class="mb-5 text-5xl font-bold">Bienvenue</h1>
-        <p class="mb-5 text-base">
-          Vous trouverez dans les pages de mon <span class="font-serif font-bold text-lg"> journal </span> 
-		  tout ce que j'aime partager autour du jeu de société : <br><br> 
-		  actualités, prototypes en cours de création, fiches de jeux, 
-		  retours d'événements, ...<br><br>... et sûrement quelques digressions au passage.
+
+    <Card title="Billets mensuels">
+		<p>
+			Au programme chaque mois : événements, récompenses, sorties attendues et
+			petites présentations.
+			<br /><br />
+			Dernier article : Billet de Juillet [TODO: lien dynamique]
+			<br /> [TODO: description de l'article]
+		</p>
+		<button slot="cta" class="btn btn-primary">Dernier article</button>
+		<button slot="cta" class="btn btn-secondary">Voir la liste</button>
+    </Card>
+	
+    <Card title="Mes jeux et prototypes">
+		<p>
+          Ici vous retrouverez des infos sur mes jeux, prototypes et idées en
+          cours
+          <ul>
+            <li>
+              [TODO: affichage dynamique des 3 mis à jour le plus récemment]
+            </li>
+            <li>Spicy Jo</li>
+            <li>Backdoor</li>
+          </ul>
         </p>
-      </div>
-    </div>
+		<button slot="cta" class="btn btn-primary">Aller voir</button>
+    </Card>
+
+    <Card title="Fiches">
+		<p>
+          Lorsque je cite un jeu, un auteur ou une autrice, ou un éditeur, vous
+          trouverez une fiche qui présente rapidement ses informations.
+          <br /><br />
+        </p>
+		<button slot="cta" class="btn btn-primary">Voir les fiches</button>
+    </Card>
+
+    <Card title="Autres">
+		<p>
+          TODO <br /><br />
+        </p>
+    </Card>
+	
   </div>
 </BaseLayout>

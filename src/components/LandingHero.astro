@@ -1,0 +1,37 @@
+---
+
+import myBackground from "../assets/index/biblio_jeux.webp";
+import { getImage } from "astro:assets";
+const optimizedBackground = await getImage({
+  src: myBackground,
+  format: "avif",
+});
+---
+<div
+    class="hero lg:min-h-96 min-h-fit"
+    style={`
+	background-image: url(${optimizedBackground.src});`}
+  >
+    <div class="hero-overlay"></div>
+    <div
+      class="hero-content
+			text-center
+			backdrop-brightness-50
+			min-w-3/4
+			lg:min-h-96"
+    >
+      <div class="max-w-md">
+        <h1 class="mb-5 text-5xl font-bold">Bienvenue</h1>
+        <p class="mb-5 text-base">
+          Vous trouverez dans les pages de mon <span
+            class="font-serif font-bold text-lg"
+          >
+            journal
+          </span>
+          tout ce que j'aime partager autour du jeu de société : <br /><br />
+          actualités, prototypes en cours de création, fiches de jeux, retours d'événements,
+          ...<br /><br />... et sûrement quelques digressions au passage.
+        </p>
+      </div>
+    </div>
+  </div>
