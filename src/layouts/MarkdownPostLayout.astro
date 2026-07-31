@@ -1,42 +1,35 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
+const date = frontmatter.pubDate.toLocaleDateString("fr", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const dateDisplay = date.charAt(0).toUpperCase() + date.slice(1);
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
-  <p>{frontmatter.pubDate.toLocaleDateString()}</p>
-  <p><em>{frontmatter.description}</em></p>
-  <p>Written by: {frontmatter.author}</p>
-  <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+  <div class="pt-2 pl-2 pr-2">
+    <p class="text-sm">
+      {frontmatter.author}, {dateDisplay}
+    </p>
+    <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+    <h1 class="text-xl mt-2">{frontmatter.title}</h1>
+    <p class="text-sm"><em>{frontmatter.description}</em></p>
+    <br>
+    <slot />
 
-  <div class="tags">
-    {
-      frontmatter.tags.map((tag: string) => (
-        <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a>
-        </p>
-      ))
-    }
+    <div class="mt-2">
+      {
+        frontmatter.tags.map((tag: string) => (
+          <p class="badge badge-soft badge-primary mr-2">
+            <a href={`/tags/${tag}`}>{tag}</a>
+          </p>
+        ))
+      }
+    </div>
+
   </div>
-
-  <slot />
 </BaseLayout>
-<style>
-  a {
-    color: #00539f;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
-  }
-</style>

@@ -3,7 +3,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import LandingHero from "../components/LandingHero.astro";
 import Card from "../components/Card.astro";
 
+import { getCollection } from "astro:content";
+
 const pageTitle = "Journal de Brojira";
+const allPosts = await getCollection("blog");
+const chronologicPosts = allPosts.sort((a, b) => {
+  if (a.data.pubDate < b.data.pubDate) return -1;
+  if (a.data.pubDate > b.data.pubDate) return 1;
+  return 0;
+});
+const lastPost = chronologicPosts.findLast(() => true);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -19,48 +28,63 @@ const pageTitle = "Journal de Brojira";
   w-auto
   justify-center"
   >
-
-    <Card title="Billets mensuels">
-		<p>
-			Au programme chaque mois : événements, récompenses, sorties attendues et
-			petites présentations.
-			<br /><br />
-			Dernier article : Billet de Juillet [TODO: lien dynamique]
-			<br /> [TODO: description de l'article]
-		</p>
-		<button slot="cta" class="btn btn-primary">Dernier article</button>
-		<button slot="cta" class="btn btn-secondary">Voir la liste</button>
-    </Card>
-	
-    <Card title="Mes jeux et prototypes">
-		<p>
-          Ici vous retrouverez des infos sur mes jeux, prototypes et idées en
-          cours
-          <ul>
-            <li>
-              [TODO: affichage dynamique des 3 mis à jour le plus récemment]
-            </li>
-            <li>Spicy Jo</li>
-            <li>Backdoor</li>
-          </ul>
+    <Card title="Billets mensuels et hors-série">
+      <p>
+        Au programme chaque mois : événements, récompenses, sorties attendues et
+        petites présentations.
+        <br /><br />
+        <span class="text-xl">{lastPost?.data.title}</span>
+        <br />
+        {lastPost?.data.description}
+        <br />
+        <p class="text-xs">
+          Par {lastPost?.data.author}, {
+            lastPost?.data.pubDate.toLocaleDateString("fr", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }.
         </p>
-		<button slot="cta" class="btn btn-primary">Aller voir</button>
+      </p>
+      <a href={lastPost ? `/posts/${lastPost?.id}/` : "/"} slot="cta">
+        <button class="btn btn-primary">Lire cet article</button>
+      </a>
+
+      <a href="/blog/" slot="cta">
+        <button class="btn btn-secondary">Voir la liste</button>
+      </a>
+    </Card>
+
+    <Card title="Mes jeux et prototypes">
+      <p>
+        Ici vous retrouverez des infos sur mes jeux, prototypes et idées en
+        cours
+        <ul>
+          <li>
+            [TODO: affichage dynamique des 3 mis à jour le plus récemment]
+          </li>
+          <li>Spicy Jo</li>
+          <li>Backdoor</li>
+        </ul>
+      </p>
+      <button slot="cta" class="btn btn-primary">Aller voir</button>
     </Card>
 
     <Card title="Fiches">
-		<p>
-          Lorsque je cite un jeu, un auteur ou une autrice, ou un éditeur, vous
-          trouverez une fiche qui présente rapidement ses informations.
-          <br /><br />
-        </p>
-		<button slot="cta" class="btn btn-primary">Voir les fiches</button>
+      <p>
+        Lorsque je cite un jeu, un auteur ou une autrice, ou un éditeur, vous
+        trouverez une fiche qui présente rapidement ses informations.
+        <br /><br />
+      </p>
+      <button slot="cta" class="btn btn-primary">Voir les fiches</button>
     </Card>
 
     <Card title="Autres">
-		<p>
-          TODO <br /><br />
-        </p>
+      <p>
+        TODO <br /><br />
+      </p>
     </Card>
-	
   </div>
 </BaseLayout>
