@@ -13,19 +13,19 @@ const dateDisplay = date.charAt(0).toUpperCase() + date.slice(1);
 
 <BaseLayout pageTitle={frontmatter.title}>
   <div class="pt-2 pl-2 pr-2">
-    <p class="text-sm">
-      {frontmatter.author}, {dateDisplay}
+    <p class="text-sm italic">
+      Par {frontmatter.author}, {dateDisplay}
     </p>
-    <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
-    <h1 class="text-xl mt-2">{frontmatter.title}</h1>
-    <p class="text-sm"><em>{frontmatter.description}</em></p>
+    {frontmatter.image && <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />}
+    <h1 class="text-3xl mt-2">{frontmatter.title}</h1>
+    <p class="text-sm text-primary/90">{frontmatter.description}</p>
     <br />
 
     <Prose>
       <slot />
     </Prose>
 
-    <div class="mt-2">
+    <div class="mt-2 mb-2">
       {
         frontmatter.tags.map((tag: string) => (
           <p class="badge badge-soft badge-primary mr-2">

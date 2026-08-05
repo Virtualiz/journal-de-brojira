@@ -32,21 +32,28 @@ const lastPost = chronologicPosts.findLast(() => true);
       <p>
         Au programme chaque mois : événements, récompenses, sorties attendues et
         petites présentations.
-        <br /><br />
-        <span class="text-xl">{lastPost?.data.title}</span>
-        <br />
-        {lastPost?.data.description}
-        <br />
-        <p class="text-xs">
-          Par {lastPost?.data.author}, {
-            lastPost?.data.pubDate.toLocaleDateString("fr", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
-          }.
-        </p>
+
+        <div class="aura aura-xs duration-4000 text-primary bg-secondary">
+          <div class="card bg-base-100 text-base-content">
+            <div class="card-body">
+              <span class="text-2xl">{lastPost?.data.title}</span>
+              <span class="text-sm text-primary/90"
+                >{lastPost?.data.description}</span
+              >
+              <p class="text-xs italic">
+                Par {lastPost?.data.author}, {
+                  lastPost?.data.pubDate.toLocaleDateString("fr", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                }.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </p>
       <a href={lastPost ? `/posts/${lastPost?.id}/` : "/"} slot="cta">
         <button class="btn btn-primary">Lire cet article</button>
@@ -57,7 +64,7 @@ const lastPost = chronologicPosts.findLast(() => true);
       </a>
     </Card>
 
-    <Card title="Mes jeux et prototypes">
+    <Card title="Mes jeux et prototypes <travail en cours>">
       <p>
         Ici vous retrouverez des infos sur mes jeux, prototypes et idées en
         cours
@@ -69,19 +76,22 @@ const lastPost = chronologicPosts.findLast(() => true);
           <li>Backdoor</li>
         </ul>
       </p>
-      <button slot="cta" class="btn btn-primary">Aller voir</button>
+      <button slot="cta" class="btn btn-primary btn-disabled">Aller voir</button
+      >
     </Card>
 
-    <Card title="Fiches">
+    <Card title="Fiches <travail en cours>">
       <p>
         Lorsque je cite un jeu, un auteur ou une autrice, ou un éditeur, vous
         trouverez une fiche qui présente rapidement ses informations.
         <br /><br />
       </p>
-      <button slot="cta" class="btn btn-primary">Voir les fiches</button>
+      <button slot="cta" class="btn btn-primary btn-disabled"
+        >Voir les fiches</button
+      >
     </Card>
 
-    <Card title="Autres">
+    <Card title="Autres <travail en cours>">
       <p>
         TODO <br /><br />
       </p>
