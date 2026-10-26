@@ -6,7 +6,7 @@ import Card from "../components/Card.astro";
 import { getCollection } from "astro:content";
 
 const pageTitle = "Journal de Brojira";
-const allPosts = await getCollection("blog");
+const allPosts = (await getCollection("blog")).filter(post => !post.data.draft);
 const chronologicPosts = allPosts.sort((a, b) => {
   if (a.data.pubDate < b.data.pubDate) return -1;
   if (a.data.pubDate > b.data.pubDate) return 1;

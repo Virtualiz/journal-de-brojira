@@ -4,7 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 
 const pageTitle = "Blog de Brojira";
-const allPosts = await getCollection("blog");
+const allPosts = (await getCollection("blog")).filter(post => !post.data.draft);
 const chronologicPosts = allPosts.sort((a, b) => {
   if (a.data.pubDate < b.data.pubDate) return -1;
   if (a.data.pubDate > b.data.pubDate) return 1;
