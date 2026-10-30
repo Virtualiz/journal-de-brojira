@@ -1,3 +1,7 @@
+## For redacting an article : 
+
+see [Billets.md](./Billets.md)
+
 ## Development
 
 When starting the dev server, use background mode:
