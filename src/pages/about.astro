@@ -1,14 +1,122 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Prose from "../components/Prose.astro";
 const pageTitle = "À propos de moi";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <h1 class="text-2xl">À propos de moi</h1>
+  <div class="p-4 lg:px-8">
+    <Prose>
+      <div class="flex flex-col sm:flex-row items-center gap-6 not-prose mb-6">
+        <!-- Avatar provisoire : remplacer par <img src="..." alt="..."> quand il sera prêt -->
+        <div class="avatar avatar-placeholder">
+          <div
+            class="bg-primary text-primary-content w-28 rounded-full ring ring-accent ring-offset-base-100 ring-offset-2"
+          >
+            <span class="text-4xl font-bold">B</span>
+          </div>
+        </div>
+        <div class="text-center sm:text-left">
+          <h1 class="text-3xl font-bold">Bruno, alias Brojira</h1>
+          <p class="opacity-80">
+            Développeur, joueur, papa et amateur de mécaniques.
+          </p>
+        </div>
+      </div>
 
-  <p>
-    TODO
-  </p>
+      <p class="lead">
+        Bienvenue dans le <strong>Journal de Brojira</strong> : un petit coin
+        du web où je partage ce que j'aime autour du jeu de société.
+      </p>
 
-  
+      <h2>Pourquoi ce journal ?</h2>
+      <p>
+        J'ai lancé ce blog pour écrire des articles de jeux de société pour
+        l'association <strong>La Guilde des Dés Truqués</strong>, à
+        Niderviller. Je suis développeur : c'est ma façon de mettre mes
+        compétences au service de l'asso et de contribuer à l'animer. C'est une
+        initiative perso, faite avec plaisir.
+      </p>
+      <p>
+        Et « journal », parce que j'y partage mes lubies, mes obsessions du
+        moment et mes curiosités.
+      </p>
+
+      <h2>Pourquoi « Brojira » ?</h2>
+      <p>
+        Mon frère était déjà dans l'asso, sous le pseudo <em>Pajira</em>.
+        Comme je suis son frère (<em>bro</em>), je suis devenu <em>Brojira</em>.
+        Simple, efficace.
+      </p>
+
+      <h2>Mon parcours de joueur</h2>
+      <p>
+        Joueur de <strong>Yu-Gi-Oh!</strong> depuis longtemps, je touchais déjà
+        à quelques jeux de société. Puis l'envie de créer les miens est
+        arrivée, et l'asso m'a permis d'approfondir sérieusement ma culture
+        ludique.
+      </p>
+
+      <h2>Ce que j'aime (et ce que j'aime moins)</h2>
+      <ul>
+        <li>
+          Les <strong>jeux de cartes</strong>, et surtout les
+          &nbsp<strong>mécaniques</strong> : jeux de société, TCG, jeux de rôle…
+          J'adore lire les règles pour découvrir comment les mécaniques
+          fonctionnent et se combinent.
+        </li>
+        <li>
+          Partager, et jouer <strong>fair-play</strong> : ne pas respecter les
+          règles, c'est jouer à un autre jeu.
+        </li>
+        <li>Les jeux de bluff, un peu moins. Ce n'est pas ma tasse de thé. Je ne sais pas mentir 😂</li>
+      </ul>
+
+      <h2>Mes créations</h2>
+      <ul>
+        <li>
+          <strong>Spicy Jo</strong> : une V1 est testable. Une V2 est prévue,
+          avec une refonte du système de pioche.
+        </li>
+        <li>
+          <strong>Backdoor</strong> : un jeu façon Loup-Garou, imaginé pour
+          l'EVG d'un ami. La V0 a été testée, il reste à l'affiner.
+        </li>
+        <li>
+          En préparation : un <strong>univers de jeu de rôle</strong> et une &nbsp
+          <strong>initiation à des TCG (Riftbound et Flesh and Blood)</strong>.
+        </li>
+      </ul>
+
+      <h2>Et aujourd'hui ?</h2>
+      <p>
+        Je joue moins depuis que je suis papa, mais une partie de
+        &nbsp<em>Terraforming Mars</em> de temps en temps reste faisable.
+      </p>
+
+      <h2>Ce que vous trouverez ici</h2>
+      <ul>
+        <li>
+          Des <a href="/blog/">billets</a> mensuels : événements, récompenses,
+          sorties attendues et petites présentations.
+        </li>
+        <li>Mes jeux et prototypes, au fil de leur avancée.</li>
+        <li>
+          Des fiches sur les jeux, auteurs, autrices et éditeurs que je cite.
+        </li>
+        <li>Quelques digressions, forcément.</li>
+      </ul>
+      <p>
+        Les articles sont classés par <a href="/tags/">tags</a> pour retrouver
+        facilement un sujet. Le site est encore en construction : certaines
+        sections arrivent petit à petit.
+      </p>
+
+      <h2>Me contacter</h2>
+      <p>
+        Le plus simple : sur le Discord de l'asso, où je suis
+        &nbsp<strong>@Brojira</strong>. Mon Instagram arrive bientôt.
+      </p>
+    </Prose>
+  </div>
 </BaseLayout>
