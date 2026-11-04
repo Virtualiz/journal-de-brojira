@@ -5,12 +5,14 @@ description: "Article mensuel de novembre 2026"
 pubDate: 2026-11-01
 tags: ["mensuel", "novembre", "2026"]
 
-imageUrl: "https://img.magnific.com/free-vector/hand-drawn-flat-hello-november-background_23-2149540303.jpg?semt=ais_hybrid&w=740&q=80"
+image: 
+  url: "https://img.magnific.com/free-vector/hand-drawn-flat-hello-november-background_23-2149540303.jpg?semt=ais_hybrid&w=740&q=80"
+  alt: "Hello November"
 ---
-<meta property="og:image" content={frontmatter.imageUrl}/>
+<meta property="og:image" content={frontmatter.image.url}/>
 <meta property="og:title" content={frontmatter.title} />
 <meta property="og:description" content={frontmatter.description} />
-<meta property="twitter:image" content={frontmatter.imageUrl}/>
+<meta property="twitter:image" content={frontmatter.image.url}/>
 <meta property="twitter:title" content={frontmatter.title} />
 <meta property="twitter:description" content={frontmatter.description} />
 
