@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, author, tags, image } = post.data;
+const url = `/posts/${post.id}/`;
+---
+
+<article
+  class="card card-border border-accent bg-base-100 h-full transition hover:shadow-xl hover:-translate-y-0.5"
+>
+  {
+    image && (
+      <figure class="aspect-video">
+        <img
+          src={image.url}
+          alt={image.alt}
+          loading="lazy"
+          class="h-full w-full object-cover"
+        />
+      </figure>
+    )
+  }
+  <div class="card-body">
+    <time
+      datetime={pubDate.toISOString()}
+      class="text-xs uppercase tracking-wide opacity-60"
+    >
+      {
+        pubDate.toLocaleDateString("fr", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      }
+    </time>
+    <h2 class="card-title">
+      <a href={url} class="link link-hover after:absolute after:inset-0">
+        {title}
+      </a>
+    </h2>
+    <p class="text-sm">{description}</p>
+    <div class="flex flex-wrap gap-1 relative z-10">
+      {
+        tags.map((tag) => (
+          <a
+            href={`/tags/${tag}/`}
+            class="badge badge-outline badge-sm hover:badge-primary"
+          >
+            {tag}
+          </a>
+        ))
+      }
+    </div>
+    <p class="text-xs italic opacity-70">Par {author}</p>
+  </div>
+</article>
