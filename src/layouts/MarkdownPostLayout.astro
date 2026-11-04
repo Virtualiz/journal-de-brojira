@@ -16,7 +16,6 @@ const dateDisplay = date.charAt(0).toUpperCase() + date.slice(1);
     <p class="text-sm italic">
       Par {frontmatter.author}, {dateDisplay}
     </p>
-    {frontmatter.image && <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />}
     <h1 class="text-3xl mt-2">{frontmatter.title}</h1>
     <p class="text-sm text-primary/90">{frontmatter.description}</p>
     <br />
