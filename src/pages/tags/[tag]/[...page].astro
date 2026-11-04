@@ -1,0 +1,47 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PostCard from "../../../components/PostCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection("blog"))
+    .filter((post) => !post.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const uniqueTags = [...new Set(posts.flatMap((post) => post.data.tags))];
+
+  return uniqueTags.flatMap((tag) =>
+    paginate(
+      posts.filter((post) => post.data.tags.includes(tag)),
+      { params: { tag }, pageSize: 6 },
+    ),
+  );
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { page } = Astro.props;
+---
+
+<BaseLayout pageTitle={tag.replace(/^./, tag[0].toUpperCase())}>
+  <div class="p-4 lg:px-8">
+    <a href="/tags/" class="btn btn-ghost btn-sm mb-4">← Retour aux tags</a>
+
+    <p class="mb-4 text-sm opacity-80">
+      Articles avec le tag <span class="badge badge-primary badge-sm">{tag}</span>
+      &nbsp({page.total}).
+    </p>
+
+    <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+      {
+        page.data.map((post) => (
+          <li class="relative">
+            <PostCard post={post} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <Pagination page={page} base={`/tags/${tag}/`} />
+  </div>
+</BaseLayout>

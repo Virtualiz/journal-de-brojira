@@ -1,24 +1,74 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-const pageTitle = "Tag Index";
+const pageTitle = "Tags";
 
+const allPosts = (await getCollection("blog")).filter(
+  (post) => !post.data.draft,
+);
 
-const allPosts = await getCollection("blog");
-const tags = [
-  ...new Set(allPosts.map((post: any) => post.data.tags).flat()),
-];
+const counts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+
+// Plus nombreux d'abord, puis ordre alphabétique
+const tags = [...counts.entries()]
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "fr"));
+
+const maxCount = tags[0]?.count ?? 1;
+
+// Taille et style selon la popularité (classes écrites en entier pour Tailwind)
+const sizeFor = (count: number) => {
+  const ratio = count / maxCount;
+  if (maxCount === 1) return "btn-md text-base";
+  if (ratio > 0.75) return "btn-xl text-2xl";
+  if (ratio > 0.5) return "btn-lg text-xl";
+  if (ratio > 0.25) return "btn-md text-base";
+  return "btn-sm text-sm";
+};
+const colorFor = (count: number) => {
+  const ratio = count / maxCount;
+  if (maxCount === 1) return "btn-outline btn-accent";
+  if (ratio > 0.75) return "btn-primary";
+  if (ratio > 0.5) return "btn-secondary";
+  return "btn-outline btn-accent";
+};
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <div class="tags">
+  <div class="p-4 lg:px-8">
+    <p class="mb-6 text-sm opacity-80">
+      {tags.length} tags, classés par nombre d'articles.
+    </p>
+
     {
-      tags.map((tag) => (
-        <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a>
-        </p>
-      ))
+      tags.length > 0 ? (
+        <ul class="flex flex-wrap items-center justify-center gap-3 py-6">
+          {tags.map(({ name, count }) => (
+            <li>
+              <a
+                href={`/tags/${name}/`}
+                class:list={[
+                  "btn rounded-full normal-case gap-2 transition hover:scale-105",
+                  sizeFor(count),
+                  colorFor(count),
+                ]}
+              >
+                {name}
+                <span class="badge badge-sm badge-neutral">{count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="alert alert-soft">
+          <span>Aucun tag pour le moment.</span>
+        </div>
+      )
     }
   </div>
 </BaseLayout>
-
