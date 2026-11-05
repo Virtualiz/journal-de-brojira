@@ -25,7 +25,7 @@ const pageTitle = "Blog de Brojira";
     <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
       {
         page.data.map((post) => (
-          <li class="relative">
+          <li class="relative isolate">
             <PostCard post={post} />
           </li>
         ))

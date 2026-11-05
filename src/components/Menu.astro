@@ -1,16 +1,25 @@
 ---
+const links = [
+  { href: "/", label: "Accueil", icon: "🏠" },
+  { href: "/blog/", label: "Blog", icon: "📖" },
+  { href: "/tags/", label: "Tags", icon: "🏷️" },
+  { href: "/about/", label: "À propos", icon: "👤" },
+];
 
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
 ---
 
 <div class="drawer">
   <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col">
     <!-- Navbar -->
-    <div class="navbar bg-base-300 w-full">
+    <div class="navbar bg-base-300 w-full border-b-2 border-accent/40 shadow-md">
       <div class="flex-none md:hidden">
         <label
           for="my-drawer-2"
-          aria-label="open sidebar"
+          aria-label="Ouvrir le menu"
           class="btn btn-square btn-ghost drawer-button"
         >
           <svg
@@ -29,30 +38,60 @@
       </div>
       <div class="mx-2 flex-1 px-2 font-serif text-accent text-2xl">
         <a href="/">Journal de Brojira</a>
-    </div>
+      </div>
       <div class="hidden flex-none md:block">
-        <ul class="menu menu-horizontal">
-          <!-- Navbar menu content here -->
-
-          <li><a href="/">🏠</a></li>
-          <li><a href="/about/">À propos</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
+        <ul class="menu menu-horizontal menu-lg gap-1">
+          {
+            links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class:list={[
+                    "font-semibold rounded-field",
+                    { "menu-active": isActive(link.href) },
+                  ]}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                >
+                  <span aria-hidden="true">{link.icon}</span>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
-    <!-- Page content here -->
   </div>
-  <div class="drawer-side">
-    <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"
+  <!-- z-50 : le menu doit passer au-dessus de tout le contenu de la page -->
+  <div class="drawer-side z-50">
+    <label for="my-drawer-2" aria-label="Fermer le menu" class="drawer-overlay"
     ></label>
-    <ul class="menu bg-base-200 min-h-full w-80 p-4">
-      <!-- Sidebar content here -->
-
-          <li><a href="/">🏠</a></li>
-          <li><a href="/about/">À propos</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
-    </ul>
+    <div class="bg-base-200 min-h-full w-80 flex flex-col border-r-2 border-accent/40">
+      <div class="p-4 pb-2 font-serif text-accent text-2xl">
+        Journal de Brojira
+      </div>
+      <ul class="menu menu-lg w-full gap-2 p-4">
+        <li class="menu-title">Navigation</li>
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={[
+                  "font-semibold text-lg rounded-field",
+                  { "menu-active": isActive(link.href) },
+                ]}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                <span aria-hidden="true" class="text-xl">
+                  {link.icon}
+                </span>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </div>
