@@ -1,0 +1,128 @@
+---
+# MODÈLE DE BILLET : copier ce fichier (ex : 2027/janvier.mdx) puis remplacer les valeurs.
+# Les fichiers qui commencent par "_" ne sont pas publiés.
+
+# Titre du billet (c'est le seul <h1> de la page : dans le texte, les sections commencent à "##")
+title: Billet JdS <Mois> <Année>
+author: Brojira
+# 1 à 2 phrases : accroche affichée sur la page, dans la liste du blog et dans les aperçus de partage
+description: "Article mensuel de <mois> <année>"
+pubDate: 2027-01-01
+tags: ["mensuel", "<mois>", "<année>"]
+# draft: true = billet invisible dans le blog, les tags et l'accueil. Retirer la ligne pour publier.
+draft: true
+image:
+  # alt OBLIGATOIRE : décrire ce que montre l'image (pas "image de…")
+  alt: "<description de l'illustration>"
+  url: "<URL de l'illustration>"
+---
+import CardList from "../../components/post/CardList.astro";
+import EventCard from "../../components/post/EventCard.astro";
+import GameCard from "../../components/post/GameCard.astro";
+import PostImage from "../../components/post/PostImage.astro";
+import ImageGallery from "../../components/post/ImageGallery.astro";
+
+{/*
+  RÈGLES D'ACCESSIBILITÉ ET DE LECTURE (ces commentaires ne sont pas affichés) :
+  - Titres : "##" pour les sections, "###" pour les sous-sections. Ne jamais sauter de niveau.
+  - Images : toujours un texte alternatif (alt) qui décrit l'image. alt="" seulement si elle est décorative.
+  - Liens : texte explicite ("le site du festival"), jamais "cliquez ici".
+  - Emojis : OK dans le texte, mais jamais seuls pour porter une information.
+  - Dans un composant, laisser UNE LIGNE VIDE après la balise ouvrante et avant la fermante
+    (sinon le gras, les liens… ne sont pas interprétés).
+  - Phrases courtes, un paragraphe = une idée.
+*/}
+
+<PostImage
+  src="<URL de l'illustration d'accueil>"
+  alt="<description de l'illustration>"
+/>
+
+[À rédiger : accroche de 2-3 phrases.]
+
+**Bonne lecture ❤️**
+
+* [Festivals et événements](#festivals-et-événements)
+* [Sorties attendues](#sorties-attendues)
+* [Une p'tite prez](#une-ptite-prez)
+
+## Festivals et événements
+
+{/*
+  Source : https://subverti.com/fr/maps/festivals/ (proches de l'Alsace-Moselle, pour le mois).
+  Un <EventCard> par événement :
+  - name, dates, address : obligatoires.
+  - schedule : un horaire par entrée. price et attendance : "Entrée gratuite", "700 personnes estimées".
+  - image : affiche. Son alt par défaut est "Affiche : <nom>". Ajouter imageAlt seulement si
+    l'affiche contient une info absente du texte.
+  - url : site de l'événement (le nom devient un lien).
+  - Contenu : 2-3 phrases de présentation, un paragraphe par ligne vide.
+*/}
+<CardList label="Festivals et événements du mois">
+
+<EventCard
+  name="<Nom du festival>"
+  image="<URL de l'affiche>"
+  dates="du 14 au 15 janvier 2027"
+  schedule={["Samedi de 10h à 19h", "Dimanche de 10h à 18h"]}
+  price="Entrée gratuite"
+  attendance="1000 personnes estimées"
+  address="<Adresse complète, département>"
+>
+
+[À rédiger : présentation du festival.]
+
+</EventCard>
+
+</CardList>
+
+## Sorties attendues
+
+### Extensions et suites de jeu
+
+{/*
+  Sources : https://www.campustech.fr/calendrier-des-sorties-jeux-de-societe-2027/ ; prix : philibertnet.
+  Un <GameCard> par jeu. Les champs reprennent les emojis de campustech (voir Billets.md).
+  Extensions et suites ici, jeux standalone dans le second tableau.
+  image : couverture du jeu (alt par défaut "Boîte du jeu <nom>").
+  Avis facultatif : 1-2 phrases en contenu de la balise (avec lignes vides).
+*/}
+<CardList label="Extensions et suites de jeu" columns={2}>
+<GameCard
+  name="<Nom du jeu>"
+  image="<URL de la boîte>"
+  players="2-4 joueurs"
+  age="10+"
+  duration="30 min"
+  mechanics="<mécaniques>"
+  authors="<auteurs>"
+  artists="<illustrateurs>"
+  publisher="<éditeur>"
+  distributor="<distributeur>"
+  price="20€"
+/>
+</CardList>
+
+### Jeux
+
+<CardList label="Jeux" columns={2}>
+{/* Copier un <GameCard> ici */}
+</CardList>
+
+## Une p'tite prez
+
+{/*
+  Galerie d'images (cartes, matériel…) : chaque image a son alt (nom de la carte, etc.).
+  Image seule : <PostImage src="…" alt="…" caption="Crédit ou légende (facultatif)" />
+*/}
+<ImageGallery
+  label="<Ce que montre la galerie>"
+  images={[
+    { src: "<URL>", alt: "<description>" },
+    { src: "<URL>", alt: "<description>" },
+  ]}
+/>
+
+---
+
+Avec amitié et bisous, **Brojira**

@@ -1,0 +1,105 @@
+---
+// Carte d'un jeu (nouveauté, extension…). À placer dans un <CardList columns={2}>.
+// Les champs correspondent aux emojis de campustech (voir Billets.md).
+import Picture from "./Picture.astro";
+
+interface Props {
+  /** Nom du jeu (titre h3). */
+  name: string;
+  /** Boîte du jeu : URL ou image importée. */
+  image: ImageMetadata | string;
+  /** Description de l'image. Par défaut : "Boîte du jeu <name>". */
+  imageAlt?: string;
+  /** 👨‍👩‍👦 Ex : "2-5 joueurs" */
+  players?: string;
+  /** 🎂 Ex : "10+" */
+  age?: string;
+  /** ⏱ Ex : "60 min" */
+  duration?: string;
+  /** ⚙️ Ex : "Tableau-building, Draft" */
+  mechanics?: string;
+  /** 💡 Auteur(s) */
+  authors?: string;
+  /** 🎨 Illustrateur(s) */
+  artists?: string;
+  /** 🛠️ Éditeur */
+  publisher?: string;
+  /** 🚚 Distributeur */
+  distributor?: string;
+  /** Prix, ex : "26€" */
+  price?: string;
+  /** Page du jeu (facultatif) : le nom devient un lien. */
+  url?: string;
+}
+
+const {
+  name, image, imageAlt, players, age, duration, mechanics,
+  authors, artists, publisher, distributor, price, url,
+} = Astro.props;
+
+const rows = [
+  { icon: "👨‍👩‍👦", label: "Joueurs", value: players },
+  { icon: "🎂", label: "Âge minimum", value: age },
+  { icon: "⏱", label: "Durée", value: duration },
+  { icon: "⚙️", label: "Mécaniques", value: mechanics },
+  { icon: "💡", label: "Auteur(s)", value: authors },
+  { icon: "🎨", label: "Illustration", value: artists },
+  { icon: "🛠️", label: "Éditeur", value: publisher },
+  { icon: "🚚", label: "Distributeur", value: distributor },
+].filter((row) => row.value);
+---
+
+<li>
+  <article
+    class="card card-border border-base-300 bg-base-100 shadow-sm h-full"
+  >
+    <figure class="bg-base-200 p-4">
+      <Picture
+        src={image}
+        alt={imageAlt ?? `Boîte du jeu ${name}`}
+        class="h-48 w-auto max-w-full rounded-field object-contain"
+      />
+    </figure>
+    <div class="card-body gap-3">
+      <h3 class="card-title text-xl">
+        {
+          url ? (
+            <a href={url} class="link link-primary" rel="noopener">
+              {name}
+            </a>
+          ) : (
+            name
+          )
+        }
+      </h3>
+
+      <div class="leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0 empty:hidden">
+        <slot />
+      </div>
+
+      <dl class="grid gap-1.5 text-sm sm:text-base">
+        {
+          rows.map((row) => (
+            <div class="flex gap-3">
+              <dt class="w-6 shrink-0 text-center">
+                <span aria-hidden="true">{row.icon}</span>
+                <span class="sr-only">{row.label}</span>
+              </dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      {
+        price && (
+          <p class="card-actions justify-end">
+            <span class="badge badge-primary badge-lg font-semibold">
+              <span class="sr-only">Prix : </span>{price}
+            </span>
+          </p>
+        )
+      }
+    </div>
+  </article>
+</li>

@@ -1,4 +1,19 @@
-Exemple d'article :
+Modèle à copier pour un nouveau billet (avec tous les commentaires de guidage) :
+- ./src/blog/posts/_modele.mdx
+
+Exemple complet utilisant les composants :
+- ./src/blog/posts/2026/decembre.mdx
+
+Composants de billet (./src/components/post/) :
+- `<CardList label="…" columns={1|2}>` : liste de cartes (label obligatoire, lu par les lecteurs d'écran)
+- `<EventCard>` : un festival/événement (name, dates, address, schedule, price, attendance, image, url)
+- `<GameCard>` : un jeu (name, image, players, age, duration, mechanics, authors, artists, publisher, distributor, price)
+- `<PostImage src alt caption>` : image seule (alt obligatoire)
+- `<ImageGallery label images>` : grille d'images (alt obligatoire pour chaque image)
+
+Accessibilité : alt sur toutes les images, titres sans saut de niveau (`##` puis `###`, le `<h1>` est le titre du billet), liens explicites.
+
+Ancien exemple (tableaux markdown, avant les composants) :
 - ./src/blog/posts/2026/octobre.mdx
 
 Source pour les festivals : 
