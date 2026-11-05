@@ -1,0 +1,634 @@
+---
+# Titre du billet (devient le seul <h1> de la page : dans le texte, commencer les sections à "##")
+title: Billet JdS Décembre 2026
+author: Brojira
+# 1 à 2 phrases : sert d'accroche sur la page, dans la liste du blog et dans les aperçus de partage
+description: "Article mensuel de décembre 2026"
+pubDate: 2026-12-01
+tags: ["mensuel", "décembre", "2026"]
+
+# draft: true = billet invisible dans le blog, les tags et l'accueil (retirer la ligne pour publier)
+draft: true
+
+# Image d'illustration (réseaux sociaux et carte du blog)
+image: 
+  # alt OBLIGATOIRE : décrire ce que montre l'image, pas "image de…"
+  alt: "Hello November"
+  url: "https://img.magnific.com/free-vector/hand-drawn-flat-hello-november-background_23-2149540303.jpg?semt=ais_hybrid&w=740&q=80"
+---
+import CardList from "../../../components/post/CardList.astro";
+import EventCard from "../../../components/post/EventCard.astro";
+import GameCard from "../../../components/post/GameCard.astro";
+import PostImage from "../../../components/post/PostImage.astro";
+import ImageGallery from "../../../components/post/ImageGallery.astro";
+
+<meta property="og:image" content={frontmatter.image.url}/>
+<meta property="og:title" content={frontmatter.title} />
+<meta property="og:description" content={frontmatter.description} />
+<meta property="twitter:image" content={frontmatter.image.url}/>
+<meta property="twitter:title" content={frontmatter.title} />
+<meta property="twitter:description" content={frontmatter.description} />
+
+{/*
+  GUIDE DE RÉDACTION (ces commentaires ne sont pas affichés)
+  - Titres : "##" pour les sections, "###" pour les sous-sections. Ne pas sauter de niveau.
+  - Contenu des composants : laisser UNE LIGNE VIDE après la balise ouvrante et avant la fermante,
+    sinon le markdown (gras, liens…) n'est pas interprété.
+  - Images : toujours un texte alternatif (alt) qui décrit l'image. alt="" seulement si décorative.
+  - Liens : texte explicite ("le site du festival"), jamais "cliquez ici".
+  - Emojis : OK dans le texte, mais ne pas les utiliser seuls pour porter une info.
+*/}
+
+{/* TODO : remplacer par l'illustration de décembre (cette image est celle de novembre) */}
+<PostImage
+  src="https://img.magnific.com/free-vector/hand-drawn-flat-hello-november-background_23-2149540303.jpg?semt=ais_hybrid&w=740&q=80"
+  alt="Illustration de bienvenue du billet"
+/>
+
+Décembre, c'est le mois où l'on range définitivement les jeux d'extérieur pour se réfugier autour de la table avec une boisson chaude et une grosse boîte 😌 Et croyez-moi, les éditeurs l'ont bien compris : le calendrier des sorties est copieux cette année, avec un mois particulièrement chargé 😱
+
+Ce mois-ci, comme d'habitude : une revue des festivals du mois, une liste de jeux attendus et une petite présentation. Et cette fois, la prez sera consacrée à un auteur plutôt qu'à une mécanique, car il y a un nom qui revient **quatre fois** dans les sorties de décembre : celui d'un prof de maths américain à qui l'on doit, entre autres, un certain jeu de cartes à collectionner affectionné par un certain _**@Sopo**_ 🤭
+
+**Bonne lecture ❤️**
+
+* [Festivals et événements](#festivals-et-événements)
+* [Sorties attendues](#sorties-attendues)
+* [Une p'tite prez: Richard Garfield, le prof de maths qui a inventé le TCG](#une-ptite-prez-richard-garfield-le-prof-de-maths-qui-a-inventé-le-tcg)
+* [Quel archétype es-tu ? ⚡](#quel-archétype-es-tu--)
+
+## Festivals et événements
+
+{/*
+  FESTIVALS (source : https://subverti.com/fr/maps/festivals/, proches de l'Alsace-Moselle)
+  Un <EventCard> par événement :
+  - name, dates, address : obligatoires
+  - schedule : un horaire par entrée ; price / attendance : "Entrée gratuite", "700 personnes estimées"
+  - image : affiche (alt par défaut "Affiche : <nom>" ; ajouter imageAlt seulement si l'affiche contient une info absente du texte)
+  - url : site de l'événement (rend le nom cliquable)
+  - Dans le contenu : 2-3 phrases de présentation, un paragraphe par ligne vide.
+*/}
+<CardList label="Festivals et événements de décembre">
+
+<EventCard
+  name="Fessti Jeux"
+  image="https://subverti.com/assets/img/maps/festivals/fessti-jeux-schwindratzheim/affiche-2026.webp?v=1793033712"
+  dates="7 au 8 décembre 2026"
+  schedule={["Samedi de 10 h à minuit", "Dimanche de 10h à 18h"]}
+  price="Entrée gratuite"
+  attendance="700 personnes estimées"
+  address="25 Rue de la Zorn 67270 Schwindratzheim, Bas-Rhin"
+>
+
+Fessti Jeux c'est un peu comme le Messti, mais pour avec des jeux. C'est une événement ludique destinée à rassembler les passionnés, les curieux et les novices, pour célébrer ensemble le plaisir du jeu sous toutes ses formes.
+
+Pendant deux jours, les participants pourront découvrir et jouer à une large sélection de jeux de société et de jeux de rôles. Des classiques indémodables aux dernières nouveautés, chacun trouvera son bonheur.
+
+</EventCard>
+
+<EventCard
+  name="Halludoween"
+  image="https://subverti.com/assets/img/maps/festivals/halludoween-selestat/affiche-2026.webp?v=1793033712"
+  dates="7 au 8 décembre 2026"
+  schedule={["Samedi de 14 h à minuit", "Dimanche de 10h à 18h"]}
+  price="Entrée gratuite"
+  address="Les Tanzmatten, Quai de l'Ill 67600 Sélestat, Bas-Rhin"
+>
+
+Un week-end de jeu et de frissons ludiques au cœur du Centre Alsace : c’est Halludoween !
+
+Créé par La ludothèque Sélest’ et organisé avec plusieurs associations partenaires, ce festival est rendu possible grâce à des passionnés qui font vivre le monde ludique et souhaitent partager leur univers avec vous (jeux de plateau, jeux de rôle, jeux de figurines, jeux de cartes à collectionner, jeux enfants, jeux en bois…).
+
+Que vous soyez débutant ou joueur confirmé, venez jouer en famille ou entre amis, découvrir des nouveautés et profiter de nombreuses animations.
+
+Sur place, vous trouverez également des boutiques pour dénicher vos prochains jeux, ainsi qu’un espace de restauration pour faire une pause gourmande entre deux parties.
+
+</EventCard>
+
+<EventCard
+  name="Geek Legends"
+  image="https://subverti.com/assets/img/maps/festivals/retrogeek-festival-vesoul/affiche-2026.webp?v=1793033712"
+  dates="du 14 au 15 décembre 2026"
+  schedule={["Samedi de 10 h à 19 h", "Dimanche de 10h à 18h"]}
+  price="de 5 à 15 €"
+  attendance="4500 personnes estimées"
+  address="ParcExpo70 - Parc des Expositions, 1 Rue Victor Dollé 70000 Vesoul, Haute-Saône"
+>
+
+Grand rassemblement des fans de pop culture, les Geek Legends offrent à ses visiteurs le temps d’un week-end une immersion totale dans l’univers geek et ludique sous toutes ses formes.
+
+Jeux vidéos, jeux de société, cosplay, youtubers mais aussi expositions, espace combats ou encore spectacles se mélangent ainsi aux stands d’exposants venus de toute la France.
+
+</EventCard>
+
+<EventCard
+  name="Week-end jeux de société coopératifs 2026"
+  image="https://subverti.com/assets/img/maps/festivals/week-end-jeux-societe-cooperatifs-metz/affiche-2026.webp?v=1793033712"
+  dates="du 14 au 15 décembre 2026"
+  schedule={["Samedi de 14h30 à 18h30", "Dimanche de 14h30 à 18h30"]}
+  price="2€ la journée"
+  attendance="100 personnes estimées"
+  address="Espace corchade, 37 rue du saulnois 57070 Metz, Moselle"
+>
+
+Le mot d’ordre de ces 2 après-midi ? 100 % coopératif !
+
+Venez en famille, entre amis ou seul (on vous trouvera des partenaires de jeu) et unissez vos forces pour atteindre un objectif commun. Ici, pas de maillon faible éliminé en cours de partie ! Chacun apporte ce qu’il sait faire. Et c’est ensemble que les coéquipiers réussissent ou... échouent (ça arrive aussi). Que la partie soit gagnée ou perdue, les joueurs sont sûrs de s’amuser et de prendre plaisir à aider les autres.
+
+</EventCard>
+
+<EventCard
+  name="Morghulis Days"
+  image="https://subverti.com/assets/img/maps/festivals/morghulis-days-muntzenheim/affiche-2026.webp?v=1793033712"
+  dates="du 14 au 15 décembre 2026"
+  price="Entrée gratuite"
+  attendance="100 personnes estimées"
+  address="Salle Marcel Meyer, 1 Rue Vauban 68320 Muntzenheim, Haut-Rhin"
+>
+
+Les Morghulis Days, c'est un évènement pour en découdre ! 🔥🎲💥
+
+Convention multi-tournois réunissant des passionnés du jeu sur tout un weekend !
+
+Mais il y a aussi de la très bonne nourriture, de quoi se rafraîchir et plein de bonne humeur.
+
+Organisé par l'association Colmar Morghulis
+
+</EventCard>
+
+<EventCard
+  name="Les Jeux du Stan"
+  image="https://subverti.com/assets/img/maps/festivals/jeux-stan-nancy/logo.webp?v=1793033712"
+  dates="du 14 au 15 décembre 2026"
+  schedule={["Samedi de 14h à 18h", "Dimanche de 10h à 18h"]}
+  price="Entrée gratuite"
+  address="Stade Marcel Picot Tomblaine 54426 Nancy-Tomblaine, Meurthe-et-Moselle"
+>
+
+Les Jeux Du Stan est un salon du jeu de société. Notre objectif est de faire découvrir aux petits et aux grands la richesse des jeux de société actuels
+
+</EventCard>
+
+<EventCard
+  name="Salon du jeu"
+  image="https://subverti.com/assets/img/maps/festivals/fete-jeu-kaysersberg/affiche-2026.webp?v=1793033712"
+  dates="Dimanche 15 décembre 2026"
+  schedule={["de 10h à 18h"]}
+  price="Entrée gratuite"
+  attendance="1000 personnes estimées"
+  address="Salle Espace Pluriel, 11 rue Saint Jacques 68240 Sigolsheim, Haut-Rhin"
+>
+
+Rejoignez-nous pour une journée exceptionnelle dédiée aux jeux de sociétés lors de notre salon du jeu !
+
+Cet événement est l'occasion parfaite pour découvrir, essayer et jouer à une multitude de jeux, que vous soyez débutants ou experts.
+
+</EventCard>
+
+<EventCard
+  name="Salon du jeu Voyer"
+  image="https://subverti.com/assets/img/maps/festivals/venez-voyer-jouez/affiche-2026.webp?v=1793033712"
+  dates="du 21 au 22 décembre 2026"
+  schedule={["Samedi de 14h à minuit", "Dimanche de 10h à 17h"]}
+  price="Entrée gratuite"
+  attendance="1500 personnes estimées"
+  address="Salle polyvalente 57560 Voyer, Moselle"
+>
+
+Salon du jeu tout public avec animations de dizaines de jeux en non stop, organisé par le Foyer Rural de Voyer, en partenariat avec la Librairie Le Ventre de la Baleine.
+
+Nouveautés, classiques avec univers dédiés, jeux primés, prototypes, éditeurs et auteurs présents pour deux journées familiales et ludiques !
+
+Entrée libre, restauration et buvette et crêpes à toute heure.
+
+Tombola au profit d'une association d'utilité sociale.
+
+Tournois gratuits primés.
+
+</EventCard>
+
+</CardList>
+
+
+## Sorties attendues
+
+Quelques sorties de jeux attendus, mais bien entendu beaucoup d'autres jeux sortent ce mois ci 😁
+
+### Extensions et suite de jeu
+
+{/*
+  JEUX (source : https://www.campustech.fr/calendrier-des-sorties-jeux-de-societe-2026/ ; prix : philibertnet)
+  Un <GameCard> par jeu, les champs reprennent les emojis de campustech (voir Billets.md) :
+  name, image, players, age, duration, mechanics, authors, artists, publisher, distributor, price.
+  Extensions/suites dans le premier tableau, jeux standalone dans le second.
+  image : couverture du jeu (alt par défaut "Boîte du jeu <nom>").
+  Texte libre (facultatif) : un avis de 1-2 phrases, en contenu de la balise (avec lignes vides).
+*/}
+<CardList label="Extensions et suites de jeu" columns={2}>
+
+<GameCard
+  name="Faraway : Au-delà du voile"
+  image="https://www.campustech.fr/wp-content/uploads/2026/05/faraway-voile.png"
+  players="2-6 joueurs"
+  age="10+"
+  duration="30 min"
+  mechanics="Extension"
+  authors="Corentin Lebrat, Johannes Goupy"
+  artists="Maxime Morin"
+  publisher="Catch Up Games"
+  distributor="Blackrock Games"
+  price="6€"
+/>
+<GameCard
+  name="Moustache : Caméléon"
+  image="https://www.campustech.fr/wp-content/uploads/2026/07/moustache-cameleon.png"
+  players="3-6 joueurs"
+  age="8+"
+  duration="20 min"
+  mechanics="Extension"
+  authors="Alexandre Aguilar, Jules Messaud"
+  artists="Gorobei"
+  publisher="Kodama"
+  distributor="Blackrock Games"
+  price="7€"
+/>
+<GameCard
+  name="La Cour de Versailles : L'Homme au masque de fer"
+  image="https://www.campustech.fr/wp-content/uploads/2026/07/la-cour-de-versailles-lhomme-au-masque-de-fer.png"
+  players="2-6 joueurs"
+  age="12+"
+  duration="20 min"
+  mechanics="Extension"
+  authors="Léo Blandin"
+  publisher="Chèvre Édition"
+  distributor="Madistrib"
+  price="6€"
+/>
+<GameCard
+  name="Petits Soldats : Parachutiste"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/petits-soldats-parachutiste.png"
+  players="2-4 joueurs"
+  age="8+"
+  duration="30 min"
+  mechanics="Extension"
+  authors="Florent Baudry, Adrien Fenouillet"
+  artists="Paul Mafayon"
+  publisher="Iello"
+  price="12€"
+/>
+<GameCard
+  name="Light Speed Arena : League 56"
+  image="https://www.campustech.fr/wp-content/uploads/2026/07/light-speed-arena-league56.png"
+  players="2-6 joueurs"
+  age="8+"
+  duration="20 min"
+  mechanics="Extension"
+  authors="Tom Jolly, James Ernest, Leonardo Alese, Emanuele Santellani"
+  artists="Marco Salogni"
+  publisher="Intrafin"
+  price="15€"
+/>
+<GameCard
+  name="The Crew : Aventure Autour du Monde"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/the-crew-aventure.png"
+  players="3-5 joueurs"
+  age="10+"
+  duration="30 min"
+  mechanics="Coop, Campagne, Plis, Objectifs"
+  authors="Thomas Sing"
+  artists="Fiore GmbH"
+  publisher="Iello"
+  price="16€"
+/>
+<GameCard
+  name="Terrorscape : Ennemis Putrides"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/terrorscape-ennemis.png"
+  players="2-4 joueurs"
+  age="14+"
+  duration="45 min"
+  mechanics="Extension"
+  authors="Jeffrey CCH"
+  artists="Arepko, Amanda Phelps, Domingo Pino, The Geek Artist, Herman Ying"
+  publisher="Iello"
+  price="28€"
+/>
+<GameCard
+  name="Solstis Collector"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/solstis-collector.png"
+  players="2 joueurs"
+  age="8+"
+  duration="30 min"
+  mechanics="Combinaison, Tuiles"
+  authors="Bruno Cathala, Corentin Lebrat"
+  artists="Axel Mahé"
+  publisher="Kodama"
+  distributor="Blackrock Games"
+  price="30€"
+/>
+
+</CardList>
+
+Et aussi, côté rééditions et nouvelles versions :
+
+- Carcassonne 25ème Anniversaire Rétro (36€)
+- Parks : Seconde Édition (50€)
+- Ice : Seconde Édition Collector (150€)
+- Les Contrées de l'Horreur : Seconde Édition (63€)
+- Wingspan Pocket (20€)
+- Piña Coladice : Barman's Edition (32€)
+
+### Jeux
+
+<CardList label="Jeux" columns={2}>
+
+<GameCard
+  name="King of Tokyo Duel : Tokyo Bay"
+  image="https://www.campustech.fr/wp-content/uploads/2026/07/kot-duel-tokyo-bay.png"
+  players="2 joueurs"
+  age="8+"
+  duration="20 min"
+  mechanics="Dés, Affrontement"
+  authors="Richard Garfield"
+  artists="Quentin Regnes"
+  publisher="Iello"
+  price="22€"
+/>
+<GameCard
+  name="Zenso"
+  image="https://www.campustech.fr/wp-content/uploads/2026/09/zenso.png"
+  players="2-4 joueurs"
+  age="10+"
+  duration="30 min"
+  mechanics="Logique, Cartes, Gestion de main, Ressources"
+  authors="Bruno Cathala, Andrea Mainini"
+  artists="Julie Gruet"
+  publisher="Blam"
+  distributor="Blackrock Games"
+  price="25€"
+/>
+<GameCard
+  name="Qu'on leur coupe la tête !"
+  image="https://www.campustech.fr/wp-content/uploads/2026/05/quon-leur-coupe-la-tete.png"
+  players="2 joueurs"
+  age="12+"
+  duration="15 min"
+  mechanics="Placement de cartes, Majorité, Contrôle de bornes"
+  authors="Bruno Cathala, Florian Sirieix"
+  artists="Ben Basso"
+  publisher="Matagot"
+  distributor="Surfin'Meeple"
+  price="9€"
+/>
+<GameCard
+  name="Fragments : Solara"
+  image="https://www.campustech.fr/wp-content/uploads/2026/05/fragments-solara.png"
+  players="1-4 joueurs"
+  age="12+"
+  duration="90 min"
+  mechanics="Coop, Narratif, Enquêtes"
+  authors="Yohan Servais"
+  artists="Noëmie Chevalier"
+  publisher="Iello"
+  price="18€"
+/>
+<GameCard
+  name="Skyrift : Aux portes de l'Ombre"
+  image="https://www.campustech.fr/wp-content/uploads/2026/02/skyrift_aux-portes.png"
+  players="2 joueurs"
+  age="12+"
+  duration="30 min"
+  mechanics="Asymétrique, Gestion de main, Affrontement"
+  authors="Richard Garfield"
+  artists="Louis Gennart, Semyon Proskuryakov, Svyatoslav Gerasymchuk"
+  publisher="Origames"
+  distributor="Neoludis"
+  price="23€"
+/>
+<GameCard
+  name="Skyrift : Les Vagues du Destin"
+  image="https://www.campustech.fr/wp-content/uploads/2026/02/skyrift-les-vagues.png"
+  players="2 joueurs"
+  age="12+"
+  duration="30 min"
+  mechanics="Asymétrique, Gestion de main, Affrontement"
+  authors="Richard Garfield"
+  artists="Louis Gennart, Semyon Proskuryakov, Svyatoslav Gerasymchuk"
+  publisher="Origames"
+  distributor="Neoludis"
+  price="23€"
+/>
+<GameCard
+  name="Final Titan"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/final-titan.png"
+  players="1-5 joueurs"
+  age="10+"
+  duration="40 min"
+  mechanics="Draft, Affrontement"
+  authors="Richard Garfield, Christian Kudahl"
+  artists="Emanuele Desiati, Xavier Cuenca, Daniel Caballero, Jose Fernando Garcia, Vincent Dutrait"
+  publisher="Iello"
+  price="36€"
+/>
+<GameCard
+  name="Nova Era"
+  image="https://www.campustech.fr/wp-content/uploads/2026/02/nova-era.png"
+  players="2-4 joueurs"
+  age="12+"
+  duration="60 min"
+  mechanics="Combo, Placement de dés, Développement"
+  authors="Andrea Chiarvesio"
+  artists="Agnès Ripoche"
+  publisher="Cmon"
+  distributor="Asmodee"
+  price="32€"
+/>
+<GameCard
+  name="Gaudí"
+  image="https://www.campustech.fr/wp-content/uploads/2026/08/gaudi.png"
+  players="1-4 joueurs"
+  age="10+"
+  duration="120 min"
+  mechanics="Collection, Placement, Tuiles"
+  authors="Dani García"
+  artists="Edu Valls"
+  publisher="Iello"
+  price="32€"
+/>
+<GameCard
+  name="Keyside"
+  image="https://www.campustech.fr/wp-content/uploads/2026/05/keyside.png"
+  players="1-4 joueurs"
+  age="14+"
+  duration="120 min"
+  mechanics="Collection, Pose d'ouvriers"
+  authors="Richard Breese, Dávid Turczi"
+  artists="Vicki Dalton"
+  publisher="Intrafin"
+  price="59€"
+/>
+<GameCard
+  name="Greenwood"
+  image="https://www.campustech.fr/wp-content/uploads/2026/07/greenwood.png"
+  players="1-4 joueurs"
+  age="14+"
+  duration="150 min"
+  mechanics="Asymétrie, Combo"
+  authors="Christos Giannakoulas, Manolis Zachariadis"
+  artists="Martin Mottet, Maurice Mosqua"
+  publisher="Super Meeple"
+  distributor="Neoludis"
+  price="68€"
+/>
+
+</CardList>
+
+Et il y en a encore beaucoup d'autres ! Pêle-mêle :
+
+- Le Seigneur des Anneaux : La Confrontation, le classique en duel de Reiner Knizia qui revient chez Iello (~40€)
+- Mirage (11€), Time Walkers (23€), Super (24€), Sunfield Farm (27€), Terrasses de Kanoa (33€), Fossilium (59€), The Old King's Crown (81€)
+- Une belle vague **Oink Games** distribuée par Gigamic, toutes ces petites boîtes débarquant le 13 décembre : Kobayakawa (20€), Pick'n Packers (20€), Rafter Five (21€), Dying Message (25€)
+
+
+## Une p'tite prez: Richard Garfield, le prof de maths qui a inventé le TCG
+
+En préparant la liste des sorties de ce mois, un nom m'a sauté aux yeux : **Richard Garfield**. Pas une fois, pas deux, mais **quatre fois** sur le mois de décembre 2026 ! Un tel embouteillage, ça méritait bien qu'on s'arrête dessus 😄
+
+Et pour les lecteurs de la rubrique Yu-Gi-Oh! en bas de ce billet, autant vous le dire tout de suite : sans ce monsieur, il n'y aurait probablement ni Yu-Gi-Oh!, ni Pokémon, ni aucun des jeux de cartes à collectionner qui remplissent nos étagères 🃏
+
+<PostImage
+  src="https://cf.geekdo-images.com/hIpTc2OZCy3PKXYNVYWrgQ__imagepage/img/mpN_KDtOdnqI852aULnEl9dl0Oo=/fit-in/900x600/filters:no_upscale():strip_icc()/pic6982267.jpg"
+  alt="Portrait de Richard Garfield"
+  caption="Richard Garfield (source : BoardGameGeek)"
+/>
+
+### **Un prof de maths dans la place**
+
+Richard Channing Garfield naît en 1963 à Philadelphie. Avant d'être auteur de jeux, c'est un **mathématicien** : il décroche un doctorat en mathématiques combinatoires à l'Université de Pennsylvanie, puis devient professeur de maths au Whitman College. Petite anecdote généalogique au passage : il est l'arrière-arrière-petit-fils de James A. Garfield, 20ᵉ président des États-Unis 🇺🇸
+
+Mais le gamin créait déjà ses propres jeux à 13 ans, et l'un d'eux va tout changer... pas forcément celui qu'on croit.
+
+Au début des années 90, Garfield présente à **Peter Adkison**, patron d'une toute jeune société nommée *Wizards of the Coast*, un jeu de robots programmant leurs déplacements sur un plateau industriel : **RoboRally**. Adkison adore... mais sa boîte n'a pas un sou, et produire un gros jeu avec plateau et figurines, c'est hors de portée. Sa contre-proposition : « Et si tu me faisais plutôt un jeu de cartes ? Petit, pas cher, qu'on puisse jouer entre deux cours, en moins de 20 minutes. »
+
+La réponse de Garfield à cette contrainte sort en août 1993. Elle s'appelle **Magic: The Gathering**.
+
+---
+### **L'invention d'un genre entier**
+
+Ce que Garfield invente avec Magic, ce n'est pas juste un jeu : c'est une **catégorie**. Le principe du *jeu de cartes à collectionner* (TCG / CCG) n'existait tout simplement pas avant. L'idée que chaque joueur arrive avec son propre deck, construit à partir d'une collection personnelle, et que la construction du deck fasse partie intégrante du jeu, c'est entièrement neuf à l'époque.
+
+Le succès est si brutal que Garfield quitte l'enseignement en 1994 pour rejoindre Wizards of the Coast à plein temps. Dans la foulée, il enchaîne :
+
+- **RoboRally** (1994), qui finit enfin par sortir grâce à l'argent de Magic 😅
+- **Vampire: The Eternal Struggle** (1994, d'abord nommé *Jyhad*), son deuxième TCG
+- **The Great Dalmuti** (1995), un petit jeu de défausse et de hiérarchie sociale terriblement efficace
+- **Netrunner** (1996), un duel asymétrique hacker contre mégacorpo, devenu culte
+
+Il redevient indépendant en 2000, et c'est là qu'il arrive dans nos ludothèques « grand public » :
+
+- **King of Tokyo** (2011, Iello), son plus gros succès familial, suivi de King of New York puis de King of Tokyo Duel
+- **Bunny Kingdom** (2017, Iello), du draft et du contrôle de territoire sous une couche de lapins adorables
+- **KeyForge** (2018), où il casse son propre jouet : chaque deck est généré automatiquement, **unique au monde**, et ne se construit pas. Un « unique deck game », l'anti-TCG après avoir inventé le TCG 🤯
+
+---
+### **Sa signature : le hasard assumé**
+
+S'il y a un fil rouge dans sa production, c'est son rapport décomplexé au **hasard**. Là où beaucoup d'auteurs cherchent à le réduire, Garfield le revendique : la pioche, les dés, l'incertitude. Pour lui, l'aléatoire n'est pas l'ennemi de la stratégie, c'est ce qui crée les décisions intéressantes : gérer le risque, s'adapter, décider quand pousser sa chance.
+
+C'est flagrant quand on aligne ses jeux : la pioche de Magic, les dés de King of Tokyo, le deck aléatoire de KeyForge... et le bluff de Skyrift, où l'on peut à tout moment monter les enchères d'une manche, à l'adversaire de suivre ou d'abandonner.
+
+---
+### **Ses quatre sorties de décembre**
+
+**Skyrift : Aux portes de l'Ombre** et **Skyrift : Les Vagues du Destin** (Origames, 23€ chacune) sont deux boîtes **autonomes** et compatibles entre elles. C'est un retour de Garfield au duel pur : pas de collection, pas de deck-building, trois factions par boîte, et une mécanique de défi au cœur du jeu qui ajoute de l'enjeu.
+
+**Final Titan** (Iello, 36€), co-signé avec Christian Kudahl, mise sur le draft et l'affrontement de 1 à 5 joueurs — avec au passage une belle brochette d'illustrateurs, dont Vincent Dutrait.
+
+**King of Tokyo Duel : Tokyo Bay** (Iello, 22€) vient enfin étoffer la déclinaison en duel de son monstre sacré 🦖
+
+| | |
+|---|---|
+| ![Skyrift : Aux portes de l'Ombre](https://www.campustech.fr/wp-content/uploads/2026/02/skyrift_aux-portes.png) | ![Skyrift : Les Vagues du Destin](https://www.campustech.fr/wp-content/uploads/2026/02/skyrift-les-vagues.png) |
+| ![Final Titan](https://www.campustech.fr/wp-content/uploads/2026/08/final-titan.png) | ![King of Tokyo Duel : Tokyo Bay](https://www.campustech.fr/wp-content/uploads/2026/07/kot-duel-tokyo-bay.png) |
+
+---
+
+Trente ans après Magic, le bonhomme sort encore quatre jeux dans le même mois, et dans quatre registres différents : le duel de cartes exigeant, le draft d'affrontement et le petit jeu de dés familial. Pas mal pour un prof de maths qui voulait juste un jeu jouable entre deux cours 😁
+
+Et vous, quel est votre Garfield préféré ? Perso j'ai du respect pour Magic, aussi longtemps après le jeu continue à être vendu et joué, et est assez reconnu pour pouvoir faire des collabs avec nos licences préférées !
+
+## Quel archétype es-tu ? ⚡
+
+Aujourd'hui on va s'attaquer à deux oeuvres importantes, deux monuments que le monde nous a permis de connaître : Jurassic Park et Damien ! 🦖 🤩 Alors ...
+
+Bienvenue dans les archives classifiées de Genomix (_GMX_) ! Pour un fan de Jurassic Park, cet archétype Yu-Gi-Oh! est le fantasme absolu : c'est l'équivalent de voir InGen pousser l'ingénierie génétique jusqu'à son point de non-retour, là où le Dr. Wu ne fusionnerait pas seulement _des dinosaures entre eux_, mais **des dinosaures avec le personnel scientifique**.
+
+Voici le rapport complet de l'incident GMX, découpé pour analyser comment chaque atrocité du lore de et archétype se traduit directement par une mécanique de jeu sur le tapis de jeu. D'ailleurs cet archétype est aussi une exclu d'occident ! (Les japonais et joueurs OCG n'ont pas encore ces cartes ! 😉)
+
+<PostImage
+  src="https://i.ebayimg.com/images/g/0UkAAeSwYudp~LwC/s-l1200.jpg"
+  alt="Exemple de liste de cartes pour un deck GMX"
+/>
+
+
+### ACTE I : La Façade d'InGen et la Manipulation Génétique
+
+Officiellement, GMX est une entreprise scientifique humanitaire. Le Directeur Kimridge et ses équipes, notamment la chercheuse Selande, prétendent recréer des Dinosaures dociles (comme la carte **_Daneen Dinosaure Restitué_**) dans un sanctuaire isolé (**_Laboratoire #5 GMX_**). En réalité, les sites de fouilles ne servent qu'à récolter des chaînes d'ADN pour concevoir l'arme biologique parfaite. Les scientifiques falsifient les données pour cacher la vérité.
+
+En jeu, cela se traduit par :
+- Le Séquençage de l'ADN (La mécanique du "Top Deck") : Pour recréer la vie, il faut trier les gènes. En jeu, les cartes GMX passent leur temps à regarder, réarranger ou dévoiler le dessus de votre Deck. On n'enchaîne pas les cartes au hasard : on séquence notre prochain tour. Révéler un Dinosaure ou un Reptile sur le dessus du Deck déclenche les effets de nos monstres, simulant la "naissance" réussie d'un clone.
+- La falsification des rapports (_L'effet de Selande_) : Dans le lore, Selande modifie les données. En jeu, son effet permet de renvoyer des cartes depuis la main ou le terrain au-dessus du Deck pour en piocher d'autres. Elle "réécrit" la main (nos ressources) pour que le laboratoire obtienne exactement les cobayes dont il a besoin.
+- Le Laboratoire #5 (La Magie de Terrain) : Cette carte immunise nos monstres contre certaines destructions et booste leur consistance. C'est l'enclos fortifié. Mais tout comme l'enclos du T-Rex, il offre un avantage immense... jusqu'à ce que la sécurité ne lâche.
+
+| | |
+|---|---|
+|![Returned Dino Danneen](https://images.ygoprodeck.com/images/cards/29927283.jpg)|![GMX Researcher Selande](https://images.ygoprodeck.com/images/cards/20049870.jpg)|
+|![GMX lab #5](https://images.ygoprodeck.com/images/cards/74378580.jpg)|![GMX Partner Selandea](https://images.ygoprodeck.com/images/cards/2618725.jpg)|
+
+### ACTE II : Le Prix de la Science et le Projet Super-Soldat
+
+L'armée finance GMX. Pour créer le soldat parfait, les scientifiques développent un agent mutagène : le Gaz Vert. L'expérimentation humaine commence dans le secret le plus total. L'adjointe du directeur, **_Noma_**, est le "Patient Zéro". Elle conserve sa conscience mais son corps développe déjà des attributs reptiliens (doigts allongés, griffes de Raptor).
+
+En Jeu :
+- L'Expérimentation Bioéthique (Le coût en Points de Vie) : Jouer Dieu a un prix. Pour activer leurs effets les plus puissants (comme invoquer spécialement un dinosaure ou récupérer une carte clé), les effets GMX demandent constamment de payer des Points de Vie (LP). Ce coût en LP représente les sacrifices éthiques, le sang versé et les ressources vitales consommés par ces expériences interdites.
+- La transition de Noma (Le changement de Type) : Sur sa carte de base, Noma est graphiquement une humaine en blouse. Pourtant, son type de monstre sur la carte n'est pas Magicien ou Guerrier : elle est de type Reptile. La mécanique de jeu trahit sa nature avant même que l'histoire n'éclate : le jeu vous dit explicitement que son ADN est déjà corrompu.
+- Le Gaz Vert : Les cartes Magie/Piège de l'archétype agissent comme des catalyseurs. Elles forcent le destin en modifiant le dessus du deck ou en détruisant nos propres monstres pour en invoquer de plus grands. C'est le principe de l'évolution forcée : on détruit le sujet faible pour libérer le prédateur.
+
+<ImageGallery
+  label="Cartes de l'archétype GMX"
+  images={[
+    { src: "https://images.ygoprodeck.com/images/cards/83528184.jpg", alt: "GMX Associate Noma" },
+    { src: "https://images.ygoprodeck.com/images/cards/56034579.jpg", alt: "GMX Chairman Kimridge" },
+    { src: "https://images.ygoprodeck.com/images/cards/39706423.jpg", alt: "GMX Suppression Squad" },
+    { src: "https://images.ygoprodeck.com/images/cards/18795635.jpg", alt: "GMX Applied experiment 55" },
+  ]}
+/>
+
+### ACTE III : L'Incident de l'Expérience #55 ou "La vie trouve toujours un chemin"
+
+Lors de l'expérimentation n°55, une capsule de Gaz Vert explose. Le confinement est brisé. Mais au lieu de tuer le personnel, le gaz fusionne instantanément l'ADN des dinosaures présents avec celui des humains qui les étudiaient. Le Directeur Kimridge et Noma subissent une métamorphose instantanée et violente, devenant des hybrides colossaux et affamés.
+
+Cela donne :
+- La Fusion instantanée (L'invocation depuis l'Extra Deck) : L'acmé du deck réside dans ses Monstres Fusion (GMX - ALLOS et GMX - VELOX). Pour les invoquer, vous n'utilisez pas une carte "Polymérisation" classique qui symboliserait une fusion contrôlée. Le deck utilise des effets rapides de déclenchement lors de l'explosion/destruction ou des Magies à effet immédiat. C'est l'accident de laboratoire en temps réel.
+- GMX - VELOX (L'évolution de Noma) : Noma fusionne avec l'ADN de Raptor pour devenir VELOX. En jeu, cette Fusion hérite permet une agressivité pure : elle recherche d'autres dino ou GMX pour l'ajouter au terrain, puis détruit un carte adverse. C'est rapide, c'est le Vélociraptor dans la cuisine : agile, mortel et impossible à arrêter.
+- GMX - ALLOS (L'évolution du Directeur) : Le Directeur Kimridge devient un Allosaure massif qui porte encore les lambeaux de sa blouse blanche. En jeu, ALLOS est le boss monster. Sa mécanique ? Il ressucite un allié par tour et il détruit son adversaire **dans tous les cas**. 
+- GMX - COMPREX : il est l'aboutissement d'un projet d'ingénierie génétique poussé à l'extrême. C'est l'équivalent de l'Indominus Rex : un monstre de Frankenstein combinant un hôte humain (un scientifique "GMX") avec les chaînes d'ADN de plusieurs spécimens préhistoriques différents. Plus les scientifiques injectent d'ADN de Dinosaure dans la formule, plus la créature finale mute et gagne en létalité. S'il a été formé avec 5 dinosaures, c'est une machine à tuer : ne peut pas être ciblé, attaque 3 fois et à chaque fois que l'adversaire invoque un monstre, il perd 800 LP, et chaque tour si un GMX est dévoilé du deck, COMPEX détruit tous les autres monstres du terrain (adverse et le sien)
+
+<ImageGallery
+  label="Cartes de l'archétype GMX"
+  images={[
+    { src: "https://images.ygoprodeck.com/images/cards/38984832.jpg", alt: "GMX 55th experiment report" },
+    { src: "https://images.ygoprodeck.com/images/cards/82706696.jpg", alt: "GMX - VELOX" },
+    { src: "https://images.ygoprodeck.com/images/cards/56311997.jpg", alt: "GMX - ALLOS" },
+    { src: "https://images.ygoprodeck.com/images/cards/75191028.jpg", alt: "GMX - COMPEX" },
+  ]}
+/>
+
+Jouer l'archétype GMX, c'est revivre la chute de Jurassic Park, mais du point de vue d'InGen. Vous commencez la partie en manipulant calmement vos éprouvettes (votre Deck), on paie de sa personne (les LP) pour accélérer les résultats, jusqu'au moment inévitable où le gaz s'échappe, changeant le personnel de laboratoire en monstres de l'Extra Deck prêts à dévorer le joueur adverse.
+
+---
+
+J'espère que ce billet de décembre vous aura plu, si vous avez un jeu, un thème ou autre chose que vous aimeriez voir aborder la prochaine fois, n'hésitez pas à me le faire savoir 🙌
+
+Et surtout, proposez-moi la prochaine personne qui se verra associée à des cartes Yu-Gi-Oh! pour le prochain “Quel archétype es-tu ?” 😀
+
+Avec amitié et bisous, **Brojira**
+<br/>

@@ -1,0 +1,26 @@
+---
+// Image seule dans un billet, avec légende facultative.
+// `alt` est OBLIGATOIRE : décrire ce que montre l'image (pas "image de…").
+// Image purement décorative : alt="" (explicite).
+import Picture from "./Picture.astro";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  /** Légende visible sous l'image (crédit, contexte…). */
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+---
+
+<figure class="not-prose my-8">
+  <Picture src={src} alt={alt} class="mx-auto h-auto max-w-full rounded-box" />
+  {
+    caption && (
+      <figcaption class="mt-2 text-center text-sm text-base-content/80">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

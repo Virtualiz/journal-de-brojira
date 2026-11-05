@@ -5,7 +5,7 @@ import "../styles/global.css";
 const { pageTitle } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -14,10 +14,15 @@ const { pageTitle } = Astro.props;
     <title>{pageTitle}</title>
   </head>
   <body class="flex flex-col min-h-svh">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:btn focus:btn-primary"
+      >Aller au contenu</a
+    >
     <Header />
-    <div class="grow">
+    <main id="contenu" class="grow">
       <slot />
-    </div>
+    </main>
     <Footer />
   </body>
 </html>

@@ -1,6 +1,33 @@
 ---
+// Mise en forme du texte des billets.
+// Les variables --tw-prose-* du plugin typography sont reliées aux couleurs du thème daisyUI
+// (sinon le texte reste gris clair, peu contrasté, y compris en thème sombre).
 ---
+
 <div
-  class="prose mx-auto [&_th]:align-top [&_td]:align-top">
+  class="prose prose-lg mx-auto max-w-none leading-relaxed
+    [--tw-prose-body:var(--color-base-content)]
+    [--tw-prose-headings:var(--color-base-content)]
+    [--tw-prose-lead:var(--color-base-content)]
+    [--tw-prose-links:var(--color-primary)]
+    [--tw-prose-bold:var(--color-base-content)]
+    [--tw-prose-counters:var(--color-base-content)]
+    [--tw-prose-bullets:var(--color-primary)]
+    [--tw-prose-hr:var(--color-base-300)]
+    [--tw-prose-quotes:var(--color-base-content)]
+    [--tw-prose-quote-borders:var(--color-accent)]
+    [--tw-prose-captions:var(--color-base-content)]
+    [--tw-prose-code:var(--color-base-content)]
+    [--tw-prose-th-borders:var(--color-base-300)]
+    [--tw-prose-td-borders:var(--color-base-300)]
+    prose-headings:scroll-mt-20
+    prose-h2:mt-14 prose-h2:border-b prose-h2:border-base-300 prose-h2:pb-2
+    prose-h3:mt-10
+    prose-a:font-medium prose-a:underline prose-a:underline-offset-2
+    prose-li:my-1
+    prose-img:rounded-box
+    [&_th]:align-top [&_td]:align-top
+    [&_table]:block [&_table]:overflow-x-auto"
+>
   <slot />
 </div>

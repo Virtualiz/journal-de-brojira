@@ -1,0 +1,23 @@
+---
+// Image interne aux composants de billet.
+// - `src` : URL (string) ou image importée depuis src/assets (ImageMetadata, optimisée par Astro).
+// - `alt` est OBLIGATOIRE. Mettre alt="" uniquement si l'image est purement décorative.
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  class?: string;
+  loading?: "lazy" | "eager";
+}
+
+const { src, alt, class: className, loading = "lazy" } = Astro.props;
+---
+
+{
+  typeof src === "string" ? (
+    <img src={src} alt={alt} loading={loading} decoding="async" class={className} />
+  ) : (
+    <Image src={src} alt={alt} loading={loading} class={className} />
+  )
+}

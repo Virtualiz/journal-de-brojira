@@ -1,0 +1,21 @@
+---
+// Liste de cartes (festivals, jeux…). À utiliser autour de <EventCard> ou <GameCard>.
+// `label` décrit la liste pour les lecteurs d'écran ("Festivals de décembre"…).
+interface Props {
+  label: string;
+  columns?: 1 | 2;
+}
+
+const { label, columns = 1 } = Astro.props;
+---
+
+<ul
+  role="list"
+  aria-label={label}
+  class:list={[
+    "not-prose grid gap-6 my-8 p-0",
+    columns === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1",
+  ]}
+>
+  <slot />
+</ul>

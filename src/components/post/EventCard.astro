@@ -1,0 +1,100 @@
+---
+// Carte d'un festival ou événement. À placer dans un <CardList>.
+// Le texte de présentation se met en contenu (avec une ligne vide avant/après dans le MDX).
+import Picture from "./Picture.astro";
+
+interface Props {
+  /** Nom de l'événement (devient un titre h3). */
+  name: string;
+  /** Affiche ou logo : URL ou image importée. Facultatif. */
+  image?: ImageMetadata | string;
+  /** Description de l'image. Par défaut : "Affiche : <name>".
+   *  À personnaliser seulement si l'affiche porte une info qui n'est PAS dans le texte. */
+  imageAlt?: string;
+  /** Ex : "du 14 au 15 décembre 2026" */
+  dates: string;
+  /** Horaires, une ligne par entrée. Ex : ["Samedi de 10h à 19h", "Dimanche de 10h à 18h"] */
+  schedule?: string[];
+  /** Ex : "Entrée gratuite" ou "de 5 à 15 €" */
+  price?: string;
+  /** Ex : "4500 personnes estimées" */
+  attendance?: string;
+  /** Adresse complète, avec le département. */
+  address: string;
+  /** Site de l'événement (facultatif) : le nom devient un lien. */
+  url?: string;
+}
+
+const { name, image, imageAlt, dates, schedule, price, attendance, address, url } =
+  Astro.props;
+---
+
+<li>
+  <article
+    class="card sm:card-side card-border border-base-300 bg-base-100 shadow-sm h-full"
+  >
+    {
+      image && (
+        <figure class="bg-base-200 p-4 sm:w-56 sm:shrink-0">
+          <Picture
+            src={image}
+            alt={imageAlt ?? `Affiche : ${name}`}
+            class="max-h-72 w-auto max-w-full rounded-field object-contain"
+          />
+        </figure>
+      )
+    }
+    <div class="card-body gap-4">
+      <h3 class="card-title text-xl">
+        {
+          url ? (
+            <a href={url} class="link link-primary" rel="noopener">
+              {name}
+            </a>
+          ) : (
+            name
+          )
+        }
+      </h3>
+
+      <div class="leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0">
+        <slot />
+      </div>
+
+      <dl class="grid gap-2">
+        <div class="flex gap-3">
+          <dt class="w-6 shrink-0 text-center">
+            <span aria-hidden="true">📅</span><span class="sr-only">Dates</span>
+          </dt>
+          <dd>
+            <strong>{dates}</strong>
+            {
+              schedule && schedule.length > 0 && (
+                <ul class="mt-1 list-disc pl-5">
+                  {schedule.map((line) => <li>{line}</li>)}
+                </ul>
+              )
+            }
+          </dd>
+        </div>
+        {
+          (price || attendance) && (
+            <div class="flex gap-3">
+              <dt class="w-6 shrink-0 text-center">
+                <span aria-hidden="true">🎟️</span>
+                <span class="sr-only">Tarif</span>
+              </dt>
+              <dd>{[price, attendance].filter(Boolean).join(", ")}</dd>
+            </div>
+          )
+        }
+        <div class="flex gap-3">
+          <dt class="w-6 shrink-0 text-center">
+            <span aria-hidden="true">📍</span><span class="sr-only">Lieu</span>
+          </dt>
+          <dd>{address}</dd>
+        </div>
+      </dl>
+    </div>
+  </article>
+</li>

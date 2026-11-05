@@ -1,0 +1,50 @@
+---
+// Grille d'images (ex : les cartes Yu-Gi-Oh! d'un archétype).
+// Chaque image DOIT avoir un `alt` (ex : le nom de la carte).
+import Picture from "./Picture.astro";
+
+interface GalleryImage {
+  src: ImageMetadata | string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  /** Décrit la galerie pour les lecteurs d'écran. Ex : "Cartes de l'archétype GMX". */
+  label: string;
+  images: GalleryImage[];
+  columns?: 2 | 3 | 4;
+}
+
+const { label, images, columns = 2 } = Astro.props;
+const colClass = {
+  2: "grid-cols-2",
+  3: "grid-cols-2 md:grid-cols-3",
+  4: "grid-cols-2 md:grid-cols-4",
+}[columns];
+---
+
+<ul
+  role="list"
+  aria-label={label}
+  class:list={["not-prose my-8 grid gap-4 p-0", colClass]}
+>
+  {
+    images.map((image) => (
+      <li>
+        <figure>
+          <Picture
+            src={image.src}
+            alt={image.alt}
+            class="mx-auto h-auto w-full max-w-xs rounded-box shadow-md"
+          />
+          {image.caption && (
+            <figcaption class="mt-1 text-center text-sm text-base-content/80">
+              {image.caption}
+            </figcaption>
+          )}
+        </figure>
+      </li>
+    ))
+  }
+</ul>
