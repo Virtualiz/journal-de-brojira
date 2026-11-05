@@ -39,7 +39,10 @@ const colorFor = (count: number) => {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout
+  pageTitle={pageTitle}
+  description="Tous les sujets du journal, classés par nombre d'articles."
+>
   <div class="p-4 lg:px-8">
     <p class="mb-6 text-sm opacity-80">
       {tags.length} tags, classés par nombre d'articles.

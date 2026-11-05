@@ -23,7 +23,10 @@ const { tag } = Astro.params;
 const { page } = Astro.props;
 ---
 
-<BaseLayout pageTitle={tag.replace(/^./, tag[0].toUpperCase())}>
+<BaseLayout
+  pageTitle={`${tag.replace(/^./, tag[0].toUpperCase())}${page.currentPage > 1 ? ` – page ${page.currentPage}` : ""}`}
+  description={`Les articles du journal de Brojira avec le tag « ${tag} » (${page.total}).`}
+>
   <div class="p-4 lg:px-8">
     <a href="/tags/" class="btn btn-ghost btn-sm mb-4">← Retour aux tags</a>
 

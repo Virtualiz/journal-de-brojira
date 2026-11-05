@@ -20,9 +20,13 @@ const formatDate = (date: Date, long = false) =>
       ? { weekday: "long", year: "numeric", month: "long", day: "numeric" }
       : { year: "numeric", month: "long", day: "numeric" },
   );
+// TODO meta : ajouter image={{ url: "/og-default.png", alt: "…" }} sur <BaseLayout> (fichier à placer dans public/)
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout
+  pageTitle={pageTitle}
+  description="Billets mensuels, jeux et prototypes en cours, fiches : tout ce que j'aime partager autour du jeu de société."
+>
   <LandingHero />
 
   <div class="p-4 lg:px-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">

@@ -16,7 +16,10 @@ const { page } = Astro.props;
 const pageTitle = "Blog de Brojira";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout
+  pageTitle={page.currentPage > 1 ? `${pageTitle} – page ${page.currentPage}` : pageTitle}
+  description="Tous les billets du journal de Brojira : billets mensuels, retours d'événements et présentations de jeux."
+>
   <div class="p-4 lg:px-8">
     <p class="mb-4 text-sm opacity-80">
       Liste de tous mes articles ({page.total}).
