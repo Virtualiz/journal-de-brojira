@@ -1,0 +1,49 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const people = await getCollection("people");
+  const games = await getCollection("games");
+  return people.map((person) => ({
+    params: { id: person.id },
+    props: {
+      person,
+      authored: games.filter((g) => g.data.authors.some((a) => a.id === person.id)),
+      illustrated: games.filter((g) => g.data.artists.some((a) => a.id === person.id)),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { person, authored, illustrated } = Astro.props;
+const sections = [
+  { id: "auteur", title: "Jeux conçus", games: authored },
+  { id: "illustrateur", title: "Jeux illustrés", games: illustrated },
+].filter((s) => s.games.length > 0);
+---
+
+<BaseLayout pageTitle={person.data.name} description={person.data.bio ?? `${person.data.name} : jeux conçus et illustrés.`}>
+  <div class="p-4 lg:px-8 max-w-4xl mx-auto">
+    <a href="/auteurs/" class="btn btn-ghost btn-sm mb-4">← Tous les auteurs</a>
+    <h1 class="font-serif text-3xl text-accent mb-3">{person.data.name}</h1>
+    {person.data.bio && <p class="mb-3">{person.data.bio}</p>}
+    {
+      person.data.url && (
+        <p class="mb-3"><a class="link link-primary" href={person.data.url} rel="noopener">Site web</a></p>
+      )
+    }
+    {
+      sections.map((s) => (
+        <section class="mt-6" aria-labelledby={s.id}>
+          <h2 id={s.id} class="font-serif text-2xl mb-2">{s.title}</h2>
+          <ul class="list-disc pl-6">
+            {s.games.map((g) => (
+              <li><a class="link link-primary" href={`/jeux/${g.id}/`}>{g.data.name}</a></li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

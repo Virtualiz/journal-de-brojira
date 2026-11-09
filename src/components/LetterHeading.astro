@@ -1,0 +1,15 @@
+---
+import { anchor } from "../lib/alphabet";
+
+interface Props {
+  letter: string;
+}
+const { letter } = Astro.props;
+---
+
+<h2
+  id={anchor(letter)}
+  class="mb-2 scroll-mt-16 border-b border-accent/40 font-serif text-2xl text-accent"
+>
+  {letter}
+</h2>

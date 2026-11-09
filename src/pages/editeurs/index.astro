@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LetterNav from "../../components/LetterNav.astro";
+import LetterHeading from "../../components/LetterHeading.astro";
+import { anchor, groupByLetter } from "../../lib/alphabet";
+
+const publishers = await getCollection("publishers");
+const { letters, groups } = groupByLetter(publishers, (p) => p.data.name);
+---
+
+<BaseLayout
+  pageTitle="Éditeurs et distributeurs"
+  description="Les éditeurs et distributeurs des jeux cités dans le journal."
+>
+  <div class="p-4 lg:px-8">
+    <p class="mb-4 text-sm opacity-80">
+      {publishers.length} éditeurs et distributeurs.
+    </p>
+    <LetterNav letters={letters} />
+    {
+      letters.map((letter) => (
+        <section class="mb-6" aria-labelledby={anchor(letter)}>
+          <LetterHeading letter={letter} />
+          <ul class="flex flex-wrap gap-3">
+            {groups.get(letter)!.map((p) => (
+              <li>
+                <a
+                  class="btn btn-outline btn-accent rounded-full normal-case"
+                  href={`/editeurs/${p.id}/`}
+                >
+                  {p.data.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

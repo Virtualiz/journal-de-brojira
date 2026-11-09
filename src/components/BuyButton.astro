@@ -1,0 +1,30 @@
+---
+// Bouton d'achat d'un jeu. Désactivé tant qu'aucune boutique n'est renseignée
+// dans `shops` (games.json). Les liens affiliés passeront par `affiliateUrl`.
+interface Props {
+  shops?: { shop: string; url: string }[];
+}
+
+const { shops = [] } = Astro.props;
+
+// Point d'entrée unique pour ajouter plus tard l'identifiant d'affiliation.
+const affiliateUrl = (_shop: string, url: string) => url;
+
+const first = shops[0];
+---
+
+{
+  first ? (
+    <a
+      href={affiliateUrl(first.shop, first.url)}
+      class="btn btn-primary"
+      rel="sponsored noopener"
+    >
+      Acheter
+    </a>
+  ) : (
+    <button type="button" class="btn btn-primary" disabled>
+      Acheter <span class="text-xs font-normal">(bientôt)</span>
+    </button>
+  )
+}

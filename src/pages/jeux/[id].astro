@@ -1,0 +1,180 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, getEntries, getEntry, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Picture from "../../components/post/Picture.astro";
+import BuyButton from "../../components/BuyButton.astro";
+import Prose from "../../components/Prose.astro";
+
+export const getStaticPaths = (async () => {
+  const games = await getCollection("games");
+  return games.map((game) => ({ params: { id: game.id }, props: { game } }));
+}) satisfies GetStaticPaths;
+
+const { game } = Astro.props;
+const d = game.data;
+const { Content } = await render(game);
+const hasBody = Boolean(game.body?.trim());
+
+const authors = await getEntries(d.authors);
+const artists = await getEntries(d.artists);
+const publisher = d.publisher ? await getEntry(d.publisher) : undefined;
+const distributor = d.distributor ? await getEntry(d.distributor) : undefined;
+const parent = d.parent ? await getEntry(d.parent) : undefined;
+const extensions = (await getCollection("games")).filter(
+  (g) => g.data.parent?.id === game.id,
+);
+
+const rows = [
+  { icon: "👨‍👩‍👦", label: "Joueurs", value: d.players },
+  { icon: "🎂", label: "Âge minimum", value: d.age },
+  { icon: "⏱", label: "Durée", value: d.duration },
+  { icon: "⚙️", label: "Mécaniques", value: d.mechanics.join(", ") },
+].filter((r) => r.value);
+---
+
+<BaseLayout
+  pageTitle={d.name}
+  description={d.description ?? `Fiche du jeu ${d.name}.`}
+  image={d.image && { url: d.image, alt: `Boîte du jeu ${d.name}` }}
+>
+  <article class="p-4 lg:px-8 max-w-4xl mx-auto">
+    <a href="/jeux/" class="btn btn-ghost btn-sm mb-4">← Tous les jeux</a>
+
+    <div class="grid gap-6 md:grid-cols-[16rem_1fr]">
+      {
+        d.image && (
+          <Picture
+            src={d.image}
+            alt={`Boîte du jeu ${d.name}`}
+            class="w-full max-w-64 rounded-field object-contain bg-base-200 p-4"
+          />
+        )
+      }
+      <div class="grid gap-3 content-start">
+        <h1 class="font-serif text-3xl text-accent">{d.name}</h1>
+        {d.kind !== "jeu" && <p><span class="badge badge-accent">{d.kind}</span></p>}
+        {
+          parent && (
+            <p>
+              {d.kind === "suite" ? "Suite de " : "Extension de "}
+              <a class="link link-primary" href={`/jeux/${parent.id}/`}>
+                {parent.data.name}
+              </a>
+            </p>
+          )
+        }
+        {d.description && <p>{d.description}</p>}
+
+        <dl class="grid gap-1.5">
+          {
+            rows.map((r) => (
+              <div class="flex gap-3">
+                <dt class="w-6 shrink-0 text-center">
+                  <span aria-hidden="true">{r.icon}</span>
+                  <span class="sr-only">{r.label}</span>
+                </dt>
+                <dd>{r.value}</dd>
+              </div>
+            ))
+          }
+          {
+            authors.length > 0 && (
+              <div class="flex gap-3">
+                <dt class="w-6 shrink-0 text-center">
+                  <span aria-hidden="true">💡</span>
+                  <span class="sr-only">Auteur(s)</span>
+                </dt>
+                <dd>
+                  {authors.map((p, i) => (
+                    <>
+                      {i > 0 && ", "}
+                      <a class="link link-primary" href={`/auteurs/${p.id}/`}>{p.data.name}</a>
+                    </>
+                  ))}
+                </dd>
+              </div>
+            )
+          }
+          {
+            artists.length > 0 && (
+              <div class="flex gap-3">
+                <dt class="w-6 shrink-0 text-center">
+                  <span aria-hidden="true">🎨</span>
+                  <span class="sr-only">Illustration</span>
+                </dt>
+                <dd>
+                  {artists.map((p, i) => (
+                    <>
+                      {i > 0 && ", "}
+                      <a class="link link-primary" href={`/auteurs/${p.id}/`}>{p.data.name}</a>
+                    </>
+                  ))}
+                </dd>
+              </div>
+            )
+          }
+          {
+            publisher && (
+              <div class="flex gap-3">
+                <dt class="w-6 shrink-0 text-center">
+                  <span aria-hidden="true">🛠️</span>
+                  <span class="sr-only">Éditeur</span>
+                </dt>
+                <dd>
+                  <a class="link link-primary" href={`/editeurs/${publisher.id}/`}>{publisher.data.name}</a>
+                </dd>
+              </div>
+            )
+          }
+          {
+            distributor && (
+              <div class="flex gap-3">
+                <dt class="w-6 shrink-0 text-center">
+                  <span aria-hidden="true">🚚</span>
+                  <span class="sr-only">Distributeur</span>
+                </dt>
+                <dd>
+                  <a class="link link-primary" href={`/editeurs/${distributor.id}/`}>{distributor.data.name}</a>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+
+        <div class="flex flex-wrap items-center gap-3">
+          {
+            d.price && (
+              <span class="badge badge-primary badge-lg font-semibold">
+                <span class="sr-only">Prix : </span>{d.price}
+              </span>
+            )
+          }
+          <BuyButton shops={d.shops} />
+        </div>
+      </div>
+    </div>
+
+    {
+      hasBody && (
+        <section class="mt-8" aria-labelledby="avis">
+          <h2 id="avis" class="font-serif text-2xl mb-3">Notre avis</h2>
+          <Prose><Content /></Prose>
+        </section>
+      )
+    }
+
+    {
+      extensions.length > 0 && (
+        <section class="mt-8" aria-labelledby="extensions">
+          <h2 id="extensions" class="font-serif text-2xl mb-3">Extensions et suites</h2>
+          <ul class="list-disc pl-6">
+            {extensions.map((g) => (
+              <li><a class="link link-primary" href={`/jeux/${g.id}/`}>{g.data.name}</a></li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

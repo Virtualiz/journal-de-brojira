@@ -1,0 +1,29 @@
+---
+// Barre de liens vers les sections par lettre d'une page d'index.
+import { anchor } from "../lib/alphabet";
+
+interface Props {
+  letters: string[];
+}
+const { letters } = Astro.props;
+---
+
+<nav
+  aria-label="Aller à une lettre"
+  class="sticky top-0 z-10 mb-6 bg-base-100/95 py-2 backdrop-blur"
+>
+  <ul class="flex flex-wrap gap-1">
+    {
+      letters.map((letter) => (
+        <li>
+          <a
+            href={`#${anchor(letter)}`}
+            class="btn btn-sm btn-outline btn-accent min-w-9"
+          >
+            {letter}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
