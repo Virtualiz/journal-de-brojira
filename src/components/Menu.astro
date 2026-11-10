@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/JB_book.png";
+
 const links = [
   { href: "/", label: "Accueil", icon: "🏠" },
   { href: "/blog/", label: "Blog", icon: "📖" },
@@ -40,7 +43,10 @@ const isActive = (href: string) =>
         </label>
       </div>
       <div class="mx-2 flex-1 px-2 font-serif text-accent text-2xl">
-        <a href="/">Journal de Brojira</a>
+        <a href="/" class="inline-flex items-center gap-2">
+          <Image src={logo} alt="" width={80} height={80} loading="eager" class="h-10 w-auto" />
+          Journal de Brojira
+        </a>
       </div>
       <div class="hidden flex-none md:block">
         <ul class="menu menu-horizontal menu-lg gap-1">
@@ -70,7 +76,8 @@ const isActive = (href: string) =>
     <label for="my-drawer-2" aria-label="Fermer le menu" class="drawer-overlay"
     ></label>
     <div class="bg-base-200 min-h-full w-80 flex flex-col border-r-2 border-accent/40">
-      <div class="p-4 pb-2 font-serif text-accent text-2xl">
+      <div class="flex items-center gap-2 p-4 pb-2 font-serif text-accent text-2xl">
+        <Image src={logo} alt="" width={80} height={80} loading="eager" class="h-10 w-auto" />
         Journal de Brojira
       </div>
       <ul class="menu menu-lg w-full gap-2 p-4">
