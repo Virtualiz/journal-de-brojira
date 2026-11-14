@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+
+// Prototypes en cours (repris de la page À propos). À déplacer dans une collection quand la liste grandira.
+const prototypes = [
+  {
+    name: "Spicy Jo",
+    status: "V1 testable",
+    text: "Une V1 est testable. Une V2 est prévue, avec une refonte du système de pioche.",
+  },
+  {
+    name: "Backdoor",
+    status: "V0 testée",
+    text: "Un jeu façon Loup-Garou, imaginé pour l'EVG d'un ami. La V0 a été testée, il reste à l'affiner.",
+  },
+];
+---
+
+<BaseLayout
+  pageTitle="L'Atelier · Brojira"
+  description="Les prototypes et créations de Brojira, au fil de leur avancée."
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
+    <header class="mb-8">
+      <h1 class="text-4xl lg:text-5xl text-primary">L'Atelier</h1>
+      <p class="mt-2 text-lg">Prototypes &amp; créations, au fil de leur avancée.</p>
+    </header>
+
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {
+        prototypes.map((p) => (
+          <li class="card border border-primary/50 bg-base-100">
+            <div class="card-body">
+              <h2 class="card-title text-2xl">
+                <Icon name="hammer" class="size-5 text-primary" />
+                {p.name}
+              </h2>
+              <p>
+                <span class="badge badge-accent badge-sm">{p.status}</span>
+              </p>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-8 text-base-content/85">
+      En préparation : un univers de jeu de rôle (à découvrir dans le <a
+        href="/grimoire/"
+        class="link link-primary">Grimoire</a
+      >) et une initiation à des TCG (Riftbound et Flesh and Blood).
+    </p>
+  </div>
+</BaseLayout>

@@ -1,10 +1,231 @@
 ---
-import Menu from './Menu.astro';
+/**
+ * En-tête : barre desktop (≥ lg) avec menu déroulant « Archives »,
+ * burger + drawer DaisyUI en dessous (Archives en accordéon, liens sociaux en bas).
+ */
+import Brand from "./Brand.astro";
+import Icon from "./Icon.astro";
+import { nav, socials, isGroup, isActive, isItemActive } from "../lib/nav";
+
+const pathname = Astro.url.pathname;
+const DRAWER_ID = "nav-drawer";
 ---
-<header>
-  <nav>
-     <div>
-      <Menu />
+
+<div class="drawer">
+  <input id={DRAWER_ID} type="checkbox" class="drawer-toggle" aria-hidden="true" tabindex="-1" />
+
+  <header class="drawer-content border-b border-primary/50 bg-base-200">
+    <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 lg:px-8 lg:py-3">
+      <label
+        for={DRAWER_ID}
+        class="btn btn-square btn-ghost -ml-2 lg:hidden"
+        role="button"
+        tabindex="0"
+        aria-label="Ouvrir le menu"
+        data-drawer-open
+      >
+        <Icon name="menu" class="size-6" />
+      </label>
+
+      <Brand class="mr-auto" />
+
+      <nav aria-label="Navigation principale" class="hidden lg:block">
+        <ul class="flex items-stretch gap-1">
+          {
+            nav.map((item) => {
+              const active = isItemActive(item, pathname);
+              const itemClass = [
+                "nav-item flex flex-col items-center gap-1 px-3 pt-1 pb-2 text-sm font-medium",
+                "border-b-2 transition-colors hover:text-primary",
+                active ? "border-primary text-primary" : "border-transparent",
+              ];
+              return isGroup(item) ? (
+                <li class="relative">
+                  <details class="nav-dropdown h-full">
+                    <summary class:list={[...itemClass, "h-full cursor-pointer list-none"]}>
+                      <Icon name={item.icon} class="size-5" />
+                      <span class="inline-flex items-center gap-0.5">
+                        {item.label}
+                        <Icon name="chevron-down" class="chevron size-3.5 transition-transform" />
+                      </span>
+                    </summary>
+                    <ul class="menu absolute right-0 z-40 mt-1 w-52 rounded-box border border-primary/50 bg-base-200 p-2 shadow-xl">
+                      {item.children.map((child) => (
+                        <li>
+                          <a
+                            href={child.href}
+                            class:list={{ "menu-active": isActive(child.href, pathname) }}
+                            aria-current={isActive(child.href, pathname) ? "page" : undefined}
+                          >
+                            <Icon name={child.icon} class="size-4 text-primary" />
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={itemClass}
+                    aria-current={isActive(item.href, pathname) ? "page" : undefined}
+                  >
+                    <Icon name={item.icon} class="size-5" />
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
     </div>
-  </nav>
-</header>
+  </header>
+
+  <!-- z-50 : le drawer passe au-dessus de tout le contenu -->
+  <div class="drawer-side z-50">
+    <label for={DRAWER_ID} aria-label="Fermer le menu" class="drawer-overlay"></label>
+    <div
+      class="flex min-h-full w-80 max-w-[85vw] flex-col border-r border-primary/50 bg-base-200"
+      role="dialog"
+      aria-label="Menu"
+    >
+      <div class="flex items-center justify-between gap-2 border-b border-primary/30 p-4">
+        <Brand size="md" />
+        <label
+          for={DRAWER_ID}
+          class="btn btn-square btn-ghost btn-sm"
+          role="button"
+          tabindex="0"
+          aria-label="Fermer le menu"
+        >
+          <Icon name="x" class="size-5" />
+        </label>
+      </div>
+
+      <nav aria-label="Navigation principale (mobile)" class="grow">
+        <ul class="menu menu-lg w-full gap-1 p-4">
+          {
+            nav.map((item) =>
+              isGroup(item) ? (
+                <li>
+                  <details open={isItemActive(item, pathname)}>
+                    <summary class="font-medium">
+                      <Icon name={item.icon} class="size-5 text-primary" />
+                      {item.label}
+                    </summary>
+                    <ul>
+                      {item.children.map((child) => (
+                        <li>
+                          <a
+                            href={child.href}
+                            class:list={{ "menu-active": isActive(child.href, pathname) }}
+                            aria-current={isActive(child.href, pathname) ? "page" : undefined}
+                          >
+                            <Icon name={child.icon} class="size-4 text-primary" />
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={["font-medium", { "menu-active": isActive(item.href, pathname) }]}
+                    aria-current={isActive(item.href, pathname) ? "page" : undefined}
+                  >
+                    <Icon name={item.icon} class="size-5 text-primary" />
+                    {item.label}
+                  </a>
+                </li>
+              ),
+            )
+          }
+        </ul>
+      </nav>
+
+      {
+        socials.length > 0 && (
+          <ul class="flex justify-center gap-2 border-t border-primary/30 p-4" aria-label="Réseaux et flux">
+            {socials.map((s) => (
+              <li>
+                <a href={s.href} class="btn btn-square btn-ghost text-primary" aria-label={s.label}>
+                  <Icon name={s.icon} class="size-6" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  // Menu « Archives » : fermeture au clic extérieur et à Échap.
+  const dropdowns = document.querySelectorAll<HTMLDetailsElement>(".nav-dropdown");
+  document.addEventListener("click", (e) => {
+    dropdowns.forEach((d) => {
+      if (d.open && !d.contains(e.target as Node)) d.open = false;
+    });
+  });
+
+  dropdowns.forEach((d) =>
+    d.addEventListener("focusout", (e) => {
+      if (!d.contains(e.relatedTarget as Node | null)) d.open = false;
+    }),
+  );
+
+  // Drawer : ouverture au clavier (Entrée/Espace sur les <label>), fermeture à Échap.
+  const toggle = document.getElementById("nav-drawer") as HTMLInputElement | null;
+  document.querySelectorAll<HTMLLabelElement>('label[for="nav-drawer"][role="button"]').forEach((l) =>
+    l.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        l.click();
+      }
+    }),
+  );
+  // Le drawer devient visible après une transition : on réessaie jusqu'à ce que le focus prenne.
+  const focusWhenVisible = (el: HTMLElement | null, tries = 20) => {
+    if (!el) return;
+    el.focus();
+    if (document.activeElement !== el && tries > 0) {
+      requestAnimationFrame(() => focusWhenVisible(el, tries - 1));
+    }
+  };
+  toggle?.addEventListener("change", () => {
+    if (toggle.checked) {
+      focusWhenVisible(document.querySelector<HTMLElement>(".drawer-side nav a"));
+    } else {
+      document.querySelector<HTMLElement>("[data-drawer-open]")?.focus();
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (toggle?.checked) {
+      toggle.checked = false;
+      toggle.dispatchEvent(new Event("change"));
+    }
+    dropdowns.forEach((d) => {
+      if (d.open) {
+        d.open = false;
+        d.querySelector("summary")?.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .nav-dropdown[open] .chevron {
+    rotate: 180deg;
+  }
+  .nav-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
