@@ -1,61 +1,77 @@
 ---
-import type { CollectionEntry } from "astro:content";
+/** Carte de billet (blog, grimoire, tags) : cadre orné, image optimisée, badge, extrait, méta, tags. */
+import OrnateCard from "./OrnateCard.astro";
+import PostCover from "./PostCover.astro";
+import Icon from "./Icon.astro";
+import { formatDate, postKind, postUrl, readingTime, type Post } from "../lib/posts";
 
 interface Props {
-  post: CollectionEntry<"blog">;
+  post: Post;
+  /** Titre de la carte : h2 par défaut (listes sous le h1 de la page). */
+  headingLevel?: 2 | 3;
 }
 
-const { post } = Astro.props;
+const { post, headingLevel = 2 } = Astro.props;
 const { title, description, pubDate, author, tags, image } = post.data;
-const url = `/posts/${post.id}/`;
+const Heading = `h${headingLevel}` as const;
 ---
 
-<article
-  class="card card-border border-primary bg-base-100 h-full transition hover:shadow-xl hover:-translate-y-0.5"
->
+<OrnateCard as="article" interactive class="flex h-full flex-col p-2.5">
   {
-    image && (
-      <figure class="aspect-video">
-        <img
-          src={image.url}
-          alt={image.alt}
-          loading="lazy"
-          class="h-full w-full object-cover"
+    // Sans image : visuel parchemin décoratif pour garder des cartes alignées.
+    image ? (
+      <div class="aspect-video overflow-hidden rounded-[2px]">
+        <PostCover
+          image={image}
+          sizes="(min-width: 1024px) 400px, (min-width: 768px) 50vw, calc(100vw - 3rem)"
         />
-      </figure>
+      </div>
+    ) : (
+      <div aria-hidden="true" class="parchment flex aspect-video items-center justify-center rounded-[2px]">
+        <Icon name="feather" class="size-14 text-gold-ink/80" />
+      </div>
     )
   }
-  <div class="card-body">
-    <time
-      datetime={pubDate.toISOString()}
-      class="text-xs uppercase tracking-wide opacity-60"
-    >
-      {
-        pubDate.toLocaleDateString("fr", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })
-      }
-    </time>
-    <h2 class="card-title">
-      <a href={url} class="link link-hover after:absolute after:inset-0">
-        {title}
-      </a>
-    </h2>
-    <p class="text-sm">{description}</p>
-    <div class="flex flex-wrap gap-1 relative z-10">
-      {
-        tags.map((tag) => (
-          <a
-            href={`/tags/${tag}/`}
-            class="badge badge-outline badge-sm hover:badge-primary"
-          >
-            {tag}
-          </a>
-        ))
-      }
-    </div>
-    <p class="text-xs italic opacity-70">Par {author}</p>
+
+  <div class="flex grow flex-col gap-2 px-2.5 pt-4 pb-3">
+    <p>
+      <span class="badge badge-secondary badge-sm gap-1 font-medium">
+        <Icon name="feather" class="size-3" />
+        {postKind(post)}
+      </span>
+    </p>
+    <Heading class="text-2xl leading-tight">
+      <a href={postUrl(post)} class="after:absolute after:inset-0 hover:text-primary">{title}</a>
+    </Heading>
+    <p class="text-[0.95rem] text-base-content/90">{description}</p>
+
+    <p class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 text-sm text-base-content/85">
+      <span class="inline-flex items-center gap-1">
+        <Icon name="calendar" class="size-4 text-primary" />
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      </span>
+      <span class="inline-flex items-center gap-1">
+        <Icon name="clock" class="size-4 text-primary" />
+        {readingTime(post)} min
+      </span>
+      <span>par {author}</span>
+    </p>
+
+    {
+      tags.length > 0 && (
+        <ul class="relative z-10 flex flex-wrap gap-1.5 pt-1" aria-label="Tags">
+          {tags.map((tag) => (
+            <li>
+              <a
+                href={`/tags/${tag}/`}
+                class="badge badge-outline badge-sm border-primary/50 hover:border-primary hover:text-primary"
+              >
+                {tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
-</article>
+</OrnateCard>

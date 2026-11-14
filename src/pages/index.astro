@@ -2,16 +2,23 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LandingHero from "../components/LandingHero.astro";
 import OrnateCard from "../components/OrnateCard.astro";
+import Flourish from "../components/Flourish.astro";
 import ParchmentBand from "../components/ParchmentBand.astro";
 import LatestPostCard from "../components/home/LatestPostCard.astro";
 import SectionTiles from "../components/home/SectionTiles.astro";
 import FeaturedPost from "../components/home/FeaturedPost.astro";
+import GamesOfTheMoment from "../components/home/GamesOfTheMoment.astro";
+import { getCollection } from "astro:content";
 import { getPublishedPosts, postUrl } from "../lib/posts";
 
 const posts = await getPublishedPosts();
 const latest = posts[0];
 // Le plus récent des billets marqués `featured: true` (section masquée s'il n'y en a aucun).
 const featured = posts.find((p) => p.data.featured);
+// Jeux marqués `playingNow: true`, par ordre alphabétique.
+const gamesNow = (await getCollection("games", (g) => g.data.playingNow)).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name, "fr"),
+);
 ---
 
 <BaseLayout
@@ -36,9 +43,7 @@ const featured = posts.find((p) => p.data.featured);
         <blockquote class="font-serif text-2xl leading-snug italic">
           « Jouer, c’est voyager sans jamais quitter sa table. »
         </blockquote>
-        <span aria-hidden="true" class="mt-2 flex w-full items-center gap-3 text-primary">
-          <span class="h-px flex-1 bg-primary/50"></span>✦<span class="h-px flex-1 bg-primary/50"></span>
-        </span>
+        <Flourish align="center" class="mt-2 w-full" />
       </OrnateCard>
     </div>
 
@@ -48,16 +53,28 @@ const featured = posts.find((p) => p.data.featured);
   </div>
 
   {
-    featured ? (
-      <ParchmentBand class="mt-14 lg:mt-20" aria-labelledby="une-title">
-        <div class="mx-auto max-w-7xl px-4 lg:px-8">
-          <div class="max-w-4xl">
-            <FeaturedPost post={featured} />
-          </div>
+    (featured || gamesNow.length > 0) && (
+      <ParchmentBand class="mt-14 lg:mt-20" aria-label="À la une et jeux du moment">
+        <div
+          class:list={[
+            "mx-auto grid max-w-7xl gap-12 px-4 lg:px-8",
+            featured && gamesNow.length > 0 && "lg:grid-cols-2 lg:gap-16",
+          ]}
+        >
+          {featured && (
+            <section aria-labelledby="une-title">
+              <FeaturedPost post={featured} />
+            </section>
+          )}
+          {gamesNow.length > 0 && (
+            <section aria-labelledby="jeux-moment-title" class="min-w-0">
+              <GamesOfTheMoment games={gamesNow} />
+            </section>
+          )}
         </div>
       </ParchmentBand>
-    ) : (
-      <div class="h-14 lg:h-20" />
     )
   }
+  <!-- « Prochain événement » : pas de collection `events` pour l'instant, section non affichée. -->
+  <div class="h-14 lg:h-20"></div>
 </BaseLayout>

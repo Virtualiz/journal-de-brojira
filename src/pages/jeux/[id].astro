@@ -2,8 +2,13 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection, getEntries, getEntry, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Picture from "../../components/post/Picture.astro";
+import BackLink from "../../components/BackLink.astro";
 import BuyButton from "../../components/BuyButton.astro";
+import Flourish from "../../components/Flourish.astro";
+import GameCover from "../../components/GameCover.astro";
+import GameTile from "../../components/GameTile.astro";
+import Icon, { type IconName } from "../../components/Icon.astro";
+import OrnateCard from "../../components/OrnateCard.astro";
 import Prose from "../../components/Prose.astro";
 
 export const getStaticPaths = (async () => {
@@ -16,137 +21,116 @@ const d = game.data;
 const { Content } = await render(game);
 const hasBody = Boolean(game.body?.trim());
 
-const authors = await getEntries(d.authors);
-const artists = await getEntries(d.artists);
+const [authors, artists] = await Promise.all([getEntries(d.authors), getEntries(d.artists)]);
 const publisher = d.publisher ? await getEntry(d.publisher) : undefined;
 const distributor = d.distributor ? await getEntry(d.distributor) : undefined;
 const parent = d.parent ? await getEntry(d.parent) : undefined;
-const extensions = (await getCollection("games")).filter(
-  (g) => g.data.parent?.id === game.id,
-);
+const extensions = (await getCollection("games")).filter((g) => g.data.parent?.id === game.id);
 
-const rows = [
-  { icon: "👨‍👩‍👦", label: "Joueurs", value: d.players },
-  { icon: "🎂", label: "Âge minimum", value: d.age },
-  { icon: "⏱", label: "Durée", value: d.duration },
-  { icon: "⚙️", label: "Mécaniques", value: d.mechanics.join(", ") },
-].filter((r) => r.value);
+type Link = { href: string; name: string };
+type Row = { icon: IconName; label: string; value?: string; links?: Link[] };
+
+const people = (list: typeof authors): Link[] =>
+  list.map((p) => ({ href: `/auteurs/${p.id}/`, name: p.data.name }));
+
+// Lignes affichées seulement si renseignées.
+const rows: Row[] = [
+  { icon: "users", label: "Joueurs", value: d.players },
+  { icon: "cake", label: "Âge", value: d.age },
+  { icon: "clock", label: "Durée", value: d.duration },
+  { icon: "layers", label: "Mécaniques", value: d.mechanics.join(", ") },
+  { icon: "lightbulb", label: authors.length > 1 ? "Auteurs" : "Auteur", links: people(authors) },
+  { icon: "palette", label: "Illustration", links: people(artists) },
+  {
+    icon: "building",
+    label: "Éditeur",
+    links: publisher ? [{ href: `/editeurs/${publisher.id}/`, name: publisher.data.name }] : [],
+  },
+  {
+    icon: "truck",
+    label: "Distributeur",
+    links: distributor ? [{ href: `/editeurs/${distributor.id}/`, name: distributor.data.name }] : [],
+  },
+].filter((r) => r.value || (r.links && r.links.length > 0));
 ---
 
 <BaseLayout
   pageTitle={d.name}
   description={d.description ?? `Fiche du jeu ${d.name}.`}
-  image={d.image && { url: d.image, alt: `Boîte du jeu ${d.name}` }}
+  image={d.image ? { url: d.image, alt: `Boîte du jeu ${d.name}` } : undefined}
 >
-  <article class="p-4 lg:px-8 max-w-4xl mx-auto">
-    <a href="/jeux/" class="btn btn-ghost btn-sm mb-4">← Tous les jeux</a>
+  <article class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
+    <BackLink href="/jeux/" label="Tous les jeux" />
 
-    <div class="grid gap-6 md:grid-cols-[16rem_1fr]">
-      {
-        d.image && (
-          <Picture
-            src={d.image}
-            alt={`Boîte du jeu ${d.name}`}
-            class="w-full max-w-64 rounded-field object-contain bg-base-200 p-4"
+    <div class="grid gap-8 md:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
+      <OrnateCard class="self-start p-2.5">
+        <div class="parchment flex aspect-[4/5] items-center justify-center rounded-[2px] p-5">
+          <GameCover
+            image={d.image}
+            alt={d.image ? `Boîte du jeu ${d.name}` : ""}
+            widths={[300, 600]}
+            sizes="(min-width: 768px) 288px, calc(100vw - 3rem)"
+            loading="eager"
           />
-        )
-      }
-      <div class="grid gap-3 content-start">
-        <h1 class="font-serif text-3xl text-primary">{d.name}</h1>
-        {d.kind !== "jeu" && <p><span class="badge badge-accent">{d.kind}</span></p>}
-        {
-          parent && (
-            <p>
-              {d.kind === "suite" ? "Suite de " : "Extension de "}
-              <a class="link link-primary" href={`/jeux/${parent.id}/`}>
-                {parent.data.name}
-              </a>
-            </p>
-          )
-        }
-        {d.description && <p>{d.description}</p>}
+        </div>
+      </OrnateCard>
 
-        <dl class="grid gap-1.5">
+      <div class="flex flex-col gap-4">
+        <header>
+          {
+            d.kind !== "jeu" && (
+              <p class="mb-2">
+                <span class="badge badge-accent capitalize">{d.kind}</span>
+              </p>
+            )
+          }
+          <h1 class="text-4xl leading-tight text-primary lg:text-5xl">{d.name}</h1>
+          {
+            parent && (
+              <p class="mt-2">
+                {d.kind === "suite" ? "Suite de " : "Extension de "}
+                <a class="link link-primary" href={`/jeux/${parent.id}/`}>
+                  {parent.data.name}
+                </a>
+              </p>
+            )
+          }
+          {d.description && <p class="mt-3 text-lg leading-relaxed">{d.description}</p>}
+        </header>
+
+        <Flourish />
+
+        <dl class="grid gap-x-6 gap-y-3 sm:grid-cols-2">
           {
             rows.map((r) => (
               <div class="flex gap-3">
-                <dt class="w-6 shrink-0 text-center">
-                  <span aria-hidden="true">{r.icon}</span>
-                  <span class="sr-only">{r.label}</span>
-                </dt>
-                <dd>{r.value}</dd>
+                <Icon name={r.icon} class="mt-0.5 size-5 text-primary" />
+                <div>
+                  <dt class="text-xs font-semibold tracking-wide text-base-content/85 uppercase">{r.label}</dt>
+                  <dd>
+                    {r.value}
+                    {r.links?.map((l, i) => (
+                      <>
+                        {i > 0 && ", "}
+                        <a class="link link-primary" href={l.href}>
+                          {l.name}
+                        </a>
+                      </>
+                    ))}
+                  </dd>
+                </div>
               </div>
             ))
           }
-          {
-            authors.length > 0 && (
-              <div class="flex gap-3">
-                <dt class="w-6 shrink-0 text-center">
-                  <span aria-hidden="true">💡</span>
-                  <span class="sr-only">Auteur(s)</span>
-                </dt>
-                <dd>
-                  {authors.map((p, i) => (
-                    <>
-                      {i > 0 && ", "}
-                      <a class="link link-primary" href={`/auteurs/${p.id}/`}>{p.data.name}</a>
-                    </>
-                  ))}
-                </dd>
-              </div>
-            )
-          }
-          {
-            artists.length > 0 && (
-              <div class="flex gap-3">
-                <dt class="w-6 shrink-0 text-center">
-                  <span aria-hidden="true">🎨</span>
-                  <span class="sr-only">Illustration</span>
-                </dt>
-                <dd>
-                  {artists.map((p, i) => (
-                    <>
-                      {i > 0 && ", "}
-                      <a class="link link-primary" href={`/auteurs/${p.id}/`}>{p.data.name}</a>
-                    </>
-                  ))}
-                </dd>
-              </div>
-            )
-          }
-          {
-            publisher && (
-              <div class="flex gap-3">
-                <dt class="w-6 shrink-0 text-center">
-                  <span aria-hidden="true">🛠️</span>
-                  <span class="sr-only">Éditeur</span>
-                </dt>
-                <dd>
-                  <a class="link link-primary" href={`/editeurs/${publisher.id}/`}>{publisher.data.name}</a>
-                </dd>
-              </div>
-            )
-          }
-          {
-            distributor && (
-              <div class="flex gap-3">
-                <dt class="w-6 shrink-0 text-center">
-                  <span aria-hidden="true">🚚</span>
-                  <span class="sr-only">Distributeur</span>
-                </dt>
-                <dd>
-                  <a class="link link-primary" href={`/editeurs/${distributor.id}/`}>{distributor.data.name}</a>
-                </dd>
-              </div>
-            )
-          }
         </dl>
 
-        <div class="flex flex-wrap items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3 pt-2">
           {
             d.price && (
-              <span class="badge badge-primary badge-lg font-semibold">
-                <span class="sr-only">Prix : </span>{d.price}
+              <span class="inline-flex items-center gap-2 rounded-field border border-primary/60 px-3 py-1.5 font-semibold text-primary">
+                <Icon name="coins" class="size-5" />
+                <span class="sr-only">Prix indicatif : </span>
+                {d.price}
               </span>
             )
           }
@@ -157,20 +141,24 @@ const rows = [
 
     {
       hasBody && (
-        <section class="mt-8" aria-labelledby="avis">
-          <h2 id="avis" class="font-serif text-2xl mb-3">Notre avis</h2>
-          <Prose><Content /></Prose>
+        <section class="mt-12" aria-labelledby="avis">
+          <h2 id="avis" class="mb-4 text-3xl text-primary">Notre avis</h2>
+          <Prose>
+            <Content />
+          </Prose>
         </section>
       )
     }
 
     {
       extensions.length > 0 && (
-        <section class="mt-8" aria-labelledby="extensions">
-          <h2 id="extensions" class="font-serif text-2xl mb-3">Extensions et suites</h2>
-          <ul class="list-disc pl-6">
+        <section class="mt-12" aria-labelledby="extensions">
+          <h2 id="extensions" class="mb-4 text-3xl text-primary">Extensions et suites</h2>
+          <ul class="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3">
             {extensions.map((g) => (
-              <li><a class="link link-primary" href={`/jeux/${g.id}/`}>{g.data.name}</a></li>
+              <li>
+                <GameTile game={g} />
+              </li>
             ))}
           </ul>
         </section>

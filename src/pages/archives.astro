@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
 import OrnateCard from "../components/OrnateCard.astro";
 import Icon, { type IconName } from "../components/Icon.astro";
 import { getPublishedPosts } from "../lib/posts";
@@ -29,12 +30,10 @@ const entries: { href: string; title: string; count: string; icon: IconName; n: 
   description="Les fiches des jeux, auteurs, autrices et éditeurs cités dans le journal, et tous les tags."
 >
   <div class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl text-primary lg:text-5xl">Les Archives</h1>
-      <p class="mt-2 text-lg">
-        Les fiches des jeux, auteurs, autrices et éditeurs cités dans le journal.
-      </p>
-    </header>
+    <PageHeader
+      title="Les Archives"
+      subtitle="Les fiches des jeux, auteurs, autrices et éditeurs cités dans le journal."
+    />
 
     <ul class="grid gap-4 sm:grid-cols-2">
       {

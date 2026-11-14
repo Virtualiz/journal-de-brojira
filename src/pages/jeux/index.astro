@@ -1,7 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Picture from "../../components/post/Picture.astro";
+import GameTile from "../../components/GameTile.astro";
+import PageHeader from "../../components/PageHeader.astro";
 import LetterNav from "../../components/LetterNav.astro";
 import LetterHeading from "../../components/LetterHeading.astro";
 import { anchor, groupByLetter } from "../../lib/alphabet";
@@ -14,36 +15,19 @@ const { letters, groups } = groupByLetter(games, (g) => g.data.name);
   pageTitle="Jeux"
   description="Les fiches des jeux cités dans le journal."
 >
-  <div class="p-4 lg:px-8">
-    <p class="mb-4 text-sm opacity-80">{games.length} jeux.</p>
+  <div class="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-12">
+    <PageHeader title="Les Jeux" subtitle="Les fiches des jeux cités dans le journal.">
+      <p class="mt-2 text-sm text-base-content/85">{games.length} jeux</p>
+    </PageHeader>
     <LetterNav letters={letters} />
     {
       letters.map((letter) => (
-        <section class="mb-8" aria-labelledby={anchor(letter)}>
+        <section class="mb-10" aria-labelledby={anchor(letter)}>
           <LetterHeading letter={letter} />
-          <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pt-2">
+          <ul class="grid grid-cols-2 gap-3 pt-3 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
             {groups.get(letter)!.map((game) => (
               <li>
-                <a
-                  href={`/jeux/${game.id}/`}
-                  class="card card-border border-base-300 bg-base-100 h-full hover:border-primary"
-                >
-                  <figure class="bg-base-200 p-4">
-                    <Picture
-                      src={game.data.image}
-                      alt=""
-                      class="h-40 w-auto max-w-full rounded-field object-contain"
-                    />
-                  </figure>
-                  <div class="card-body gap-2 p-4">
-                    <span class="card-title">{game.data.name}</span>
-                    {game.data.kind !== "jeu" && (
-                      <span class="badge badge-accent badge-sm">
-                        {game.data.kind}
-                      </span>
-                    )}
-                  </div>
-                </a>
+                <GameTile game={game} />
               </li>
             ))}
           </ul>

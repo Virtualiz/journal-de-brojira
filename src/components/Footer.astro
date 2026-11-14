@@ -1,7 +1,19 @@
 ---
+/** Pied de page : logo, devise, copyright. */
+import Brand from "./Brand.astro";
 ---
-<footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 sticky bottom-0">
-  <aside>
-    <p>Copyright © {new Date().getFullYear()} - Tous droits réservés par Moi</p>
-  </aside>
+
+<footer class="border-t border-primary/50 bg-base-200">
+  <div
+    class="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-8 text-center
+      lg:flex-row lg:justify-between lg:gap-8 lg:px-8 lg:text-left"
+  >
+    <Brand />
+    <p class="flex w-full items-center gap-3 font-serif text-xl italic lg:w-auto lg:flex-1 lg:text-2xl">
+      <span aria-hidden="true" class="h-px flex-1 bg-primary/40"></span>
+      <span>Un journal personnel · Une mémoire collective</span>
+      <span aria-hidden="true" class="h-px flex-1 bg-primary/40"></span>
+    </p>
+    <p class="text-sm text-base-content/85">© {new Date().getFullYear()} Brojira · Tous droits réservés</p>
+  </div>
 </footer>

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
 import LetterNav from "../../components/LetterNav.astro";
 import LetterHeading from "../../components/LetterHeading.astro";
 import { anchor, groupByLetter } from "../../lib/alphabet";
@@ -13,10 +14,10 @@ const { letters, groups } = groupByLetter(publishers, (p) => p.data.name);
   pageTitle="Éditeurs et distributeurs"
   description="Les éditeurs et distributeurs des jeux cités dans le journal."
 >
-  <div class="p-4 lg:px-8">
-    <p class="mb-4 text-sm opacity-80">
-      {publishers.length} éditeurs et distributeurs.
-    </p>
+  <div class="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-12">
+    <PageHeader title="Les Éditeurs" subtitle="Les éditeurs et distributeurs des jeux cités dans le journal.">
+      <p class="mt-2 text-sm text-base-content/85">{publishers.length} éditeurs et distributeurs</p>
+    </PageHeader>
     <LetterNav letters={letters} />
     {
       letters.map((letter) => (

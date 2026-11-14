@@ -1,0 +1,18 @@
+---
+/** En-tête de page : titre or en serif, sous-titre, contenu optionnel (compteur, liens…), filet décoratif. */
+import Flourish from "./Flourish.astro";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<header class="mb-8 lg:mb-10">
+  <h1 class="text-4xl text-primary lg:text-5xl">{title}</h1>
+  {subtitle && <p class="mt-2 max-w-3xl text-lg">{subtitle}</p>}
+  <slot />
+  <Flourish class="mt-5" />
+</header>
