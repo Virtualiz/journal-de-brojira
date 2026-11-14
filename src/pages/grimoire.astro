@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+
+// Grimoire : univers et écrits (nouvelles, jeu de rôle). Un billet y entre via l'un de ces tags.
+const GRIMOIRE_TAGS = ["JdR", "nouvelle"];
+
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft && p.data.tags.some((t) => GRIMOIRE_TAGS.includes(t)))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  pageTitle="Le Grimoire · Brojira"
+  description="Univers, nouvelles et écrits de jeu de rôle de Brojira, dont le monde de Qualia."
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
+    <header class="mb-8">
+      <h1 class="text-4xl lg:text-5xl text-primary">Le Grimoire</h1>
+      <p class="mt-2 text-lg">
+        Univers &amp; écrits : nouvelles et fragments de jeu de rôle, à commencer par le monde de
+        Qualia, où l'on a choisi de tuer la magie pour survivre.
+      </p>
+    </header>
+
+    {
+      posts.length > 0 && (
+        <section aria-labelledby="grimoire-ecrits">
+          <h2 id="grimoire-ecrits" class="mb-4 text-2xl">Les écrits</h2>
+          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <li class="relative isolate">
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

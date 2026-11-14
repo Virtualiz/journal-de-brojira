@@ -1,0 +1,42 @@
+---
+/** Logo + nom « Brojira » + sous-titre. Réutilisé dans l'en-tête, le drawer et le pied de page. */
+import { Image } from "astro:assets";
+import logo from "../assets/JB_book.png";
+
+interface Props {
+  /** Lien vers l'accueil (désactiver dans un contexte déjà cliquable). */
+  href?: string | null;
+  size?: "md" | "lg";
+  class?: string;
+}
+
+const { href = "/", size = "md", class: className } = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag
+  href={href ?? undefined}
+  class:list={["inline-flex items-center gap-3 rounded-box", className]}
+  aria-label={href ? "Brojira, retour à l'accueil" : undefined}
+>
+  <Image
+    src={logo}
+    alt=""
+    width={96}
+    height={96}
+    format="webp"
+    loading="eager"
+    class:list={["w-auto", size === "lg" ? "h-14" : "h-10 sm:h-12"]}
+  />
+  <span class="flex flex-col leading-none">
+    <span
+      class:list={[
+        "font-serif font-semibold text-primary",
+        size === "lg" ? "text-4xl" : "text-3xl sm:text-4xl",
+      ]}>Brojira</span
+    >
+    <span class="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.18em] text-base-content/85">
+      Chroniques &amp; Archives
+    </span>
+  </span>
+</Tag>
