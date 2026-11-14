@@ -1,0 +1,33 @@
+---
+/**
+ * Image d'un billet (URL distante du frontmatter) optimisée par <Image> : WebP, tailles responsives.
+ * Rien n'est rendu si le billet n'a pas d'image.
+ */
+import { Image } from "astro:assets";
+
+interface Props {
+  image?: { url: string; alt: string };
+  /** Attribut sizes (largeur affichée selon l'écran). */
+  sizes: string;
+  widths?: number[];
+  loading?: "eager" | "lazy";
+  class?: string;
+}
+
+const { image, sizes, widths = [400, 640, 960], loading = "lazy", class: className } = Astro.props;
+---
+
+{
+  image && (
+    <Image
+      src={image.url}
+      alt={image.alt}
+      inferSize
+      format="webp"
+      widths={widths}
+      sizes={sizes}
+      loading={loading}
+      class:list={["h-full w-full object-cover", className]}
+    />
+  )
+}

@@ -4,6 +4,7 @@ author: Brojira
 description: "Nouvelle dans l'univers de Qualia"
 pubDate: 2026-09-29
 tags: ["JdR", "nouvelle"]
+featured: true
 ---
 
 > par Jarek <Défenseur de Qualia>, ami de l'Archimage Kaelen

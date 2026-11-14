@@ -1,197 +1,63 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LandingHero from "../components/LandingHero.astro";
-import Card from "../components/Card.astro";
+import OrnateCard from "../components/OrnateCard.astro";
+import ParchmentBand from "../components/ParchmentBand.astro";
+import LatestPostCard from "../components/home/LatestPostCard.astro";
+import SectionTiles from "../components/home/SectionTiles.astro";
+import FeaturedPost from "../components/home/FeaturedPost.astro";
+import { getPublishedPosts, postUrl } from "../lib/posts";
 
-import { getCollection } from "astro:content";
-
-const pageTitle = "Journal de Brojira";
-const allPosts = (await getCollection("blog")).filter((post) => !post.data.draft);
-const recentPosts = allPosts.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const [lastPost, ...olderPosts] = recentPosts;
-const previousPosts = olderPosts.slice(0, 3);
-
-const formatDate = (date: Date, long = false) =>
-  date.toLocaleDateString(
-    "fr",
-    long
-      ? { weekday: "long", year: "numeric", month: "long", day: "numeric" }
-      : { year: "numeric", month: "long", day: "numeric" },
-  );
+const posts = await getPublishedPosts();
+const latest = posts[0];
+// Le plus récent des billets marqués `featured: true` (section masquée s'il n'y en a aucun).
+const featured = posts.find((p) => p.data.featured);
 ---
 
 <BaseLayout
-  pageTitle={pageTitle}
+  pageTitle="Journal de Brojira"
   description="Billets mensuels, jeux et prototypes en cours, fiches : tout ce que j'aime partager autour du jeu de société."
   image={{ url: "/og-image.png", alt: "Ludotheque pour le journal de Brojira" }}
 >
-  <LandingHero />
+  <LandingHero latestPostHref={latest && postUrl(latest)} />
 
-  <div class="p-4 lg:px-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-    <!-- Mise en avant : dernier billet -->
-    <section
-      aria-labelledby="billets-title"
-      class="lg:col-span-2 md:col-span-2"
+  <div class="relative z-10 mx-auto max-w-7xl px-4 pt-6 lg:-mt-14 lg:px-8 lg:pt-0">
+    <div
+      class:list={[
+        "grid gap-6",
+        latest && "lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1fr)]",
+      ]}
     >
-      <div
-        class="card card-border border-primary bg-base-100 h-full transition hover:shadow-xl"
-      >
-        <div class="card-body">
-          <h2 id="billets-title" class="card-title">
-            Billets mensuels et hors-série
-          </h2>
-          <p class="text-sm opacity-80">
-            Au programme chaque mois : événements, récompenses, sorties
-            attendues et petites présentations.
-          </p>
+      {latest && <LatestPostCard post={latest} />}
 
-          {
-            lastPost ? (
-              <div class="card lg:card-side bg-base-200 shadow-md mt-2">
-                {lastPost.data.image && (
-                  <figure class="lg:w-1/3">
-                    <img
-                      src={lastPost.data.image.url}
-                      alt={lastPost.data.image.alt}
-                      class="h-full w-full object-cover"
-                    />
-                  </figure>
-                )}
-                <div class="card-body">
-                  <span class="badge badge-primary badge-sm">
-                    Dernier billet
-                  </span>
-                  <h3 class="text-2xl font-semibold">
-                    <a
-                      href={`/posts/${lastPost.id}/`}
-                      class="link link-hover"
-                    >
-                      {lastPost.data.title}
-                    </a>
-                  </h3>
-                  <p class="text-sm">{lastPost.data.description}</p>
-                  <div class="flex flex-wrap gap-1">
-                    {lastPost.data.tags.map((tag) => (
-                      <a
-                        href={`/tags/${tag}/`}
-                        class="badge badge-outline badge-sm hover:badge-primary"
-                      >
-                        {tag}
-                      </a>
-                    ))}
-                  </div>
-                  <p class="text-xs italic">
-                    Par {lastPost.data.author}, {formatDate(lastPost.data.pubDate, true)}.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div class="alert alert-soft">
-                <span>Aucun billet publié pour le moment.</span>
-              </div>
-            )
-          }
+      <!-- Citation décorative : desktop seulement. -->
+      <OrnateCard as="figure" class="hidden flex-col items-center justify-center gap-3 p-8 text-center lg:flex">
+        <span aria-hidden="true" class="font-serif text-6xl leading-none text-primary">“</span>
+        <blockquote class="font-serif text-2xl leading-snug italic">
+          « Jouer, c’est voyager sans jamais quitter sa table. »
+        </blockquote>
+        <span aria-hidden="true" class="mt-2 flex w-full items-center gap-3 text-primary">
+          <span class="h-px flex-1 bg-primary/50"></span>✦<span class="h-px flex-1 bg-primary/50"></span>
+        </span>
+      </OrnateCard>
+    </div>
 
-          {
-            previousPosts.length > 0 && (
-              <ul class="list mt-2">
-                <li class="p-2 pb-1 text-xs uppercase tracking-wide opacity-60">
-                  Billets précédents
-                </li>
-                {previousPosts.map((post) => (
-                  <li class="list-row">
-                    <div class="list-col-grow">
-                      <a
-                        href={`/posts/${post.id}/`}
-                        class="link link-hover font-medium"
-                      >
-                        {post.data.title}
-                      </a>
-                      <div class="text-xs opacity-60">
-                        {formatDate(post.data.pubDate)}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )
-          }
-
-          <div class="card-actions justify-end mt-2">
-            {
-              lastPost && (
-                <a href={`/posts/${lastPost.id}/`} class="btn btn-primary">
-                  Lire cet article
-                </a>
-              )
-            }
-            <a href="/blog/" class="btn btn-secondary">Voir la liste</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section en cours -->
-    <section aria-labelledby="jeux-title" class="opacity-80">
-      <div class="card card-border border-primary bg-base-100 h-full">
-        <div class="card-body">
-          <h2 id="jeux-title" class="card-title">
-            Mes jeux et prototypes
-            <span class="badge badge-warning badge-sm">En cours</span>
-          </h2>
-          <p class="text-sm">
-            Ici vous retrouverez des infos sur mes jeux, prototypes et idées en
-            cours.
-          </p>
-          <ul class="list">
-            <li class="list-row">Spicy Jo</li>
-            <li class="list-row">Backdoor</li>
-            <li class="list-row">
-              <div class="skeleton h-4 w-3/4"></div>
-            </li>
-          </ul>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary" disabled>Aller voir</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section aria-labelledby="fiches-title">
-      <div class="card card-border border-primary bg-base-100 h-full">
-        <div class="card-body">
-          <h2 id="fiches-title" class="card-title">
-            Fiches
-          </h2>
-          <p class="text-sm">
-            Lorsque je cite un jeu, un auteur ou une autrice, ou un éditeur,
-            vous trouverez une fiche qui présente rapidement ses informations.
-          </p>
-          <div class="card-actions justify-end">
-            <a href="/jeux/" class="btn btn-primary">Liste des jeux</a>
-            <a href="/auteurs/" class="btn btn-secondary">Liste des auteurs</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section aria-labelledby="autres-title" class="opacity-80">
-      <div class="card card-border border-primary bg-base-100 h-full">
-        <div class="card-body">
-          <h2 id="autres-title" class="card-title">
-            Autres
-            <span class="badge badge-warning badge-sm">En cours</span>
-          </h2>
-          <div class="flex flex-col gap-2">
-            <div class="skeleton h-4 w-full"></div>
-            <div class="skeleton h-4 w-5/6"></div>
-            <div class="skeleton h-4 w-2/3"></div>
-          </div>
-          <p class="text-xs italic opacity-70">À venir.</p>
-        </div>
-      </div>
-    </section>
+    <div class="mt-8 lg:mt-10">
+      <SectionTiles />
+    </div>
   </div>
+
+  {
+    featured ? (
+      <ParchmentBand class="mt-14 lg:mt-20" aria-labelledby="une-title">
+        <div class="mx-auto max-w-7xl px-4 lg:px-8">
+          <div class="max-w-4xl">
+            <FeaturedPost post={featured} />
+          </div>
+        </div>
+      </ParchmentBand>
+    ) : (
+      <div class="h-14 lg:h-20" />
+    )
+  }
 </BaseLayout>

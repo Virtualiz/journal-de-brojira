@@ -1,5 +1,5 @@
 ---
-/** Logo + nom « Brojira » + sous-titre. Réutilisé dans l'en-tête, le drawer et le pied de page. */
+/** Logo + nom « Journal de Brojira » + sous-titre. Réutilisé dans l'en-tête, le drawer et le pied de page. */
 import { Image } from "astro:assets";
 import logo from "../assets/JB_book.png";
 
@@ -17,7 +17,7 @@ const Tag = href ? "a" : "div";
 <Tag
   href={href ?? undefined}
   class:list={["inline-flex items-center gap-3 rounded-box", className]}
-  aria-label={href ? "Brojira, retour à l'accueil" : undefined}
+  aria-label={href ? "Journal de Brojira, retour à l'accueil" : undefined}
 >
   <Image
     src={logo}
@@ -31,9 +31,9 @@ const Tag = href ? "a" : "div";
   <span class="flex flex-col leading-none">
     <span
       class:list={[
-        "font-serif font-semibold text-primary",
-        size === "lg" ? "text-4xl" : "text-3xl sm:text-4xl",
-      ]}>Brojira</span
+        "font-serif font-semibold text-primary whitespace-nowrap",
+        size === "lg" ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl",
+      ]}>Journal de Brojira</span
     >
     <span class="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.18em] text-base-content/85">
       Chroniques &amp; Archives

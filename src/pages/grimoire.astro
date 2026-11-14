@@ -1,14 +1,12 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/PostCard.astro";
+import { getPublishedPosts } from "../lib/posts";
 
 // Grimoire : univers et écrits (nouvelles, jeu de rôle). Un billet y entre via l'un de ces tags.
 const GRIMOIRE_TAGS = ["JdR", "nouvelle"];
 
-const posts = (await getCollection("blog"))
-  .filter((p) => !p.data.draft && p.data.tags.some((t) => GRIMOIRE_TAGS.includes(t)))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = await getPublishedPosts((p) => p.data.tags.some((t) => GRIMOIRE_TAGS.includes(t)));
 ---
 
 <BaseLayout

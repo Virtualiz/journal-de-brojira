@@ -1,0 +1,98 @@
+---
+/**
+ * Carte encadrée : bordure or fine, filet intérieur discret et 4 coins ornementés.
+ * Un seul SVG (masque CSS) est tourné pour les 4 coins ; sa couleur suit `currentColor`
+ * (or sur fond sombre, or foncé sur parchemin). Purement décoratif : aria-hidden.
+ *
+ * <OrnateCard>…</OrnateCard>
+ * <OrnateCard as="article" variant="parchment" interactive class="p-6">…</OrnateCard>
+ */
+import type { HTMLTag } from "astro/types";
+
+interface Props {
+  as?: HTMLTag;
+  /** dark : fond base-100 + or. parchment : fond parchemin + or foncé. */
+  variant?: "dark" | "parchment";
+  /** Survol : bordure plus marquée + léger soulèvement (désactivé si prefers-reduced-motion). */
+  interactive?: boolean;
+  /** Coins plus petits, pour les tuiles étroites (mobile 2 colonnes). */
+  compact?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  as: Tag = "div",
+  variant = "dark",
+  interactive = false,
+  compact = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  class:list={[
+    "ornate relative rounded-[3px] border",
+    variant === "parchment"
+      ? "parchment ornate-parchment border-gold-ink/45"
+      : "bg-base-100 border-primary/55",
+    interactive && "ornate-interactive",
+    compact && "ornate-compact",
+    className,
+  ]}
+  {...rest}
+>
+  <span aria-hidden="true" class="ornate-corner" data-corner="tl"></span>
+  <span aria-hidden="true" class="ornate-corner" data-corner="tr"></span>
+  <span aria-hidden="true" class="ornate-corner" data-corner="br"></span>
+  <span aria-hidden="true" class="ornate-corner" data-corner="bl"></span>
+  <slot />
+</Tag>
+
+<style>
+  .ornate {
+    --ornate-color: var(--color-primary);
+    --ornate-size: 1.75rem;
+    /* Filet intérieur : 5 px de fond puis 1 px d'or atténué. */
+    box-shadow:
+      inset 0 0 0 5px var(--ornate-bg, var(--color-base-100)),
+      inset 0 0 0 6px color-mix(in oklab, var(--ornate-color) 22%, transparent);
+  }
+  .ornate-compact {
+    --ornate-size: 1.25rem;
+  }
+  .ornate-parchment {
+    --ornate-color: var(--color-gold-ink);
+    --ornate-bg: var(--color-accent);
+  }
+
+  /* Coin dessiné en haut à gauche ; les 3 autres sont le même SVG tourné. */
+  .ornate-corner {
+    position: absolute;
+    width: var(--ornate-size);
+    height: var(--ornate-size);
+    background-color: var(--ornate-color);
+    pointer-events: none;
+    -webkit-mask: var(--ornate-corner-svg) center / contain no-repeat;
+    mask: var(--ornate-corner-svg) center / contain no-repeat;
+    --ornate-corner-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M1 31V14C1 6.8 6.8 1 14 1h17'/%3E%3Cpath d='M6 24v-9c0-5 4-9 9-9h9'/%3E%3Cpath d='M12 9.5l2.5 2.5-2.5 2.5-2.5-2.5z' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  }
+  .ornate-corner[data-corner="tl"] { top: -1px; left: -1px; }
+  .ornate-corner[data-corner="tr"] { top: -1px; right: -1px; rotate: 90deg; }
+  .ornate-corner[data-corner="br"] { bottom: -1px; right: -1px; rotate: 180deg; }
+  .ornate-corner[data-corner="bl"] { bottom: -1px; left: -1px; rotate: 270deg; }
+
+  .ornate-interactive {
+    transition: border-color 0.2s ease, translate 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ornate-interactive:hover,
+  .ornate-interactive:focus-within {
+    border-color: var(--ornate-color);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ornate-interactive:hover {
+      translate: 0 -2px;
+    }
+  }
+</style>
