@@ -1,0 +1,80 @@
+---
+/**
+ * Bande parchemin pleine largeur, avec bords SVG (déchiré ou ondulé) en entrée et en sortie.
+ * Les bords sont découpés par un masque CSS sur la bande elle-même : le grain reste continu
+ * jusqu'au bord et la couleur de la section voisine apparaît naturellement.
+ *
+ * <ParchmentBand aria-labelledby="une">…</ParchmentBand>
+ * <ParchmentBand edge="wave" edges="top">…</ParchmentBand>
+ */
+import type { HTMLTag } from "astro/types";
+
+interface Props {
+  as?: HTMLTag;
+  edge?: "torn" | "wave";
+  /** Côtés découpés. */
+  edges?: "both" | "top" | "bottom";
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { as: Tag = "section", edge = "torn", edges = "both", class: className, ...rest } = Astro.props;
+
+// Tracés dans un repère 1200 × 20 : la partie pleine est en bas (bord d'entrée).
+const paths = {
+  torn: "M0 20V6.2L18 6.9L33 3.7L64 3.9L96 3.6L126 5.1L142 7.3L158 5.4L189 7.2L221 4.2L242 9.3L274 12.5L306 8.9L321 12.8L336 8.6L354 5.9L372 8.4L404 6.1L439 4.8L471 8.7L491 6.7L522 10.1L554 3.6L574 8.0L605 7.3L629 7.7L657 6.6L678 10.9L714 10.8L730 8.7L760 8.0L784 10.3L807 9.1L823 4.2L850 4.6L874 4.5L903 7.2L938 3.8L969 8.7L993 6.4L1018 8.9L1050 11.0L1066 11.4L1088 7.7L1123 3.6L1160 10.0L1194 8.8L1200 8V20Z",
+  wave: "M0 20V10C100 2 200 2 300 8S500 18 600 10 800 2 900 8 1100 16 1200 9V20Z",
+};
+
+const svg = (flip: boolean) =>
+  `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 20' preserveAspectRatio='none'>` +
+      `<path d='${paths[edge]}'${flip ? " transform='matrix(1 0 0 -1 0 20)'" : ""}/></svg>`,
+  )}")`;
+
+const style = [
+  edges !== "bottom" && `--band-top: ${svg(false)}`,
+  edges !== "top" && `--band-bottom: ${svg(true)}`,
+]
+  .filter(Boolean)
+  .join("; ");
+---
+
+<Tag
+  class:list={["parchment parchment-band relative", `band-${edges}`, className]}
+  style={style}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .parchment-band {
+    --edge: 0.875rem;
+    padding-block: calc(var(--edge) + 2.5rem);
+  }
+  @media (min-width: 1024px) {
+    .parchment-band {
+      --edge: 1.25rem;
+      padding-block: calc(var(--edge) + 3.5rem);
+    }
+  }
+
+  /* Bord(s) SVG + rectangle plein pour le reste de la bande. */
+  .band-both {
+    mask:
+      var(--band-top) top / 100% var(--edge) no-repeat,
+      var(--band-bottom) bottom / 100% var(--edge) no-repeat,
+      linear-gradient(#000 0 0) center / 100% calc(100% - 2 * var(--edge) + 2px) no-repeat;
+  }
+  .band-top {
+    mask:
+      var(--band-top) top / 100% var(--edge) no-repeat,
+      linear-gradient(#000 0 0) bottom / 100% calc(100% - var(--edge) + 1px) no-repeat;
+  }
+  .band-bottom {
+    mask:
+      var(--band-bottom) bottom / 100% var(--edge) no-repeat,
+      linear-gradient(#000 0 0) top / 100% calc(100% - var(--edge) + 1px) no-repeat;
+  }
+</style>

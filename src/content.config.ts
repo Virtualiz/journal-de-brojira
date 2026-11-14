@@ -17,7 +17,9 @@ const blog = defineCollection({
         alt: z.string()
       }).optional(),
       tags: z.array(z.string()),
-      draft: z.boolean().default(false)
+      draft: z.boolean().default(false),
+      /** Mis en avant dans la bande « À la une » de l'accueil (le plus récent l'emporte). */
+      featured: z.boolean().default(false)
     })
 });
 

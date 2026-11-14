@@ -35,12 +35,6 @@ export const nav: NavItem[] = [
   { href: "/about/", label: "À propos", icon: "user" },
 ];
 
-/** Liens sociaux : n'ajouter une entrée que si l'URL existe (pas de lien mort). */
-export const socials: NavLink[] = [
-  { href: "https://github.com/Virtualiz/journal-de-brojira", label: "GitHub", icon: "github" },
-  { href: "/rss.xml", label: "Flux RSS", icon: "rss" },
-];
-
 export const isActive = (href: string, pathname: string) =>
   href === "/" ? pathname === "/" : pathname.startsWith(href);
 

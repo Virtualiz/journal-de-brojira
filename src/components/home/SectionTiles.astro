@@ -1,0 +1,36 @@
+---
+/** Grille des 4 rubriques : 2 × 2 sur mobile, 4 colonnes sur desktop. */
+import OrnateCard from "../OrnateCard.astro";
+import Icon, { type IconName } from "../Icon.astro";
+
+const tiles: { href: string; title: string; subtitle: string; icon: IconName }[] = [
+  { href: "/blog/", title: "Le Journal", subtitle: "Billets & chroniques", icon: "book-open" },
+  { href: "/atelier/", title: "L’Atelier", subtitle: "Prototypes & créations", icon: "hammer" },
+  { href: "/grimoire/", title: "Le Grimoire", subtitle: "Univers & écrits", icon: "scroll" },
+  { href: "/archives/", title: "Les Archives", subtitle: "Jeux, auteurs & éditeurs", icon: "archive" },
+];
+---
+
+<section aria-labelledby="rubriques-title">
+  <h2 id="rubriques-title" class="sr-only">Rubriques</h2>
+  <ul class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
+    {
+      tiles.map((t) => (
+        <OrnateCard
+          as="li"
+          interactive
+          compact
+          class="flex flex-col items-center px-3 py-5 text-center lg:py-6"
+        >
+          <Icon name={t.icon} class="size-8 text-primary lg:size-9" />
+          <h3 class="mt-2 text-xl leading-tight lg:text-2xl">
+            <a href={t.href} class="after:absolute after:inset-0">
+              {t.title}
+            </a>
+          </h3>
+          <p class="mt-1 text-sm text-base-content/85">{t.subtitle}</p>
+        </OrnateCard>
+      ))
+    }
+  </ul>
+</section>

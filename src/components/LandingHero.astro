@@ -1,37 +1,66 @@
 ---
+/**
+ * Hero de l'accueil : image de fond (WebP responsive) + dégradé sombre côté texte.
+ * Mobile : texte en bas, dégradé vertical, hero plus court. Desktop (≥ lg) : texte à gauche, dégradé horizontal.
+ */
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+// Image provisoire : remplacer par l'illustration définitive (idéalement ≥ 1920 px de large).
+import heroImage from "../assets/index/barajeux.png";
 
-import myBackground from "../assets/index/barajeux.png";
-import { getImage } from "astro:assets";
-const optimizedBackground = await getImage({
-  src: myBackground,
-  format: "avif",
-});
+interface Props {
+  /** Lien vers le dernier billet publié ; le bouton n'est pas affiché s'il n'y en a pas. */
+  latestPostHref?: string;
+}
+
+const { latestPostHref } = Astro.props;
 ---
-<div
-    class="hero lg:min-h-96 min-h-fit"
-    style={`
-	background-image: url(${optimizedBackground.src});`}
+
+<section aria-labelledby="hero-title" class="relative isolate overflow-hidden bg-base-200">
+  <Image
+    src={heroImage}
+    alt=""
+    format="webp"
+    widths={[640, 960, 1280, 1920]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-[65%_center]"
+  />
+  <!-- Dégradé : opaque sous le texte (contraste AA garanti quelle que soit l'image). -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 bg-linear-to-t from-base-200 from-35% via-base-200/80 to-base-200/25
+      lg:bg-linear-to-r lg:from-base-200 lg:from-30% lg:via-base-200/80 lg:via-50% lg:to-transparent"
   >
-    <div class="hero-overlay"></div>
-    <div
-      class="hero-content
-			text-center
-			backdrop-brightness-50
-			min-w-3/4
-			lg:min-h-96"
-    >
-      <div class="max-w-md">
-        <h1 class="mb-5 text-5xl font-bold">Bienvenue</h1>
-        <p class="mb-5 text-base">
-          Vous trouverez dans les pages de mon <span
-            class="font-serif font-bold text-lg"
+  </div>
+
+  <div
+    class="mx-auto flex min-h-[26rem] max-w-7xl items-end px-4 pt-24 pb-10
+      sm:min-h-[30rem] lg:min-h-[34rem] lg:items-center lg:px-8 lg:py-16"
+  >
+    <div class="max-w-xl">
+      <h1
+        id="hero-title"
+        class="text-[2.6rem] leading-[1.05] font-medium italic sm:text-6xl lg:text-7xl"
+      >
+        Le journal d’un aventurier ludique.
+      </h1>
+      <p class="mt-5 text-base leading-relaxed sm:text-lg">
+        Bienvenue dans mon carnet de bord : actualités du jeu de société, découvertes, prototypes
+        en cours de création, retours d'événements… et sûrement quelques digressions au passage.
+      </p>
+      {
+        latestPostHref && (
+          <a
+            href={latestPostHref}
+            class="btn btn-outline btn-primary mt-7 rounded-full border-2 px-6 font-semibold"
           >
-            journal
-          </span>&nbsp
-          tout ce que j'aime partager autour du jeu de société : <br /><br />
-          actualités, prototypes en cours de création, fiches de jeux, retours d'événements,
-          ...<br /><br />... et sûrement quelques digressions au passage.
-        </p>
-      </div>
+            Découvrir le dernier billet
+            <Icon name="arrow-right" class="size-4" />
+          </a>
+        )
+      }
     </div>
   </div>
+</section>

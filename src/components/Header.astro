@@ -1,11 +1,11 @@
 ---
 /**
  * En-tête : barre desktop (≥ lg) avec menu déroulant « Archives »,
- * burger + drawer DaisyUI en dessous (Archives en accordéon, liens sociaux en bas).
+ * burger + drawer DaisyUI en dessous (Archives en accordéon).
  */
 import Brand from "./Brand.astro";
 import Icon from "./Icon.astro";
-import { nav, socials, isGroup, isActive, isItemActive } from "../lib/nav";
+import { nav, isGroup, isActive, isItemActive } from "../lib/nav";
 
 const pathname = Astro.url.pathname;
 const DRAWER_ID = "nav-drawer";
@@ -149,19 +149,6 @@ const DRAWER_ID = "nav-drawer";
         </ul>
       </nav>
 
-      {
-        socials.length > 0 && (
-          <ul class="flex justify-center gap-2 border-t border-primary/30 p-4" aria-label="Réseaux et flux">
-            {socials.map((s) => (
-              <li>
-                <a href={s.href} class="btn btn-square btn-ghost text-primary" aria-label={s.label}>
-                  <Icon name={s.icon} class="size-6" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
     </div>
   </div>
 </div>

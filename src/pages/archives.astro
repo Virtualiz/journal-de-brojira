@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import OrnateCard from "../components/OrnateCard.astro";
+import Icon, { type IconName } from "../components/Icon.astro";
+import { getPublishedPosts } from "../lib/posts";
+
+const [games, people, publishers, posts] = await Promise.all([
+  getCollection("games"),
+  getCollection("people"),
+  getCollection("publishers"),
+  getPublishedPosts(),
+]);
+const tagCount = new Set(posts.flatMap((p) => p.data.tags)).size;
+
+const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`;
+
+// Une entrée n'apparaît que si elle contient quelque chose.
+const entries: { href: string; title: string; count: string; icon: IconName; n: number }[] = [
+  { href: "/jeux/", title: "Jeux", count: plural(games.length, "fiche", "fiches"), icon: "dices", n: games.length },
+  { href: "/auteurs/", title: "Auteurs & autrices", count: plural(people.length, "fiche", "fiches"), icon: "users", n: people.length },
+  { href: "/editeurs/", title: "Éditeurs", count: plural(publishers.length, "fiche", "fiches"), icon: "building", n: publishers.length },
+  { href: "/tags/", title: "Tags", count: plural(tagCount, "tag", "tags"), icon: "tag", n: tagCount },
+].filter((e) => e.n > 0);
+---
+
+<BaseLayout
+  pageTitle="Les Archives · Journal de Brojira"
+  description="Les fiches des jeux, auteurs, autrices et éditeurs cités dans le journal, et tous les tags."
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
+    <header class="mb-8">
+      <h1 class="text-4xl text-primary lg:text-5xl">Les Archives</h1>
+      <p class="mt-2 text-lg">
+        Les fiches des jeux, auteurs, autrices et éditeurs cités dans le journal.
+      </p>
+    </header>
+
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {
+        entries.map((e) => (
+          <OrnateCard as="li" interactive class="flex items-center gap-4 p-5">
+            <Icon name={e.icon} class="size-9 text-primary" />
+            <div>
+              <h2 class="text-2xl">
+                <a href={e.href} class="after:absolute after:inset-0">
+                  {e.title}
+                </a>
+              </h2>
+              <p class="text-sm text-base-content/85">{e.count}</p>
+            </div>
+          </OrnateCard>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

@@ -5,7 +5,7 @@
 }
 
 /* Thème « fantasy » : violet nuit, accents or, bandes parchemin.
-   Contrastes (WCAG) : or/base-100 9,5:1 · base-content/base-100 ≈14:1 · accent-content/accent 11:1.
+   Contrastes (WCAG) : or/base-100 9,5:1 · base-content/base-100 ≈16:1 · accent-content/accent 11:1.
    À éviter : texte or sur parchemin (1,4:1 → utiliser --color-gold-ink) et texte secondary sur fond sombre (2,9:1). */
 @plugin "daisyui/theme" {
   name: "brojira";
@@ -16,7 +16,7 @@
   --color-base-100: #24132f;
   --color-base-200: #1a0e22;
   --color-base-300: #3a2350;
-  --color-base-content: #f3e3c8;
+  --color-base-content: #faf3e8;
 
   --color-primary: #e8b86a;
   --color-primary-content: #24132f;
