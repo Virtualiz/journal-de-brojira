@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/PostCard.astro";
 import Pagination from "../../components/Pagination.astro";
+import PageHeader from "../../components/PageHeader.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = (await getCollection("blog"))
@@ -20,15 +21,18 @@ const pageTitle = "Blog de Brojira";
   pageTitle={page.currentPage > 1 ? `${pageTitle} – page ${page.currentPage}` : pageTitle}
   description="Tous les billets du journal de Brojira : billets mensuels, retours d'événements et présentations de jeux."
 >
-  <div class="p-4 lg:px-8">
-    <p class="mb-4 text-sm opacity-80">
-      Liste de tous mes articles ({page.total}).
-    </p>
+  <div class="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-12">
+    <PageHeader
+      title="Le Journal"
+      subtitle="Billets mensuels, chroniques et hors-séries : événements, récompenses, sorties attendues et petites présentations."
+    >
+      <p class="mt-2 text-sm text-base-content/85">{page.total} billets</p>
+    </PageHeader>
 
-    <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+    <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         page.data.map((post) => (
-          <li class="relative isolate">
+          <li>
             <PostCard post={post} />
           </li>
         ))

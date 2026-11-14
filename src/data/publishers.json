@@ -2,5 +2,9 @@
   { "id": "catch-up-games", "name": "Catch Up Games" },
   { "id": "blackrock-games", "name": "Blackrock Games" },
   { "id": "kodama", "name": "Kodama" },
-  { "id": "iello", "name": "Iello" }
+  { "id": "iello", "name": "Iello" },
+  { "id": "intrafin-games", "name": "Intrafin Games" },
+  { "id": "sylex", "name": "Sylex" },
+  { "id": "blue-cocker", "name": "Blue Cocker" },
+  { "id": "la-boite-de-jeu", "name": "La Boîte de Jeu" }
 ]

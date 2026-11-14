@@ -46,15 +46,14 @@ const games = defineCollection({
   loader: glob({ pattern: "**/[^_]*.md", base: "./src/data/games" }),
   schema: z.object({
     name: z.string(),
-    /** Boîte du jeu (URL). Image provisoire si absente. */
-    image: z
-      .string()
-      .url()
-      .default("https://static.vecteezy.com/system/resources/previews/050/027/638/non_2x/mystery-box-with-question-mark-silhouette-icon-vector.jpg"),
+    /** Boîte du jeu (URL). Facultative : un visuel dé + cartes la remplace si absente. */
+    image: z.string().url().optional(),
     description: z.string().optional(),
     /** Jeu de base si c'est une extension ou une suite. */
     parent: reference("games").optional(),
     kind: z.enum(["jeu", "extension", "suite"]).default("jeu"),
+    /** Affiché dans « Nos jeux du moment » sur l'accueil. */
+    playingNow: z.boolean().default(false),
     players: z.string().optional(),
     age: z.string().optional(),
     duration: z.string().optional(),

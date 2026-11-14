@@ -1,0 +1,58 @@
+---
+/**
+ * « Nos jeux du moment » : fiches de jeux marquées `playingNow: true`.
+ * Défilement horizontal (snap) sur mobile, grille sur grand écran. Rendu par l'accueil seulement s'il y a des jeux.
+ */
+import type { CollectionEntry } from "astro:content";
+import GameCover from "../GameCover.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  games: CollectionEntry<"games">[];
+}
+
+const { games } = Astro.props;
+---
+
+<div>
+  <h2 id="jeux-moment-title" class="flex items-center gap-3 text-3xl">
+    <Icon name="dices" class="size-6 text-gold-ink" />
+    Nos jeux du moment
+    <span aria-hidden="true" class="h-px flex-1 bg-gold-ink/40"></span>
+  </h2>
+
+  <ul
+    class="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:scroll-px-0 sm:px-0
+      lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0"
+    aria-label="Jeux du moment"
+  >
+    {
+      games.map((game) => (
+        <li class="w-36 shrink-0 snap-start sm:w-40 lg:w-auto">
+          <a href={`/jeux/${game.id}/`} class="group block rounded-[2px]">
+            <div class="flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[2px] bg-white/55 p-2 shadow-md ring-1 ring-gold-ink/25 transition-shadow group-hover:shadow-lg group-hover:ring-gold-ink/60">
+              <GameCover
+                image={game.data.image}
+                widths={[180, 360]}
+                sizes="(min-width: 1024px) 140px, 160px"
+                class="drop-shadow-none"
+              />
+            </div>
+            <span class="mt-2 block font-serif text-lg leading-tight font-semibold group-hover:underline">
+              {game.data.name}
+            </span>
+            {game.data.players && (
+              <span class="block text-sm">{game.data.players}{game.data.duration && ` · ${game.data.duration}`}</span>
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="mt-4 text-right">
+    <a href="/jeux/" class="inline-flex items-center gap-1 font-semibold hover:underline">
+      Voir tous les jeux <Icon name="arrow-right" class="size-4 text-gold-ink" />
+    </a>
+  </p>
+</div>

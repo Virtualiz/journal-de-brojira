@@ -1,0 +1,36 @@
+---
+/** Tuile de jeu (listes de jeux) : boîte sur fond parchemin dans un cadre orné, nom, type, joueurs et durée. */
+import type { CollectionEntry } from "astro:content";
+import OrnateCard from "./OrnateCard.astro";
+import GameCover from "./GameCover.astro";
+
+interface Props {
+  game: CollectionEntry<"games">;
+  /** h3 par défaut (tuiles sous un h2 de section). */
+  headingLevel?: 2 | 3;
+}
+
+const { game, headingLevel = 3 } = Astro.props;
+const { name, image, kind, players, duration } = game.data;
+const meta = [players, duration].filter(Boolean).join(" · ");
+const Heading = `h${headingLevel}` as const;
+---
+
+<OrnateCard as="article" interactive class="flex h-full flex-col p-2.5">
+  <div class="parchment flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[2px] p-3 sm:p-4">
+    <GameCover image={image} sizes="(min-width: 1024px) 240px, (min-width: 640px) 30vw, 45vw" />
+  </div>
+  <div class="flex grow flex-col gap-1.5 px-1 pt-3 pb-1 sm:px-2 sm:pb-2">
+    <Heading class="text-lg leading-tight sm:text-xl">
+      <a href={`/jeux/${game.id}/`} class="after:absolute after:inset-0 hover:text-primary">{name}</a>
+    </Heading>
+    {meta && <p class="text-xs text-base-content/85 sm:text-sm">{meta}</p>}
+    {
+      kind !== "jeu" && (
+        <p class="mt-auto pt-1">
+          <span class="badge badge-accent badge-sm capitalize">{kind}</span>
+        </p>
+      )
+    }
+  </div>
+</OrnateCard>

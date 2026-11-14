@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
 import Icon from "../components/Icon.astro";
+import OrnateCard from "../components/OrnateCard.astro";
 
 // Prototypes en cours (repris de la page À propos). À déplacer dans une collection quand la liste grandira.
 const prototypes = [
@@ -22,26 +24,21 @@ const prototypes = [
   description="Les prototypes et créations de Brojira, au fil de leur avancée."
 >
   <div class="mx-auto max-w-5xl px-4 py-8 lg:px-8 lg:py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl lg:text-5xl text-primary">L'Atelier</h1>
-      <p class="mt-2 text-lg">Prototypes &amp; créations, au fil de leur avancée.</p>
-    </header>
+    <PageHeader title="L’Atelier" subtitle="Prototypes & créations, au fil de leur avancée." />
 
     <ul class="grid gap-4 sm:grid-cols-2">
       {
         prototypes.map((p) => (
-          <li class="card border border-primary/50 bg-base-100">
-            <div class="card-body">
-              <h2 class="card-title text-2xl">
-                <Icon name="hammer" class="size-5 text-primary" />
-                {p.name}
-              </h2>
-              <p>
-                <span class="badge badge-accent badge-sm">{p.status}</span>
-              </p>
-              <p>{p.text}</p>
-            </div>
-          </li>
+          <OrnateCard as="li" class="flex flex-col gap-3 p-6">
+            <h2 class="flex items-center gap-2 text-2xl">
+              <Icon name="hammer" class="size-5 text-primary" />
+              {p.name}
+            </h2>
+            <p>
+              <span class="badge badge-accent badge-sm">{p.status}</span>
+            </p>
+            <p>{p.text}</p>
+          </OrnateCard>
         ))
       }
     </ul>

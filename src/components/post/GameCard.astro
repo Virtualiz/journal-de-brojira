@@ -2,6 +2,7 @@
 // Carte d'un jeu (nouveauté, extension…). À placer dans un <CardList columns={2}>.
 // Les champs correspondent aux emojis de campustech (voir Billets.md).
 import Picture from "./Picture.astro";
+import OrnateCard from "../OrnateCard.astro";
 
 interface Props {
   /** Nom du jeu (titre h3). */
@@ -50,10 +51,8 @@ const rows = [
 ---
 
 <li>
-  <article
-    class="card card-border border-base-300 bg-base-100 shadow-sm h-full"
-  >
-    <figure class="bg-base-200 p-4">
+  <OrnateCard as="article" class="card h-full">
+    <figure class="parchment m-2.5 rounded-[2px] p-4">
       <Picture
         src={image}
         alt={imageAlt ?? `Boîte du jeu ${name}`}
@@ -61,7 +60,7 @@ const rows = [
       />
     </figure>
     <div class="card-body gap-3">
-      <h3 class="card-title text-xl">
+      <h3 class="card-title text-2xl">
         {
           url ? (
             <a href={url} class="link link-primary" rel="noopener">
@@ -94,12 +93,12 @@ const rows = [
       {
         price && (
           <p class="card-actions justify-end">
-            <span class="badge badge-primary badge-lg font-semibold">
+            <span class="inline-flex items-center rounded-field border border-primary/60 px-3 py-1 font-semibold text-primary">
               <span class="sr-only">Prix : </span>{price}
             </span>
           </p>
         )
       }
     </div>
-  </article>
+  </OrnateCard>
 </li>

@@ -1,0 +1,19 @@
+---
+/** Lien de retour vers une page de liste (« ← Tous les jeux »). */
+import Icon from "./Icon.astro";
+
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<a
+  href={href}
+  class="mb-6 inline-flex items-center gap-1.5 rounded-field text-sm font-medium text-primary hover:underline"
+>
+  <Icon name="arrow-left" class="size-4" />
+  {label}
+</a>

@@ -1,8 +1,18 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import BackLink from "../components/BackLink.astro";
+import Flourish from "../components/Flourish.astro";
+import Icon from "../components/Icon.astro";
 import Prose from "../components/Prose.astro";
-const { frontmatter } = Astro.props;
-const date = frontmatter.pubDate.toLocaleDateString("fr", {
+import { postKind, readingTime, type Post } from "../lib/posts";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, author, pubDate, image, tags } = post.data;
+const date = pubDate.toLocaleDateString("fr", {
   weekday: "long",
   year: "numeric",
   month: "long",
@@ -12,41 +22,67 @@ const dateDisplay = date.charAt(0).toUpperCase() + date.slice(1);
 ---
 
 <BaseLayout
-  pageTitle={frontmatter.title}
-  description={frontmatter.description}
-  image={frontmatter.image}
+  pageTitle={title}
+  description={description}
+  image={image}
   type="article"
-  publishedTime={frontmatter.pubDate}
+  publishedTime={pubDate}
 >
   <article class="mx-auto max-w-3xl px-4 py-8 lg:py-12">
+    <BackLink href="/blog/" label="Le Journal" />
+
     <header class="mb-8">
-      <h1 class="text-3xl lg:text-4xl font-bold leading-tight">
-        {frontmatter.title}
-      </h1>
-      <p class="mt-3 text-lg text-base-content/90">{frontmatter.description}</p>
-      <p class="mt-3 text-sm text-base-content/80">
-        Par {frontmatter.author},&nbsp
-        <time datetime={frontmatter.pubDate.toISOString()}>{dateDisplay}</time>
+      <p class="mb-3">
+        <span class="badge badge-secondary gap-1.5 font-medium">
+          <Icon name="feather" class="size-3.5" />
+          {postKind(post)}
+        </span>
       </p>
+      <h1 class="text-4xl leading-tight text-primary lg:text-5xl">{title}</h1>
+      <p class="mt-3 text-lg">{description}</p>
+      <p class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-base-content/85">
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="calendar" class="size-4 text-primary" />
+          <time datetime={pubDate.toISOString()}>{dateDisplay}</time>
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="clock" class="size-4 text-primary" />
+          {readingTime(post)} min de lecture
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="user" class="size-4 text-primary" />
+          par {author}
+        </span>
+      </p>
+      <Flourish class="mt-6" />
     </header>
 
     <Prose>
       <slot />
     </Prose>
 
-    <footer class="mt-12 border-t border-base-300 pt-4">
-      <h2 class="sr-only">Tags de l'article</h2>
-      <ul class="flex flex-wrap gap-2" role="list">
-        {
-          frontmatter.tags.map((tag: string) => (
-            <li>
-              <a href={`/tags/${tag}/`} class="badge badge-soft badge-primary badge-lg">
-                {tag}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+    <footer class="mt-14">
+      <Flourish align="center" />
+      {
+        tags.length > 0 && (
+          <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+            <h2 class="sr-only">Tags du billet</h2>
+            <Icon name="tag" class="size-4 text-primary" />
+            <ul class="flex flex-wrap justify-center gap-2" role="list">
+              {tags.map((tag) => (
+                <li>
+                  <a
+                    href={`/tags/${tag}/`}
+                    class="badge badge-outline border-primary/60 hover:border-primary hover:text-primary"
+                  >
+                    {tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
     </footer>
   </article>
 </BaseLayout>

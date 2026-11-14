@@ -69,6 +69,18 @@
   .parchment :focus-visible {
     outline-color: var(--color-gold-ink);
   }
+
+  /* Mouvements réduits : pas d'animation ni de transition (drawer, survols, défilement). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 /* Bande ou carte parchemin : fond clair, texte sombre, grain très léger (SVG inline, aucune requête). */
@@ -78,4 +90,23 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
     radial-gradient(ellipse at center, transparent 55%, rgb(122 78 20 / 0.12) 100%);
   --color-base-content: var(--color-accent-content);
+}
+
+/* Texte des billets (<Prose>) : couleurs du thème. Sélecteur plus fort que celui de daisyUI
+   (`:root .prose`, qui met le texte à 80 % d'opacité et les titres en crème). */
+:root .prose.prose-brojira {
+  --tw-prose-body: var(--color-base-content);
+  --tw-prose-headings: var(--color-primary);
+  --tw-prose-lead: var(--color-base-content);
+  --tw-prose-links: var(--color-primary);
+  --tw-prose-bold: var(--color-base-content);
+  --tw-prose-counters: var(--color-base-content);
+  --tw-prose-bullets: var(--color-primary);
+  --tw-prose-hr: color-mix(in oklab, var(--color-primary) 35%, transparent);
+  --tw-prose-quotes: var(--color-base-content);
+  --tw-prose-quote-borders: var(--color-primary);
+  --tw-prose-captions: var(--color-base-content);
+  --tw-prose-code: var(--color-base-content);
+  --tw-prose-th-borders: var(--color-base-300);
+  --tw-prose-td-borders: var(--color-base-300);
 }

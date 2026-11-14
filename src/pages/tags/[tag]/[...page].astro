@@ -4,6 +4,8 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PostCard from "../../../components/PostCard.astro";
 import Pagination from "../../../components/Pagination.astro";
+import BackLink from "../../../components/BackLink.astro";
+import PageHeader from "../../../components/PageHeader.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = (await getCollection("blog"))
@@ -27,18 +29,16 @@ const { page } = Astro.props;
   pageTitle={`${tag.replace(/^./, tag[0].toUpperCase())}${page.currentPage > 1 ? ` – page ${page.currentPage}` : ""}`}
   description={`Les articles du journal de Brojira avec le tag « ${tag} » (${page.total}).`}
 >
-  <div class="p-4 lg:px-8">
-    <a href="/tags/" class="btn btn-ghost btn-sm mb-4">← Retour aux tags</a>
+  <div class="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-12">
+    <BackLink href="/tags/" label="Tous les tags" />
+    <PageHeader title={`# ${tag}`}>
+      <p class="mt-2 text-sm text-base-content/85">{page.total} {page.total > 1 ? "billets" : "billet"}</p>
+    </PageHeader>
 
-    <p class="mb-4 text-sm opacity-80">
-      Articles avec le tag <span class="badge badge-primary badge-sm">{tag}</span>
-      &nbsp({page.total}).
-    </p>
-
-    <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+    <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         page.data.map((post) => (
-          <li class="relative isolate">
+          <li>
             <PostCard post={post} />
           </li>
         ))

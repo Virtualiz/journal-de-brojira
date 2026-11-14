@@ -2,6 +2,7 @@
 // Carte d'un festival ou événement. À placer dans un <CardList>.
 // Le texte de présentation se met en contenu (avec une ligne vide avant/après dans le MDX).
 import Picture from "./Picture.astro";
+import OrnateCard from "../OrnateCard.astro";
 
 interface Props {
   /** Nom de l'événement (devient un titre h3). */
@@ -30,12 +31,10 @@ const { name, image, imageAlt, dates, schedule, price, attendance, address, url 
 ---
 
 <li>
-  <article
-    class="card sm:card-side card-border border-base-300 bg-base-100 shadow-sm h-full"
-  >
+  <OrnateCard as="article" class="card sm:card-side h-full">
     {
       image && (
-        <figure class="bg-base-200 p-4 sm:w-56 sm:shrink-0">
+        <figure class="parchment m-2.5 rounded-[2px] p-4 sm:w-56 sm:shrink-0">
           <Picture
             src={image}
             alt={imageAlt ?? `Affiche : ${name}`}
@@ -45,7 +44,7 @@ const { name, image, imageAlt, dates, schedule, price, attendance, address, url 
       )
     }
     <div class="card-body gap-4">
-      <h3 class="card-title text-xl">
+      <h3 class="card-title text-2xl">
         {
           url ? (
             <a href={url} class="link link-primary" rel="noopener">
@@ -96,5 +95,5 @@ const { name, image, imageAlt, dates, schedule, price, attendance, address, url 
         </div>
       </dl>
     </div>
-  </article>
+  </OrnateCard>
 </li>

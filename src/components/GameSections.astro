@@ -1,0 +1,28 @@
+---
+/** Sections de tuiles de jeux (« Jeux conçus », « Jeux édités »…). Les sections vides ne sont pas rendues. */
+import type { CollectionEntry } from "astro:content";
+import GameTile from "./GameTile.astro";
+
+interface Props {
+  sections: { id: string; title: string; games: CollectionEntry<"games">[] }[];
+}
+
+const sections = Astro.props.sections.filter((s) => s.games.length > 0);
+---
+
+{
+  sections.map((s) => (
+    <section class="mt-10 first:mt-0" aria-labelledby={s.id}>
+      <h2 id={s.id} class="mb-4 text-3xl">
+        {s.title} <span class="text-lg text-base-content/85">({s.games.length})</span>
+      </h2>
+      <ul class="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+        {s.games.map((g) => (
+          <li>
+            <GameTile game={g} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))
+}
