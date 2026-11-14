@@ -26,7 +26,7 @@ const { letters, groups } = groupByLetter(publishers, (p) => p.data.name);
             {groups.get(letter)!.map((p) => (
               <li>
                 <a
-                  class="btn btn-outline btn-accent rounded-full normal-case"
+                  class="btn btn-outline btn-primary rounded-full normal-case"
                   href={`/editeurs/${p.id}/`}
                 >
                   {p.data.name}

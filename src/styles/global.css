@@ -1,5 +1,72 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/typography';
 @plugin "daisyui" {
-   themes: fantasy --default, dracula --prefersdark;
+  themes: brojira --default;
+}
+
+/* Thème « fantasy » : violet nuit, accents or, bandes parchemin.
+   Contrastes (WCAG) : or/base-100 9,5:1 · base-content/base-100 ≈14:1 · accent-content/accent 11:1.
+   À éviter : texte or sur parchemin (1,4:1 → utiliser --color-gold-ink) et texte secondary sur fond sombre (2,9:1). */
+@plugin "daisyui/theme" {
+  name: "brojira";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #24132f;
+  --color-base-200: #1a0e22;
+  --color-base-300: #3a2350;
+  --color-base-content: #f3e3c8;
+
+  --color-primary: #e8b86a;
+  --color-primary-content: #24132f;
+  --color-secondary: #7b4fa0;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f3e3c8;
+  --color-accent-content: #3a2340;
+
+  --color-neutral: #2d1a3c;
+  --color-neutral-content: #f3e3c8;
+
+  --color-info: #8ab4e8;
+  --color-info-content: #1a0e22;
+  --color-success: #8fc99a;
+  --color-success-content: #1a0e22;
+  --color-warning: #e8b86a;
+  --color-warning-content: #24132f;
+  --color-error: #f08a8a;
+  --color-error-content: #1a0e22;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@theme {
+  --font-serif: "Cormorant Garamond Variable", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  /* Or foncé pour le texte sur parchemin : 5,7:1 sur #f3e3c8. */
+  --color-gold-ink: #7a4e14;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: 0.005em;
+  }
+}
+
+/* Bande ou carte parchemin : fond clair, texte sombre, grain très léger (SVG inline, aucune requête). */
+@utility parchment {
+  background-color: var(--color-accent);
+  color: var(--color-accent-content);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at center, transparent 55%, rgb(122 78 20 / 0.12) 100%);
+  --color-base-content: var(--color-accent-content);
 }

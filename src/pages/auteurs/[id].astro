@@ -26,7 +26,7 @@ const sections = [
 <BaseLayout pageTitle={person.data.name} description={person.data.bio ?? `${person.data.name} : jeux conçus et illustrés.`}>
   <div class="p-4 lg:px-8 max-w-4xl mx-auto">
     <a href="/auteurs/" class="btn btn-ghost btn-sm mb-4">← Tous les auteurs</a>
-    <h1 class="font-serif text-3xl text-accent mb-3">{person.data.name}</h1>
+    <h1 class="font-serif text-3xl text-primary mb-3">{person.data.name}</h1>
     {person.data.bio && <p class="mb-3">{person.data.bio}</p>}
     {
       person.data.url && (
