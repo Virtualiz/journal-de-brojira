@@ -32,10 +32,10 @@ const sizeFor = (count: number) => {
 };
 const colorFor = (count: number) => {
   const ratio = count / maxCount;
-  if (maxCount === 1) return "btn-outline btn-accent";
+  if (maxCount === 1) return "btn-outline btn-primary";
   if (ratio > 0.75) return "btn-primary";
   if (ratio > 0.5) return "btn-secondary";
-  return "btn-outline btn-accent";
+  return "btn-outline btn-primary";
 };
 ---
 

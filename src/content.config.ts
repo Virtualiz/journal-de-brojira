@@ -48,7 +48,7 @@ const games = defineCollection({
     image: z
       .string()
       .url()
-      .default("https://flowbite.com/docs/images/examples/image-1@2x.jpg"),
+      .default("https://static.vecteezy.com/system/resources/previews/050/027/638/non_2x/mystery-box-with-question-mark-silhouette-icon-vector.jpg"),
     description: z.string().optional(),
     /** Jeu de base si c'est une extension ou une suite. */
     parent: reference("games").optional(),

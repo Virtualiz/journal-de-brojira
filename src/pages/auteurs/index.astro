@@ -24,7 +24,7 @@ const { letters, groups } = groupByLetter(people, (p) => p.data.name);
             {groups.get(letter)!.map((p) => (
               <li>
                 <a
-                  class="btn btn-outline btn-accent rounded-full normal-case"
+                  class="btn btn-outline btn-primary rounded-full normal-case"
                   href={`/auteurs/${p.id}/`}
                 >
                   {p.data.name}
