@@ -6,5 +6,15 @@
   { "id": "intrafin-games", "name": "Intrafin Games" },
   { "id": "sylex", "name": "Sylex" },
   { "id": "blue-cocker", "name": "Blue Cocker" },
-  { "id": "la-boite-de-jeu", "name": "La Boîte de Jeu" }
+  { "id": "la-boite-de-jeu", "name": "La Boîte de Jeu" },
+  { "id": "chevre-edition", "name": "Chèvre Édition" },
+  { "id": "madistrib", "name": "Madistrib" },
+  { "id": "blam", "name": "Blam" },
+  { "id": "matagot", "name": "Matagot" },
+  { "id": "surfinmeeple", "name": "Surfin'Meeple" },
+  { "id": "origames", "name": "Origames" },
+  { "id": "neoludis", "name": "Neoludis" },
+  { "id": "cmon", "name": "Cmon" },
+  { "id": "asmodee", "name": "Asmodee" },
+  { "id": "super-meeple", "name": "Super Meeple" }
 ]
