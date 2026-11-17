@@ -9,7 +9,9 @@ import GameCover from "../../components/GameCover.astro";
 import GameTile from "../../components/GameTile.astro";
 import Icon, { type IconName } from "../../components/Icon.astro";
 import OrnateCard from "../../components/OrnateCard.astro";
+import PostMentions from "../../components/PostMentions.astro";
 import Prose from "../../components/Prose.astro";
+import { postsCiting } from "../../lib/mentions";
 
 export const getStaticPaths = (async () => {
   const games = await getCollection("games");
@@ -26,6 +28,8 @@ const publisher = d.publisher ? await getEntry(d.publisher) : undefined;
 const distributor = d.distributor ? await getEntry(d.distributor) : undefined;
 const parent = d.parent ? await getEntry(d.parent) : undefined;
 const extensions = (await getCollection("games")).filter((g) => g.data.parent?.id === game.id);
+// Billets qui citent le jeu ou l'une de ses extensions.
+const citations = await postsCiting("games", game.id, extensions);
 
 type Link = { href: string; name: string };
 type Row = { icon: IconName; label: string; value?: string; links?: Link[] };
@@ -164,5 +168,7 @@ const rows: Row[] = [
         </section>
       )
     }
+
+    <PostMentions citations={citations} headingClass="text-3xl text-primary" />
   </article>
 </BaseLayout>

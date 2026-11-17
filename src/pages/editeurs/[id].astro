@@ -6,6 +6,8 @@ import BackLink from "../../components/BackLink.astro";
 import GameSections from "../../components/GameSections.astro";
 import Icon from "../../components/Icon.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import PostMentions from "../../components/PostMentions.astro";
+import { postsCiting } from "../../lib/mentions";
 
 export const getStaticPaths = (async () => {
   const publishers = await getCollection("publishers");
@@ -21,6 +23,8 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { publisher, published, distributed } = Astro.props;
+// Billets qui citent la fiche ou l'un de ses jeux.
+const citations = await postsCiting("publishers", publisher.id, [...new Set([...published, ...distributed])]);
 const sections = [
   { id: "edites", title: "Jeux édités", games: published },
   { id: "distribues", title: "Jeux distribués", games: distributed },
@@ -43,5 +47,6 @@ const sections = [
       }
     </PageHeader>
     <GameSections sections={sections} />
+    <PostMentions citations={citations} class="mt-10" />
   </div>
 </BaseLayout>

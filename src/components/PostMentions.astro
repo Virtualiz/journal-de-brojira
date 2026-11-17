@@ -1,0 +1,62 @@
+---
+/**
+ * Section « Cité dans le journal » des fiches (jeu, auteur, éditeur) : billets qui la mentionnent.
+ * Rien n'est rendu s'il n'y en a aucun. Voir src/lib/mentions.ts.
+ */
+import Icon from "./Icon.astro";
+import OrnateCard from "./OrnateCard.astro";
+import EntityLink from "./post/EntityLink.astro";
+import { gameHref } from "../lib/fiches";
+import type { Citation } from "../lib/mentions";
+import { formatDate, postUrl } from "../lib/posts";
+
+interface Props {
+  citations: Citation[];
+  /** Classes du titre h2, pour suivre les autres sections de la page. */
+  headingClass?: string;
+  /** Classes de la section (marge haute "mt-12" par défaut). */
+  class?: string;
+}
+
+const { citations, headingClass = "text-3xl", class: className } = Astro.props;
+---
+
+{
+  citations.length > 0 && (
+    <section class={className ?? "mt-12"} aria-labelledby="cite-dans-le-journal">
+      <h2 id="cite-dans-le-journal" class:list={["mb-4", headingClass]}>
+        Cité dans le journal <span class="text-lg text-base-content/85">({citations.length})</span>
+      </h2>
+      <ul class="grid gap-4 sm:grid-cols-2" role="list">
+        {citations.map(({ post, via }) => (
+          <li>
+            <OrnateCard as="article" compact class="flex h-full gap-3 p-4">
+              <Icon name="feather" class="mt-1 size-5 text-primary" />
+              <div class="flex min-w-0 flex-col gap-1">
+                <h3 class="text-xl leading-tight">
+                  <a href={postUrl(post)} class="hover:text-primary">
+                    {post.data.title}
+                  </a>
+                </h3>
+                <p class="text-sm text-base-content/85">
+                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                </p>
+                {via.length > 0 && (
+                  <p class="text-sm">
+                    {via.length > 1 ? "Jeux cités : " : "Jeu cité : "}
+                    {via.map((g, i) => (
+                      <>
+                        {i > 0 && ", "}
+                        <EntityLink href={gameHref(g.id)}>{g.data.name}</EntityLink>
+                      </>
+                    ))}
+                  </p>
+                )}
+              </div>
+            </OrnateCard>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

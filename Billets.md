@@ -19,6 +19,7 @@ Composants de billet (./src/components/post/), disponibles dans tous les billets
 Fiches (source unique des infos de jeux) :
 - jeux : `./src/data/games/<id>.md` (l'id d'un jeu est le nom du fichier)
 - personnes : `./src/data/people.json`, éditeurs et distributeurs : `./src/data/publishers.json`
+- « Cité dans le journal » : un billet publié qui utilise `GameLink`, `GameCard`, `GameList`, `PersonLink` ou `PublisherLink` apparaît automatiquement sur les fiches concernées (et sur celles des auteurs/éditeurs de ses jeux). Les brouillons n'y apparaissent pas ; le texte en gras ou les tableaux markdown ne comptent pas comme citation.
 - un id sans fiche n'interrompt pas le build : le composant affiche du texte simple et un avertissement `Fiche introuvable` apparaît dans la console. À corriger avant publication.
 
 Accessibilité : alt sur toutes les images, titres sans saut de niveau (`##` puis `###`, le `<h1>` est le titre du billet), liens explicites.
