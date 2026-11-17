@@ -1,0 +1,21 @@
+---
+/**
+ * Lien vers la fiche d'un auteur ou d'un illustrateur (id de src/data/people.json).
+ *   <PersonLink id="bruno-cathala" />                 → « Bruno Cathala »
+ *   <PersonLink id="bruno-cathala">Cathala</PersonLink> → texte personnalisé
+ */
+import EntityLink from "./EntityLink.astro";
+import { findFiche, personHref } from "../../lib/fiches";
+
+interface Props {
+  id: string;
+  /** Icône de personne devant le nom. */
+  icon?: boolean;
+}
+
+const { id, icon = false } = Astro.props;
+const person = await findFiche("people", id, "PersonLink");
+const label = person?.data.name ?? id;
+---
+
+<EntityLink href={person && personHref(id)} icon={icon ? "user" : undefined}>{Astro.slots.has("default") ? <slot /> : label}</EntityLink>

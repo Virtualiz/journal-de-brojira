@@ -18,11 +18,6 @@ image:
   alt: "<description de l'illustration>"
   url: "<URL de l'illustration>"
 ---
-import CardList from "../../components/post/CardList.astro";
-import EventCard from "../../components/post/EventCard.astro";
-import GameCard from "../../components/post/GameCard.astro";
-import PostImage from "../../components/post/PostImage.astro";
-import ImageGallery from "../../components/post/ImageGallery.astro";
 
 {/*
   RÈGLES D'ACCESSIBILITÉ ET DE LECTURE (ces commentaires ne sont pas affichés) :
@@ -33,6 +28,12 @@ import ImageGallery from "../../components/post/ImageGallery.astro";
   - Dans un composant, laisser UNE LIGNE VIDE après la balise ouvrante et avant la fermante
     (sinon le gras, les liens… ne sont pas interprétés).
   - Phrases courtes, un paragraphe = une idée.
+
+  COMPOSANTS (disponibles sans import, voir Billets.md) :
+  - Liens roses vers les fiches du site, à utiliser dans le texte :
+    <GameLink id="faraway" />  <PersonLink id="bruno-cathala" />  <PublisherLink id="iello" />
+    Texte personnalisé : <GameLink id="faraway">ce petit bijou</GameLink>
+  - Un id sans fiche s'affiche en texte simple (avertissement dans la console du build).
 */}
 
 <PostImage
@@ -84,32 +85,24 @@ import ImageGallery from "../../components/post/ImageGallery.astro";
 
 {/*
   Sources : https://www.campustech.fr/calendrier-des-sorties-jeux-de-societe-2027/ ; prix : philibertnet.
-  Un <GameCard> par jeu. Les champs reprennent les emojis de campustech (voir Billets.md).
-  Extensions et suites ici, jeux standalone dans le second tableau.
-  image : couverture du jeu (alt par défaut "Boîte du jeu <nom>").
-  Avis facultatif : 1-2 phrases en contenu de la balise (avec lignes vides).
+  1. Créer les fiches manquantes : coller les blocs campustech dans un fichier, puis `pnpm new-game <fichier>`
+     (voir Billets.md). L'id d'un jeu = le nom de son fichier dans src/data/games/.
+  2. Lister les ids : une carte par jeu, dans l'ordre donné.
+  Extensions et suites ici, jeux standalone dans la seconde liste.
+  Pour commenter un jeu : <CardList label="…" columns={2}> avec des <GameCard id="…"> dont le
+  contenu (entouré de lignes vides) est le commentaire.
 */}
-<CardList label="Extensions et suites de jeu" columns={2}>
-<GameCard
-  name="<Nom du jeu>"
-  image="<URL de la boîte>"
-  players="2-4 joueurs"
-  age="10+"
-  duration="30 min"
-  mechanics="<mécaniques>"
-  authors="<auteurs>"
-  artists="<illustrateurs>"
-  publisher="<éditeur>"
-  distributor="<distributeur>"
-  price="20€"
+<GameList
+  label="Extensions et suites de jeu"
+  ids={["<id-du-jeu>", "<id-du-jeu>"]}
 />
-</CardList>
 
 ### Jeux
 
-<CardList label="Jeux" columns={2}>
-{/* Copier un <GameCard> ici */}
-</CardList>
+<GameList
+  label="Jeux"
+  ids={["<id-du-jeu>", "<id-du-jeu>"]}
+/>
 
 ## Une p'tite prez
 

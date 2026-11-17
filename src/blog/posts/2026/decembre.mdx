@@ -16,11 +16,6 @@ image:
   alt: "Hello November"
   url: "https://img.magnific.com/free-vector/hand-drawn-flat-hello-november-background_23-2149540303.jpg?semt=ais_hybrid&w=740&q=80"
 ---
-import CardList from "../../../components/post/CardList.astro";
-import EventCard from "../../../components/post/EventCard.astro";
-import GameCard from "../../../components/post/GameCard.astro";
-import PostImage from "../../../components/post/PostImage.astro";
-import ImageGallery from "../../../components/post/ImageGallery.astro";
 
 {/*
   GUIDE DE RÉDACTION (ces commentaires ne sont pas affichés)
@@ -30,6 +25,7 @@ import ImageGallery from "../../../components/post/ImageGallery.astro";
   - Images : toujours un texte alternatif (alt) qui décrit l'image. alt="" seulement si décorative.
   - Liens : texte explicite ("le site du festival"), jamais "cliquez ici".
   - Emojis : OK dans le texte, mais ne pas les utiliser seuls pour porter une info.
+  - Liens vers les fiches : <GameLink id="…" />, <PersonLink id="…" />, <PublisherLink id="…" /> (voir Billets.md).
 */}
 
 {/* TODO : remplacer par l'illustration de décembre (cette image est celle de novembre) */}
@@ -209,115 +205,24 @@ Quelques sorties de jeux attendus, mais bien entendu beaucoup d'autres jeux sort
 
 {/*
   JEUX (source : https://www.campustech.fr/calendrier-des-sorties-jeux-de-societe-2026/ ; prix : philibertnet)
-  Un <GameCard> par jeu, les champs reprennent les emojis de campustech (voir Billets.md) :
-  name, image, players, age, duration, mechanics, authors, artists, publisher, distributor, price.
-  Extensions/suites dans le premier tableau, jeux standalone dans le second.
-  image : couverture du jeu (alt par défaut "Boîte du jeu <nom>").
-  Texte libre (facultatif) : un avis de 1-2 phrases, en contenu de la balise (avec lignes vides).
+  Chaque jeu a sa fiche dans src/data/games/<id>.md : la créer avec `pnpm new-game` (voir Billets.md).
+  - <GameList label="…" ids={[…]} /> : une carte par id, dans l'ordre donné.
+  - Pour commenter un jeu : <CardList columns={2}> avec des <GameCard id="…"> (texte entre les balises).
+  Extensions/suites dans la première liste, jeux standalone dans la seconde.
 */}
-<CardList label="Extensions et suites de jeu" columns={2}>
-
-<GameCard
-  name="Faraway : Au-delà du voile"
-  image="https://www.campustech.fr/wp-content/uploads/2026/05/faraway-voile.png"
-  players="2-6 joueurs"
-  age="10+"
-  duration="30 min"
-  mechanics="Extension"
-  authors="Corentin Lebrat, Johannes Goupy"
-  artists="Maxime Morin"
-  publisher="Catch Up Games"
-  distributor="Blackrock Games"
-  price="6€"
+<GameList
+  label="Extensions et suites de jeu"
+  ids={[
+    "faraway-au-dela-du-voile",
+    "moustache-cameleon",
+    "la-cour-de-versailles-lhomme-au-masque-de-fer",
+    "petits-soldats-parachutiste",
+    "light-speed-arena-league-56",
+    "the-crew-aventure-autour-du-monde",
+    "terrorscape-ennemis-putrides",
+    "solstis-collector",
+  ]}
 />
-<GameCard
-  name="Moustache : Caméléon"
-  image="https://www.campustech.fr/wp-content/uploads/2026/07/moustache-cameleon.png"
-  players="3-6 joueurs"
-  age="8+"
-  duration="20 min"
-  mechanics="Extension"
-  authors="Alexandre Aguilar, Jules Messaud"
-  artists="Gorobei"
-  publisher="Kodama"
-  distributor="Blackrock Games"
-  price="7€"
-/>
-<GameCard
-  name="La Cour de Versailles : L'Homme au masque de fer"
-  image="https://www.campustech.fr/wp-content/uploads/2026/07/la-cour-de-versailles-lhomme-au-masque-de-fer.png"
-  players="2-6 joueurs"
-  age="12+"
-  duration="20 min"
-  mechanics="Extension"
-  authors="Léo Blandin"
-  publisher="Chèvre Édition"
-  distributor="Madistrib"
-  price="6€"
-/>
-<GameCard
-  name="Petits Soldats : Parachutiste"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/petits-soldats-parachutiste.png"
-  players="2-4 joueurs"
-  age="8+"
-  duration="30 min"
-  mechanics="Extension"
-  authors="Florent Baudry, Adrien Fenouillet"
-  artists="Paul Mafayon"
-  publisher="Iello"
-  price="12€"
-/>
-<GameCard
-  name="Light Speed Arena : League 56"
-  image="https://www.campustech.fr/wp-content/uploads/2026/07/light-speed-arena-league56.png"
-  players="2-6 joueurs"
-  age="8+"
-  duration="20 min"
-  mechanics="Extension"
-  authors="Tom Jolly, James Ernest, Leonardo Alese, Emanuele Santellani"
-  artists="Marco Salogni"
-  publisher="Intrafin"
-  price="15€"
-/>
-<GameCard
-  name="The Crew : Aventure Autour du Monde"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/the-crew-aventure.png"
-  players="3-5 joueurs"
-  age="10+"
-  duration="30 min"
-  mechanics="Coop, Campagne, Plis, Objectifs"
-  authors="Thomas Sing"
-  artists="Fiore GmbH"
-  publisher="Iello"
-  price="16€"
-/>
-<GameCard
-  name="Terrorscape : Ennemis Putrides"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/terrorscape-ennemis.png"
-  players="2-4 joueurs"
-  age="14+"
-  duration="45 min"
-  mechanics="Extension"
-  authors="Jeffrey CCH"
-  artists="Arepko, Amanda Phelps, Domingo Pino, The Geek Artist, Herman Ying"
-  publisher="Iello"
-  price="28€"
-/>
-<GameCard
-  name="Solstis Collector"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/solstis-collector.png"
-  players="2 joueurs"
-  age="8+"
-  duration="30 min"
-  mechanics="Combinaison, Tuiles"
-  authors="Bruno Cathala, Corentin Lebrat"
-  artists="Axel Mahé"
-  publisher="Kodama"
-  distributor="Blackrock Games"
-  price="30€"
-/>
-
-</CardList>
 
 Et aussi, côté rééditions et nouvelles versions :
 
@@ -332,144 +237,25 @@ Et aussi, côté rééditions et nouvelles versions :
 
 <CardList label="Jeux" columns={2}>
 
-<GameCard
-  name="King of Tokyo Duel : Tokyo Bay"
-  image="https://www.campustech.fr/wp-content/uploads/2026/07/kot-duel-tokyo-bay.png"
-  players="2 joueurs"
-  age="8+"
-  duration="20 min"
-  mechanics="Dés, Affrontement"
-  authors="Richard Garfield"
-  artists="Quentin Regnes"
-  publisher="Iello"
-  price="22€"
-/>
-<GameCard
-  name="Zenso"
-  image="https://www.campustech.fr/wp-content/uploads/2026/09/zenso.png"
-  players="2-4 joueurs"
-  age="10+"
-  duration="30 min"
-  mechanics="Logique, Cartes, Gestion de main, Ressources"
-  authors="Bruno Cathala, Andrea Mainini"
-  artists="Julie Gruet"
-  publisher="Blam"
-  distributor="Blackrock Games"
-  price="25€"
-/>
-<GameCard
-  name="Qu'on leur coupe la tête !"
-  image="https://www.campustech.fr/wp-content/uploads/2026/05/quon-leur-coupe-la-tete.png"
-  players="2 joueurs"
-  age="12+"
-  duration="15 min"
-  mechanics="Placement de cartes, Majorité, Contrôle de bornes"
-  authors="Bruno Cathala, Florian Sirieix"
-  artists="Ben Basso"
-  publisher="Matagot"
-  distributor="Surfin'Meeple"
-  price="9€"
-/>
-<GameCard
-  name="Fragments : Solara"
-  image="https://www.campustech.fr/wp-content/uploads/2026/05/fragments-solara.png"
-  players="1-4 joueurs"
-  age="12+"
-  duration="90 min"
-  mechanics="Coop, Narratif, Enquêtes"
-  authors="Yohan Servais"
-  artists="Noëmie Chevalier"
-  publisher="Iello"
-  price="18€"
-/>
-<GameCard
-  name="Skyrift : Aux portes de l'Ombre"
-  image="https://www.campustech.fr/wp-content/uploads/2026/02/skyrift_aux-portes.png"
-  players="2 joueurs"
-  age="12+"
-  duration="30 min"
-  mechanics="Asymétrique, Gestion de main, Affrontement"
-  authors="Richard Garfield"
-  artists="Louis Gennart, Semyon Proskuryakov, Svyatoslav Gerasymchuk"
-  publisher="Origames"
-  distributor="Neoludis"
-  price="23€"
-/>
-<GameCard
-  name="Skyrift : Les Vagues du Destin"
-  image="https://www.campustech.fr/wp-content/uploads/2026/02/skyrift-les-vagues.png"
-  players="2 joueurs"
-  age="12+"
-  duration="30 min"
-  mechanics="Asymétrique, Gestion de main, Affrontement"
-  authors="Richard Garfield"
-  artists="Louis Gennart, Semyon Proskuryakov, Svyatoslav Gerasymchuk"
-  publisher="Origames"
-  distributor="Neoludis"
-  price="23€"
-/>
-<GameCard
-  name="Final Titan"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/final-titan.png"
-  players="1-5 joueurs"
-  age="10+"
-  duration="40 min"
-  mechanics="Draft, Affrontement"
-  authors="Richard Garfield, Christian Kudahl"
-  artists="Emanuele Desiati, Xavier Cuenca, Daniel Caballero, Jose Fernando Garcia, Vincent Dutrait"
-  publisher="Iello"
-  price="36€"
-/>
-<GameCard
-  name="Nova Era"
-  image="https://www.campustech.fr/wp-content/uploads/2026/02/nova-era.png"
-  players="2-4 joueurs"
-  age="12+"
-  duration="60 min"
-  mechanics="Combo, Placement de dés, Développement"
-  authors="Andrea Chiarvesio"
-  artists="Agnès Ripoche"
-  publisher="Cmon"
-  distributor="Asmodee"
-  price="32€"
-/>
-<GameCard
-  name="Gaudí"
-  image="https://www.campustech.fr/wp-content/uploads/2026/08/gaudi.png"
-  players="1-4 joueurs"
-  age="10+"
-  duration="120 min"
-  mechanics="Collection, Placement, Tuiles"
-  authors="Dani García"
-  artists="Edu Valls"
-  publisher="Iello"
-  price="32€"
-/>
-<GameCard
-  name="Keyside"
-  image="https://www.campustech.fr/wp-content/uploads/2026/05/keyside.png"
-  players="1-4 joueurs"
-  age="14+"
-  duration="120 min"
-  mechanics="Collection, Pose d'ouvriers"
-  authors="Richard Breese, Dávid Turczi"
-  artists="Vicki Dalton"
-  publisher="Intrafin"
-  price="59€"
-/>
-<GameCard
-  name="Greenwood"
-  image="https://www.campustech.fr/wp-content/uploads/2026/07/greenwood.png"
-  players="1-4 joueurs"
-  age="14+"
-  duration="150 min"
-  mechanics="Asymétrie, Combo"
-  authors="Christos Giannakoulas, Manolis Zachariadis"
-  artists="Martin Mottet, Maurice Mosqua"
-  publisher="Super Meeple"
-  distributor="Neoludis"
-  price="68€"
-/>
+<GameCard id="king-of-tokyo-duel-tokyo-bay" />
+<GameCard id="zenso" />
+<GameCard id="quon-leur-coupe-la-tete" />
+<GameCard id="fragments-solara" />
+<GameCard id="skyrift-aux-portes-de-lombre">
+
+Boîte autonome, compatible avec <GameLink id="skyrift-les-vagues-du-destin" />.
+
+</GameCard>
+<GameCard id="skyrift-les-vagues-du-destin">
+
+Boîte autonome, compatible avec <GameLink id="skyrift-aux-portes-de-lombre" />.
+
+</GameCard>
+<GameCard id="final-titan" />
+<GameCard id="nova-era" />
+<GameCard id="gaudi" />
+<GameCard id="keyside" />
+<GameCard id="greenwood" />
 
 </CardList>
 
@@ -481,7 +267,7 @@ Et il y en a encore beaucoup d'autres ! Pêle-mêle :
 
 ## Une p'tite prez: Richard Garfield, le prof de maths qui a inventé le TCG
 
-En préparant la liste des sorties de ce mois, un nom m'a sauté aux yeux : **Richard Garfield**. Pas une fois, pas deux, mais **quatre fois** sur le mois de décembre 2026 ! Un tel embouteillage, ça méritait bien qu'on s'arrête dessus 😄
+En préparant la liste des sorties de ce mois, un nom m'a sauté aux yeux : **<PersonLink id="richard-garfield" />**. Pas une fois, pas deux, mais **quatre fois** sur le mois de décembre 2026 ! Un tel embouteillage, ça méritait bien qu'on s'arrête dessus 😄
 
 Et pour les lecteurs de la rubrique Yu-Gi-Oh! en bas de ce billet, autant vous le dire tout de suite : sans ce monsieur, il n'y aurait probablement ni Yu-Gi-Oh!, ni Pokémon, ni aucun des jeux de cartes à collectionner qui remplissent nos étagères 🃏
 
@@ -529,11 +315,11 @@ C'est flagrant quand on aligne ses jeux : la pioche de Magic, les dés de King o
 ---
 ### **Ses quatre sorties de décembre**
 
-**Skyrift : Aux portes de l'Ombre** et **Skyrift : Les Vagues du Destin** (Origames, 23€ chacune) sont deux boîtes **autonomes** et compatibles entre elles. C'est un retour de Garfield au duel pur : pas de collection, pas de deck-building, trois factions par boîte, et une mécanique de défi au cœur du jeu qui ajoute de l'enjeu.
+**<GameLink id="skyrift-aux-portes-de-lombre" />** et **<GameLink id="skyrift-les-vagues-du-destin" />** (<PublisherLink id="origames" />, 23€ chacune) sont deux boîtes **autonomes** et compatibles entre elles. C'est un retour de Garfield au duel pur : pas de collection, pas de deck-building, trois factions par boîte, et une mécanique de défi au cœur du jeu qui ajoute de l'enjeu.
 
-**Final Titan** (Iello, 36€), co-signé avec Christian Kudahl, mise sur le draft et l'affrontement de 1 à 5 joueurs — avec au passage une belle brochette d'illustrateurs, dont Vincent Dutrait.
+**<GameLink id="final-titan" />** (<PublisherLink id="iello" />, 36€), co-signé avec <PersonLink id="christian-kudahl" />, mise sur le draft et l'affrontement de 1 à 5 joueurs — avec au passage une belle brochette d'illustrateurs, dont <PersonLink id="vincent-dutrait" />.
 
-**King of Tokyo Duel : Tokyo Bay** (Iello, 22€) vient enfin étoffer la déclinaison en duel de son monstre sacré 🦖
+**<GameLink id="king-of-tokyo-duel-tokyo-bay" />** (<PublisherLink id="iello" />, 22€) vient enfin étoffer la déclinaison en duel de son monstre sacré 🦖
 
 | | |
 |---|---|

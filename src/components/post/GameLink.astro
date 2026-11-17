@@ -1,0 +1,80 @@
+---
+/**
+ * Lien vers la fiche d'un jeu (id = nom du fichier dans src/data/games/).
+ *   <GameLink id="faraway" />                  → « Faraway »
+ *   <GameLink id="faraway">ce petit bijou</GameLink>
+ *   <GameLink id="faraway" tooltip={false} />  → sans infobulle
+ *
+ * Infobulle (boîte du jeu + prix) au survol et au focus clavier, seulement sur les écrans
+ * avec souris : au doigt, le lien s'ouvre directement. Échap la masque (WCAG 1.4.13).
+ * Elle est aria-hidden : le nom du lien suffit aux lecteurs d'écran, la fiche détaille le reste.
+ */
+import EntityLink from "./EntityLink.astro";
+import GameCover from "../GameCover.astro";
+import Icon from "../Icon.astro";
+import { findFiche, gameHref } from "../../lib/fiches";
+
+interface Props {
+  id: string;
+  /** Infobulle avec la boîte et le prix (par défaut : oui). */
+  tooltip?: boolean;
+  /** Icône de dés devant le nom. */
+  icon?: boolean;
+}
+
+const { id, tooltip = true, icon = false } = Astro.props;
+const game = await findFiche("games", id, "GameLink");
+const label = game?.data.name ?? id;
+const hasSlot = Astro.slots.has("default");
+---
+
+{
+  game && tooltip ? (
+    <span class="game-tip tooltip inline">
+      <span class="tooltip-content parchment not-prose flex flex-col items-center gap-2 p-2.5" aria-hidden="true">
+        <span class="flex h-28 w-32 items-center justify-center">
+          <GameCover image={game.data.image} sizes="128px" widths={[128, 256]} />
+        </span>
+        {game.data.price && (
+          <span class="inline-flex items-center gap-1 rounded-field border border-gold-ink/60 px-2 py-0.5 text-sm font-semibold text-gold-ink">
+            <Icon name="coins" class="size-4" />
+            {game.data.price}
+          </span>
+        )}
+      </span>
+      <EntityLink href={gameHref(id)} icon={icon ? "dices" : undefined}>{hasSlot ? <slot /> : label}</EntityLink>
+    </span>
+  ) : (
+    <EntityLink href={game && gameHref(id)} icon={icon ? "dices" : undefined}>{hasSlot ? <slot /> : label}</EntityLink>
+  )
+}
+
+<style>
+  .game-tip {
+    /* Pointe de l'infobulle (daisyUI) assortie au parchemin. */
+    --tt-bg: var(--color-accent);
+  }
+  .game-tip.tip-dismissed > .tooltip-content,
+  .game-tip.tip-dismissed::after {
+    visibility: hidden;
+  }
+  @media (hover: none) {
+    .game-tip > .tooltip-content,
+    .game-tip::after {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Échap masque l'infobulle ouverte jusqu'à ce que la souris ou le focus quitte le lien.
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    document.querySelectorAll<HTMLElement>(".game-tip:hover, .game-tip:has(:focus-visible)").forEach((tip) => {
+      tip.classList.add("tip-dismissed");
+      const reset = () => tip.classList.remove("tip-dismissed");
+      tip.addEventListener("mouseleave", reset, { once: true });
+      tip.addEventListener("focusout", reset, { once: true });
+    });
+  });
+</script>

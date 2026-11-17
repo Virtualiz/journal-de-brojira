@@ -1,0 +1,25 @@
+---
+/**
+ * Liste de cartes de jeux, dans l'ordre donné : <CardList> + un <GameCard> par id.
+ *   <GameList label="Jeux de décembre" ids={["zenso", "gaudi"]} />
+ * Pour ajouter un commentaire à un jeu, écrire plutôt <CardList> avec des <GameCard> à l'intérieur.
+ */
+import CardList from "./CardList.astro";
+import GameCard from "./GameCard.astro";
+
+interface Props {
+  /** Décrit la liste pour les lecteurs d'écran. */
+  label: string;
+  /** Ids des fiches (src/data/games/<id>.md). */
+  ids: string[];
+  columns?: 1 | 2;
+  /** Niveau des titres des cartes (h4 par défaut). */
+  headingLevel?: 3 | 4;
+}
+
+const { label, ids, columns = 2, headingLevel } = Astro.props;
+---
+
+<CardList label={label} columns={columns}>
+  {ids.map((id) => <GameCard id={id} headingLevel={headingLevel} />)}
+</CardList>
