@@ -1,0 +1,19 @@
+---
+/**
+ * Lien rose vers une fiche du site (base de <GameLink>, <PersonLink>, <PublisherLink>).
+ * Sans `href` (fiche introuvable) : texte simple, sans lien.
+ * Le balisage tient sur une ligne pour ne pas ajouter d'espace souligné dans le lien.
+ */
+import Icon, { type IconName } from "../Icon.astro";
+
+interface Props {
+  href?: string;
+  /** Petite icône devant le nom (décorative). */
+  icon?: IconName;
+  class?: string;
+}
+
+const { href, icon, class: className } = Astro.props;
+---
+
+{href ? <a href={href} class:list={["link-rose not-prose", className]}>{icon && <Icon name={icon} class="mr-1 inline-block size-[0.9em] align-[-0.1em]" />}<slot /></a> : <span class={className}><slot /></span>}

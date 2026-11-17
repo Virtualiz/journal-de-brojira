@@ -1,6 +1,15 @@
 ---
 import { getCollection, render } from "astro:content";
 import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
+import CardList from "../../components/post/CardList.astro";
+import EventCard from "../../components/post/EventCard.astro";
+import GameCard from "../../components/post/GameCard.astro";
+import GameLink from "../../components/post/GameLink.astro";
+import GameList from "../../components/post/GameList.astro";
+import ImageGallery from "../../components/post/ImageGallery.astro";
+import PersonLink from "../../components/post/PersonLink.astro";
+import PostImage from "../../components/post/PostImage.astro";
+import PublisherLink from "../../components/post/PublisherLink.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -12,8 +21,21 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// Composants disponibles dans tous les billets MDX sans les importer.
+const components = {
+  CardList,
+  EventCard,
+  GameCard,
+  GameLink,
+  GameList,
+  ImageGallery,
+  PersonLink,
+  PostImage,
+  PublisherLink,
+};
 ---
 
 <MarkdownPostLayout post={post}>
-  <Content />
+  <Content components={components} />
 </MarkdownPostLayout>

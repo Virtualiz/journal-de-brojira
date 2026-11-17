@@ -50,6 +50,11 @@
   --font-sans: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
   /* Or foncé pour le texte sur parchemin : 5,7:1 sur #f3e3c8. */
   --color-gold-ink: #7a4e14;
+  /* Rose des liens vers les fiches du site (jeux, auteurs, éditeurs) : 9,1:1 sur base-100.
+     L'or reste la couleur des liens classiques. */
+  --color-rose: #f0a6c8;
+  /* Rose foncé pour le parchemin : 5,7:1 sur #f3e3c8. */
+  --color-rose-ink: #9b2c5e;
 }
 
 @layer base {
@@ -90,6 +95,23 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
     radial-gradient(ellipse at center, transparent 55%, rgb(122 78 20 / 0.12) 100%);
   --color-base-content: var(--color-accent-content);
+  --link-rose-color: var(--color-rose-ink);
+}
+
+/* Lien vers une fiche (<GameLink>, <PersonLink>, <PublisherLink>) : texte et soulignement roses.
+   Poser aussi `not-prose` sur le lien pour que les styles de <Prose> ne l'écrasent pas. */
+@utility link-rose {
+  color: var(--link-rose-color, var(--color-rose));
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 50%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 /* Texte des billets (<Prose>) : couleurs du thème. Sélecteur plus fort que celui de daisyUI

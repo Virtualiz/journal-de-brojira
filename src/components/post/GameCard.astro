@@ -1,104 +1,153 @@
 ---
-// Carte d'un jeu (nouveauté, extension…). À placer dans un <CardList columns={2}>.
-// Les champs correspondent aux emojis de campustech (voir Billets.md).
-import Picture from "./Picture.astro";
+/**
+ * Carte d'un jeu dans un billet, construite à partir de sa fiche (src/data/games/<id>.md).
+ * À placer dans un <CardList columns={2}>, ou générée par <GameList>.
+ *
+ *   <GameCard id="zenso" />
+ *   <GameCard id="zenso">
+ *
+ *   Avis ou commentaire propre au billet (markdown, entouré de lignes vides).
+ *
+ *   </GameCard>
+ *
+ * Mise en page : boîte à gauche dès que la carte fait au moins 20rem de large (requête de conteneur),
+ * boîte au-dessus en dessous de cette largeur.
+ */
+import { getEntries, getEntry, type CollectionEntry } from "astro:content";
+import EntityLink from "./EntityLink.astro";
+import GameCover from "../GameCover.astro";
+import Icon, { type IconName } from "../Icon.astro";
 import OrnateCard from "../OrnateCard.astro";
+import { findFiche, gameHref, personHref, publisherHref } from "../../lib/fiches";
 
 interface Props {
-  /** Nom du jeu (titre h3). */
-  name: string;
-  /** Boîte du jeu : URL ou image importée. */
-  image: ImageMetadata | string;
-  /** Description de l'image. Par défaut : "Boîte du jeu <name>". */
-  imageAlt?: string;
-  /** 👨‍👩‍👦 Ex : "2-5 joueurs" */
-  players?: string;
-  /** 🎂 Ex : "10+" */
-  age?: string;
-  /** ⏱ Ex : "60 min" */
-  duration?: string;
-  /** ⚙️ Ex : "Tableau-building, Draft" */
-  mechanics?: string;
-  /** 💡 Auteur(s) */
-  authors?: string;
-  /** 🎨 Illustrateur(s) */
-  artists?: string;
-  /** 🛠️ Éditeur */
-  publisher?: string;
-  /** 🚚 Distributeur */
-  distributor?: string;
-  /** Prix, ex : "26€" */
-  price?: string;
-  /** Page du jeu (facultatif) : le nom devient un lien. */
-  url?: string;
+  /** Nom du fichier de la fiche, sans .md. */
+  id: string;
+  /** Niveau du titre : h4 par défaut (cartes sous un "###" du billet). */
+  headingLevel?: 3 | 4;
 }
 
-const {
-  name, image, imageAlt, players, age, duration, mechanics,
-  authors, artists, publisher, distributor, price, url,
-} = Astro.props;
+const { id, headingLevel = 4 } = Astro.props;
+const Heading = `h${headingLevel}` as const;
+const hasSlot = Astro.slots.has("default");
 
-const rows = [
-  { icon: "👨‍👩‍👦", label: "Joueurs", value: players },
-  { icon: "🎂", label: "Âge minimum", value: age },
-  { icon: "⏱", label: "Durée", value: duration },
-  { icon: "⚙️", label: "Mécaniques", value: mechanics },
-  { icon: "💡", label: "Auteur(s)", value: authors },
-  { icon: "🎨", label: "Illustration", value: artists },
-  { icon: "🛠️", label: "Éditeur", value: publisher },
-  { icon: "🚚", label: "Distributeur", value: distributor },
-].filter((row) => row.value);
+const game = await findFiche("games", id, "GameCard");
+const d = game?.data;
+
+type Link = { href: string; name: string };
+type Row = { icon: IconName; label: string; value?: string; links?: Link[] };
+
+let rows: Row[] = [];
+let parent: CollectionEntry<"games"> | undefined;
+
+if (d) {
+  const [authors, artists] = await Promise.all([getEntries(d.authors), getEntries(d.artists)]);
+  const publisher = d.publisher ? await getEntry(d.publisher) : undefined;
+  const distributor = d.distributor ? await getEntry(d.distributor) : undefined;
+  parent = d.parent ? await getEntry(d.parent) : undefined;
+
+  const people = (list: typeof authors): Link[] =>
+    list.filter(Boolean).map((p) => ({ href: personHref(p.id), name: p.data.name }));
+  const org = (p: typeof publisher): Link[] => (p ? [{ href: publisherHref(p.id), name: p.data.name }] : []);
+
+  rows = [
+    { icon: "users" as const, label: "Joueurs", value: d.players },
+    { icon: "cake" as const, label: "Âge minimum", value: d.age },
+    { icon: "clock" as const, label: "Durée", value: d.duration },
+    { icon: "layers" as const, label: "Mécaniques", value: d.mechanics.join(", ") },
+    { icon: "lightbulb" as const, label: authors.length > 1 ? "Auteurs" : "Auteur", links: people(authors) },
+    { icon: "palette" as const, label: "Illustration", links: people(artists) },
+    { icon: "building" as const, label: "Éditeur", links: org(publisher) },
+    { icon: "truck" as const, label: "Distributeur", links: org(distributor) },
+  ].filter((r) => r.value || (r.links && r.links.length > 0));
+}
 ---
 
-<li>
-  <OrnateCard as="article" class="card h-full">
-    <figure class="parchment m-2.5 rounded-[2px] p-4">
-      <Picture
-        src={image}
-        alt={imageAlt ?? `Boîte du jeu ${name}`}
-        class="h-48 w-auto max-w-full rounded-field object-contain"
-      />
-    </figure>
-    <div class="card-body gap-3">
-      <h3 class="card-title text-2xl">
-        {
-          url ? (
-            <a href={url} class="link link-primary" rel="noopener">
-              {name}
+<li class="@container">
+  {
+    d ? (
+      <OrnateCard as="article" class="flex h-full flex-col gap-3 p-2.5 @xs:flex-row @xs:gap-4">
+        <div class="parchment flex h-44 shrink-0 items-center justify-center rounded-[2px] p-3 @xs:h-auto @xs:w-28 @sm:w-36">
+          <GameCover image={d.image} sizes="(min-width: 768px) 144px, 50vw" widths={[144, 288, 480]} />
+        </div>
+
+        <div class="flex min-w-0 grow flex-col gap-2 px-2 pb-2 @xs:py-2 @xs:pr-2 @xs:pl-0">
+          {
+            d.kind !== "jeu" && (
+              <p>
+                <span class="badge badge-accent badge-sm capitalize">{d.kind}</span>
+              </p>
+            )
+          }
+          <Heading class="text-xl leading-tight text-primary @sm:text-2xl">
+            <a
+              href={gameHref(id)}
+              class="underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-rose hover:decoration-current"
+            >
+              {d.name}
             </a>
-          ) : (
-            name
-          )
-        }
-      </h3>
+          </Heading>
+          {
+            parent && (
+              <p class="text-sm">
+                {d.kind === "suite" ? "Suite de " : "Extension de "}
+                <EntityLink href={gameHref(parent.id)}>{parent.data.name}</EntityLink>
+              </p>
+            )
+          }
 
-      <div class="leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0 empty:hidden">
-        <slot />
-      </div>
+          {
+            hasSlot && (
+              <div class="leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0">
+                <slot />
+              </div>
+            )
+          }
 
-      <dl class="grid gap-1.5 text-sm sm:text-base">
-        {
-          rows.map((row) => (
-            <div class="flex gap-3">
-              <dt class="w-6 shrink-0 text-center">
-                <span aria-hidden="true">{row.icon}</span>
-                <span class="sr-only">{row.label}</span>
-              </dt>
-              <dd>{row.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
+          <dl class="grid gap-1.5 text-sm">
+            {
+              rows.map((r) => (
+                <div class="flex gap-2.5">
+                  <dt class="shrink-0">
+                    <Icon name={r.icon} class="mt-0.5 size-4 text-primary" />
+                    <span class="sr-only">{r.label}</span>
+                  </dt>
+                  <dd>
+                    {r.value}
+                    {r.links?.map((l, i) => (
+                      <>
+                        {i > 0 && ", "}
+                        <EntityLink href={l.href}>{l.name}</EntityLink>
+                      </>
+                    ))}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
 
-      {
-        price && (
-          <p class="card-actions justify-end">
-            <span class="inline-flex items-center rounded-field border border-primary/60 px-3 py-1 font-semibold text-primary">
-              <span class="sr-only">Prix : </span>{price}
-            </span>
-          </p>
-        )
-      }
-    </div>
-  </OrnateCard>
+          {
+            d.price && (
+              <p class="mt-auto flex justify-end pt-1">
+                <span class="inline-flex items-center gap-1.5 rounded-field border border-primary/60 px-2.5 py-0.5 font-semibold text-primary">
+                  <Icon name="coins" class="size-4" />
+                  <span class="sr-only">Prix indicatif : </span>
+                  {d.price}
+                </span>
+              </p>
+            )
+          }
+        </div>
+      </OrnateCard>
+    ) : (
+      <OrnateCard as="article" class="flex h-full flex-col gap-2 p-5">
+        <Heading class="text-xl leading-tight text-primary">{id}</Heading>
+        {hasSlot && (
+          <div class="leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0">
+            <slot />
+          </div>
+        )}
+      </OrnateCard>
+    )
+  }
 </li>
