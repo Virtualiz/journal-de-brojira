@@ -10,8 +10,8 @@
  *
  *   </GameCard>
  *
- * Mise en page : boîte à gauche dès que la carte fait au moins 20rem de large (requête de conteneur),
- * boîte au-dessus en dessous de cette largeur.
+ * Mise en page (requête de conteneur) : boîte au-dessus tant que la carte fait moins de 28rem de large
+ * (2 colonnes, mobile), boîte à gauche au-delà (1 colonne), pour garder une image lisible.
  */
 import { getEntries, getEntry, type CollectionEntry } from "astro:content";
 import EntityLink from "./EntityLink.astro";
@@ -66,12 +66,12 @@ if (d) {
 <li class="@container">
   {
     d ? (
-      <OrnateCard as="article" class="flex h-full flex-col gap-3 p-2.5 @xs:flex-row @xs:gap-4">
-        <div class="parchment flex h-44 shrink-0 items-center justify-center rounded-[2px] p-3 @xs:h-auto @xs:w-28 @sm:w-36">
-          <GameCover image={d.image} sizes="(min-width: 768px) 144px, 50vw" widths={[144, 288, 480]} />
+      <OrnateCard as="article" class="flex h-full flex-col gap-3 p-2.5 @md:flex-row @md:gap-4">
+        <div class="parchment flex h-56 shrink-0 items-center justify-center rounded-[2px] p-3 @md:h-auto @md:min-h-52 @md:w-44 @xl:w-52">
+          <GameCover image={d.image} sizes="(min-width: 768px) 360px, 100vw" widths={[240, 360, 480, 720]} />
         </div>
 
-        <div class="flex min-w-0 grow flex-col gap-2 px-2 pb-2 @xs:py-2 @xs:pr-2 @xs:pl-0">
+        <div class="flex min-w-0 grow flex-col gap-2 px-2 pb-2 @md:py-2 @md:pr-2 @md:pl-0">
           {
             d.kind !== "jeu" && (
               <p>
@@ -79,7 +79,7 @@ if (d) {
               </p>
             )
           }
-          <Heading class="text-xl leading-tight text-primary @sm:text-2xl">
+          <Heading class="text-xl leading-tight text-primary @md:text-2xl">
             <a
               href={gameHref(id)}
               class="underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-rose hover:decoration-current"
