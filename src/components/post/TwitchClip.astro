@@ -1,0 +1,36 @@
+---
+/**
+ * Clip Twitch intégré dans un billet, au format 16/9 et responsive.
+ *   <TwitchClip clip="MagnificentGiftedGoldfishDansGame-GtVpSWtNgQlK4czo" title="…" caption="…" />
+ *
+ * - `clip` : l'identifiant du clip (la fin de l'URL https://clips.twitch.tv/<clip>).
+ * - `title` OBLIGATOIRE : décrit la vidéo pour les lecteurs d'écran (titre de l'iframe).
+ * - Twitch n'autorise l'intégration que sur les domaines passés en `parent` :
+ *   le domaine du site (astro.config `site`) et localhost pour le dev.
+ *   Sur un autre domaine (ex. deploy preview Netlify), le lecteur refuse de s'afficher :
+ *   le lien sous la vidéo reste utilisable.
+ */
+interface Props {
+  clip: string;
+  title: string;
+  /** Légende visible sous la vidéo (contexte, crédit…). */
+  caption?: string;
+}
+
+const { clip, title, caption } = Astro.props;
+const parents = [...new Set([Astro.site?.hostname, "localhost"].filter(Boolean))];
+const src = `https://clips.twitch.tv/embed?clip=${encodeURIComponent(clip)}&${parents
+  .map((p) => `parent=${p}`)
+  .join("&")}&autoplay=false`;
+const href = `https://clips.twitch.tv/${encodeURIComponent(clip)}`;
+---
+
+<figure class="not-prose my-8">
+  <div class="aspect-video w-full overflow-hidden rounded-box bg-base-300">
+    <iframe {src} {title} class="h-full w-full" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-base-content/80">
+    {caption && <>{caption} · </>}
+    <a href={href} class="link">Voir le clip sur Twitch</a>
+  </figcaption>
+</figure>
