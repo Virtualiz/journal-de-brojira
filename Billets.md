@@ -15,6 +15,7 @@ Composants de billet (./src/components/post/), disponibles dans tous les billets
   - rose = une fiche du site, or = un lien classique
 - `<PostImage src alt caption>` : image seule (alt obligatoire)
 - `<ImageGallery label images>` : grille d'images (alt obligatoire pour chaque image)
+- `<TwitchClip clip="…" title="…" caption="…" />` : clip Twitch responsive (clip = fin de l'URL `clips.twitch.tv/<clip>`, title obligatoire). Ne s'affiche que sur le domaine du site et en local
 
 Fiches (source unique des infos de jeux) :
 - jeux : `./src/data/games/<id>.md` (l'id d'un jeu est le nom du fichier)
@@ -59,6 +60,7 @@ Forêt Mixte Smoky Mountains
    - le logo de l'éditeur devant le nom est ignoré, garder seulement le nom du jeu
    - la date de sortie (📆) est ignorée
    - ajouter le prix (philibertnet) sur sa propre ligne
+   - TOUJOURS ajouter une ligne `description: …` : courte présentation du jeu (1 à 3 phrases : thème, ce qu'on fait pendant la partie, comment on gagne), rédigée d'après la fiche philibertnet (BGG bloque les accès automatiques), sans inventer de règle. Pour une extension : ce qu'elle ajoute + « Nécessite le jeu de base. » Elle s'affiche sous le nom du jeu et dans les aperçus de partage (le corps de la fiche, lui, est la section « Notre avis »)
    - facultatif : `kind: extension|suite`, `parent: <id du jeu de base>`, `id: <id voulu>`
 2. Mettre tous les blocs du mois dans un fichier, séparés par une ligne vide, puis lancer :
 ```

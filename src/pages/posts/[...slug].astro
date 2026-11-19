@@ -10,6 +10,7 @@ import ImageGallery from "../../components/post/ImageGallery.astro";
 import PersonLink from "../../components/post/PersonLink.astro";
 import PostImage from "../../components/post/PostImage.astro";
 import PublisherLink from "../../components/post/PublisherLink.astro";
+import TwitchClip from "../../components/post/TwitchClip.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -33,6 +34,7 @@ const components = {
   PersonLink,
   PostImage,
   PublisherLink,
+  TwitchClip,
 };
 ---
 

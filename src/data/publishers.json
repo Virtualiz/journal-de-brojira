@@ -1,7 +1,7 @@
 [
   { "id": "catch-up-games", "name": "Catch Up Games" },
   { "id": "blackrock-games", "name": "Blackrock Games" },
-  { "id": "kodama", "name": "Kodama" },
+  { "id": "kodama", "name": "Kodama Games", "description": "Anciennement Lumberjacks Studio." },
   { "id": "iello", "name": "Iello" },
   { "id": "intrafin-games", "name": "Intrafin Games" },
   { "id": "sylex", "name": "Sylex" },
@@ -16,5 +16,22 @@
   { "id": "neoludis", "name": "Neoludis" },
   { "id": "cmon", "name": "Cmon" },
   { "id": "asmodee", "name": "Asmodee" },
-  { "id": "super-meeple", "name": "Super Meeple" }
+  { "id": "super-meeple", "name": "Super Meeple" },
+  { "id": "schmidt-spiele", "name": "Schmidt Spiele" },
+  { "id": "oya", "name": "Oya" },
+  { "id": "kosmos", "name": "Kosmos" },
+  { "id": "gigamic", "name": "Gigamic" },
+  { "id": "repos-production", "name": "Repos Production" },
+  { "id": "dont-panic-games", "name": "Don't Panic Games" },
+  { "id": "pearl-games", "name": "Pearl Games" },
+  { "id": "hans-im-gluck", "name": "Hans im Glück" },
+  { "id": "pixie-games", "name": "Pixie Games" },
+  { "id": "libellud", "name": "Libellud" },
+  { "id": "fentasy-games", "name": "Fentasy Games" },
+  { "id": "rose-noire", "name": "Rose Noire" },
+  { "id": "tycoon-games", "name": "Tycoon Games" },
+  { "id": "moona-games", "name": "Moona Games" },
+  { "id": "ludonova", "name": "Ludonova" },
+  { "id": "allplay", "name": "Allplay" },
+  { "id": "usaopoly", "name": "USAopoly" }
 ]
