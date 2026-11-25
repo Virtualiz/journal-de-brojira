@@ -56,6 +56,16 @@ const imageUrl = image ? new URL(image.url, Astro.site).href : undefined;
       name="twitter:card"
       content={imageUrl ? "summary_large_image" : "summary"}
     />
+    {
+      import.meta.env.PROD && (
+        <script
+          is:inline
+          data-goatcounter="https://journal-de-brojira.goatcounter.com/count"
+          async
+          src="https://gc.zgo.at/count.js"
+        />
+      )
+    }
   </head>
   <body class="flex flex-col min-h-svh">
     <a
