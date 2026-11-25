@@ -1,6 +1,7 @@
 ---
 /**
- * Image d'un billet (URL distante du frontmatter) optimisée par <Image> : WebP, tailles responsives.
+ * Image d'un billet. URL distante : optimisée par <Image> (WebP, tailles responsives).
+ * Chemin local (dossier public/, commençant par "/") : affichée telle quelle.
  * Rien n'est rendu si le billet n'a pas d'image.
  */
 import { Image } from "astro:assets";
@@ -15,10 +16,23 @@ interface Props {
 }
 
 const { image, sizes, widths = [400, 640, 960], loading = "lazy", class: className } = Astro.props;
+// Chemin du dossier public/ (ex. "/posts/2026/x.webp") : servi tel quel, <Image> ne peut pas en déduire la taille.
+const isLocal = image?.url.startsWith("/");
 ---
 
 {
-  image && (
+  image && isLocal && (
+    <img
+      src={image.url}
+      alt={image.alt}
+      loading={loading}
+      decoding="async"
+      class:list={["h-full w-full object-cover", className]}
+    />
+  )
+}
+{
+  image && !isLocal && (
     <Image
       src={image.url}
       alt={image.alt}
